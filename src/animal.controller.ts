@@ -8,4 +8,9 @@ const animals: object[] = [
 @Controller('animals')
 export class AnimalController {
   constructor() {}
+
+  @Get('cat')
+  async getCat(): Promise<object> {
+    return animals;
+  }
 }
