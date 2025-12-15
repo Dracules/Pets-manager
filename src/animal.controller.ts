@@ -1,5 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
 
+class AnimalDTO {
+  name: string = 'cattinho';
+  age: number = 10;
+}
+
 const animals: object[] = [
   { name: 'cat', age: 3 },
   { name: 'catty', age: 6 },
