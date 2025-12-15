@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Param } from '@nestjs/common';
 
 class AnimalDTO {
   name: string = 'cattinho';
@@ -22,5 +22,13 @@ export class AnimalController {
   @Get('cat/:id')
   async getCatById(@Param('id') id: number): Promise<object> {
     return animals[id];
+  }
+
+  @Post('cat')
+  getCats(@Body() catDTO: AnimalDTO, @Res() response): void {
+    //response.send('Your good animal!');
+    const catty = { name: catDTO.name, age: catDTO.age };
+    animals.push(catty);
+    response.json(catty);
   }
 }
