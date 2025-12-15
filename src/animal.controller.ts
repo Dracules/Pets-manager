@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
 const animals: object[] = [
   { name: 'cat', age: 3 },
@@ -12,5 +12,10 @@ export class AnimalController {
   @Get('cat')
   async getCat(): Promise<object> {
     return animals;
+  }
+
+  @Get('cat/:id')
+  async getCatById(@Param('id') id: number): Promise<object> {
+    return animals[id];
   }
 }
