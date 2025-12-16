@@ -2,11 +2,7 @@ import { Controller, Get, Post, Body, Res, Param } from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { Cat } from './interfaces/cat.interface';
 import { type Response } from 'express';
-
-class AnimalDTO {
-  name: string = 'cattinho';
-  age: number = 10;
-}
+import { AnimalDTO } from './dto/animal.dto';
 
 @Controller('animals')
 export class AnimalController {
