@@ -1,34 +1,28 @@
 import { Controller, Get, Post, Body, Res, Param } from '@nestjs/common';
-
-class AnimalDTO {
-  name: string = 'cattinho';
-  age: number = 10;
-}
-
-const animals: object[] = [
-  { name: 'cat', age: 3 },
-  { name: 'catty', age: 6 },
-];
+import { AnimalService } from './animal.service';
+import { Cat } from './interfaces/cat.interface';
+import { type Response } from 'express';
+import { AnimalDTO } from './dto/animal.dto';
 
 @Controller('animals')
 export class AnimalController {
-  constructor() {}
+  constructor(private animalService: AnimalService) {}
 
   @Get('cat')
-  async getCat(): Promise<object> {
-    return animals;
+  async getCat(): Promise<Cat[]> {
+    return this.animalService.getAll();
   }
 
   @Get('cat/:id')
-  async getCatById(@Param('id') id: number): Promise<object> {
-    return animals[id];
+  async getCatById(@Param('id') id: number): Promise<Cat> {
+    return this.animalService.getById(id);
   }
 
   @Post('cat')
-  getCats(@Body() catDTO: AnimalDTO, @Res() response): void {
+  getCats(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
     //response.send('Your good animal!');
     const catty = { name: catDTO.name, age: catDTO.age };
-    animals.push(catty);
+    this.animalService.create(catty);
     response.json(catty);
   }
 }
