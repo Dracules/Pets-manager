@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Res, Param } from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { Cat } from './interfaces/cat.interface';
+import { type Response } from 'express';
 
 class AnimalDTO {
   name: string = 'cattinho';
@@ -22,7 +23,7 @@ export class AnimalController {
   }
 
   @Post('cat')
-  getCats(@Body() catDTO: AnimalDTO, @Res() response): void {
+  getCats(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
     //response.send('Your good animal!');
     const catty = { name: catDTO.name, age: catDTO.age };
     this.animalService.create(catty);
