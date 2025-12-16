@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Res, Param } from '@nestjs/common';
 import { AnimalService } from './animal.service';
+import { Cat } from './interfaces/cat.interface';
 
 class AnimalDTO {
   name: string = 'cattinho';
@@ -11,12 +12,12 @@ export class AnimalController {
   constructor(private animalService: AnimalService) {}
 
   @Get('cat')
-  async getCat(): Promise<object> {
+  async getCat(): Promise<Cat[]> {
     return this.animalService.getAll();
   }
 
   @Get('cat/:id')
-  async getCatById(@Param('id') id: number): Promise<object> {
+  async getCatById(@Param('id') id: number): Promise<Cat> {
     return this.animalService.getById(id);
   }
 
