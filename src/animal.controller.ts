@@ -20,8 +20,7 @@ export class AnimalController {
 
   @Post('cat')
   getCats(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
-    //response.send('Your good animal!');
-    const catty = { name: catDTO.name, age: catDTO.age };
+    const catty = { name: catDTO.name ?? 'catinho', age: catDTO.age ?? 1 };
     this.animalService.create(catty);
     response.json(catty);
   }
