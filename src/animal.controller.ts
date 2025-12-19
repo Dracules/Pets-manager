@@ -24,7 +24,7 @@ export class AnimalController {
 
   @Get('cat/:id')
   @UseFilters(new AnimalExceptionFilter())
-  async getCatById(@Param('id') id: number): Promise<Cat> {
+  async getCatById(@Param('id', ParseIntPipe) id: number): Promise<Cat> {
     return this.animalService.getById(id);
   }
 
