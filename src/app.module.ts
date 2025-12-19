@@ -1,8 +1,13 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AnimalModule } from './animal.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { EverythingFilter } from './exception_filters/everything.exception.filter';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [AnimalModule],
@@ -10,6 +15,16 @@ import { APP_FILTER } from '@nestjs/core';
     {
       provide: APP_FILTER,
       useClass: EverythingFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useFactory: () =>
+        new ValidationPipe({
+          whitelist: true,
+          forbidNonWhitelisted: true,
+          transform: true,
+          transformOptions: { enableImplicitConversion: true },
+        }),
     },
   ],
 })

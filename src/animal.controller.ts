@@ -6,6 +6,7 @@ import {
   Res,
   Param,
   UseFilters,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { Cat } from './interfaces/cat.interface';
@@ -24,14 +25,13 @@ export class AnimalController {
 
   @Get('cat/:id')
   @UseFilters(new AnimalExceptionFilter())
-  async getCatById(@Param('id') id: number): Promise<Cat> {
+  async getCatById(@Param('id', ParseIntPipe) id: number): Promise<Cat> {
     return this.animalService.getById(id);
   }
 
   @Post('cat')
   getCats(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
-    const catty = { name: catDTO.name ?? 'catinho', age: catDTO.age ?? 1 };
-    this.animalService.create(catty);
-    response.json(catty);
+    this.animalService.create(catDTO);
+    response.json(catDTO);
   }
 }
