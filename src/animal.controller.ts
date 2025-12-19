@@ -6,6 +6,7 @@ import {
   Res,
   Param,
   UseFilters,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { Cat } from './interfaces/cat.interface';
