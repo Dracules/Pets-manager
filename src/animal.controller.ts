@@ -31,8 +31,7 @@ export class AnimalController {
 
   @Post('cat')
   getCats(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
-    const catty = { name: catDTO.name ?? 'catinho', age: catDTO.age ?? 1 };
-    this.animalService.create(catty);
-    response.json(catty);
+    this.animalService.create(catDTO);
+    response.json(catDTO);
   }
 }
