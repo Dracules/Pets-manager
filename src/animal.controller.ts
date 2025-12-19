@@ -1,8 +1,17 @@
-import { Controller, Get, Post, Body, Res, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Res,
+  Param,
+  UseFilters,
+} from '@nestjs/common';
 import { AnimalService } from './animal.service';
 import { Cat } from './interfaces/cat.interface';
 import { type Response } from 'express';
 import { AnimalDTO } from './dto/animal.dto';
+import { AnimalExceptionFilter } from './exception_filters/animal.http.exception.filter';
 
 @Controller('animals')
 export class AnimalController {
@@ -14,6 +23,7 @@ export class AnimalController {
   }
 
   @Get('cat/:id')
+  @UseFilters(new AnimalExceptionFilter())
   async getCatById(@Param('id') id: number): Promise<Cat> {
     return this.animalService.getById(id);
   }
