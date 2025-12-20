@@ -19,7 +19,7 @@ export class AnimalController {
   constructor(private animalService: AnimalService) {}
 
   @Get('cat')
-  async getCat(): Promise<Cat[]> {
+  async getCats(): Promise<Cat[]> {
     return this.animalService.getAll();
   }
 
@@ -30,7 +30,7 @@ export class AnimalController {
   }
 
   @Post('cat')
-  getCats(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
+  createCat(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
     this.animalService.create(catDTO);
     response.json(catDTO);
   }
