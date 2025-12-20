@@ -13,6 +13,7 @@ import { Cat } from './interfaces/cat.interface';
 import { type Response } from 'express';
 import { AnimalDTO } from './dto/animal.dto';
 import { AnimalExceptionFilter } from './exception_filters/animal.http.exception.filter';
+import { Roles } from './decorators/roles.decorator';
 
 @Controller('animals')
 export class AnimalController {
@@ -30,12 +31,14 @@ export class AnimalController {
   }
 
   @Post('cat')
+  @Roles(['admin', 'user'])
   createCat(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
     this.animalService.create(catDTO);
     response.json(catDTO);
   }
 
   @Get('admin')
+  @Roles(['admin'])
   getAdmin(): string {
     return 'Hello, Admin!';
   }
