@@ -34,4 +34,9 @@ export class AnimalController {
     this.animalService.create(catDTO);
     response.json(catDTO);
   }
+
+  @Get('admin')
+  getAdmin(): string {
+    return 'Hello, Admin!';
+  }
 }
