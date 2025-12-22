@@ -7,6 +7,7 @@ import {
   Param,
   UseFilters,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
 import { Cat } from '../interfaces/cat.interface';
@@ -14,6 +15,7 @@ import { type Response } from 'express';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalExceptionFilter } from '../exception_filters/animal.http.exception.filter';
 import { Roles } from '../decorators/roles.decorator';
+import { CatCacheInterceptor } from 'src/interseptors/cat.cache.interceptor';
 
 @Controller('animals')
 export class AnimalController {
@@ -26,6 +28,7 @@ export class AnimalController {
 
   @Get('cat/:id')
   @UseFilters(AnimalExceptionFilter)
+  @UseInterceptors(CatCacheInterceptor)
   async getCatById(@Param('id', ParseIntPipe) id: number): Promise<Cat> {
     return this.animalService.getById(id);
   }
