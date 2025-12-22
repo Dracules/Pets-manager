@@ -7,7 +7,9 @@ import {
 import { AnimalModule } from './animal.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { EverythingFilter } from './exception_filters/everything.exception.filter';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [AnimalModule],
@@ -25,6 +27,14 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
           transform: true,
           transformOptions: { enableImplicitConversion: true },
         }),
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
