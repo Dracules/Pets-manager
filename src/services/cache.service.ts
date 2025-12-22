@@ -6,6 +6,7 @@ export class CacheService<T> {
   }
 
   saveToCache(url: string, item: T): void {
+    console.log(`Кладем в кэш переменную с url=${url}`);
     this.cache.set(url, item);
   }
 }
