@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from './interfaces/cat.interface';
-import { AnimalException } from './exception_filters/exceptions/animal.exception';
+import { Cat } from '../interfaces/cat.interface';
+import { AnimalException } from '../exception_filters/exceptions/animal.exception';
 
 @Injectable()
 export class AnimalService {

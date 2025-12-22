@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AnimalController } from './animal.controller';
-import { AnimalService } from './animal.service';
+import { AnimalController } from '../controllers/animal.controller';
+import { AnimalService } from '../services/animal.service';
 
 @Module({
   controllers: [AnimalController],
