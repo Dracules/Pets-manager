@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Cat } from '../interfaces/cat.interface';
 import { AnimalException } from '../exception_filters/exceptions/animal.exception';
+import { AnimalDTO } from '../dto/animal.dto';
 
 @Injectable()
 export class AnimalService {
   private readonly cats: Cat[] = [
-    { name: 'cat', age: 3 },
-    { name: 'catty', age: 6 },
+    { id: 0, name: 'cat', age: 3 },
+    { id: 1, name: 'catty', age: 6 },
   ];
 
-  create(cat: Cat) {
+  create(catDTO: AnimalDTO) {
+    const cat: Cat = {
+      id: this.cats.length > 0 ? this.cats[length - 1].id + 1 : 0,
+      ...catDTO,
+    };
     this.cats.push(cat);
   }
 
@@ -18,7 +23,8 @@ export class AnimalService {
   }
 
   getById(id: number): Cat {
-    if (id >= this.cats.length || id < 0) throw new AnimalException();
-    return this.cats[id];
+    const cat = this.cats.find((cat) => cat.id === id);
+    if (!cat || id < 0) throw new AnimalException();
+    return cat;
   }
 }
