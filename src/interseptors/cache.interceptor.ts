@@ -12,9 +12,9 @@ export class CacheInterceptor<T> implements NestInterceptor<T, T> {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
-    const id = Number(request.params.id);
+    const key = request.url;
 
-    const cached = this.cache.getFromCache(id);
+    const cached = this.cache.getFromCache(key);
     if (cached) {
       return of(cached);
     }
@@ -22,7 +22,7 @@ export class CacheInterceptor<T> implements NestInterceptor<T, T> {
     return next.handle().pipe(
       tap((item: T) => {
         if (item) {
-          this.cache.saveToCache(id, item);
+          this.cache.saveToCache(key, item);
         }
       }),
     );

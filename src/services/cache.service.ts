@@ -1,11 +1,11 @@
 export class CacheService<T> {
-  private readonly cache = new Map<number, T>();
+  private readonly cache = new Map<string, T>();
 
-  getFromCache(id: number): T | undefined {
-    return this.cache.get(id);
+  getFromCache(url: string): T | undefined {
+    return this.cache.get(url);
   }
 
-  saveToCache(id: number, item: T): void {
-    this.cache.set(id, item);
+  saveToCache(url: string, item: T): void {
+    this.cache.set(url, item);
   }
 }
