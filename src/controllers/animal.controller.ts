@@ -10,7 +10,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
-import { Cat } from '../interfaces/cat.interface';
 import { type Response } from 'express';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalExceptionFilter } from '../exception_filters/animal.http.exception.filter';
