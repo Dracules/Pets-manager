@@ -10,9 +10,20 @@ import { EverythingFilter } from './exception_filters/everything.exception.filte
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [AnimalModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        uri: config.get<string>('MONGO_URI'),
+      }),
+    }),
+    AnimalModule,
+  ],
   providers: [
     {
       provide: APP_FILTER,
