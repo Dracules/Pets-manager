@@ -20,8 +20,7 @@ CatSchema.virtual('id').get(function () {
 
 CatSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc, ret: any) => {
-    ret.id = ret._id;
+  transform: (_doc, ret: Record<string, any>) => {
     delete ret._id;
     return ret;
   },
