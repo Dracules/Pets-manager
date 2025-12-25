@@ -21,8 +21,8 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  GetRole(request: any): UserRole[] {
-    const authHeader = request.headers['authorization'] as string | undefined;
+  GetRole(request: RequestWithUser): UserRole[] {
+    const authHeader = request.headers['authorization'];
 
     if (!authHeader) return [];
 
