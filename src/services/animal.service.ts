@@ -1,29 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from '../interfaces/cat.interface';
 import { AnimalException } from '../exception_filters/exceptions/animal.exception';
 import { AnimalDTO } from '../dto/animal.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Cat, CatDocument } from 'src/schemas/cat.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AnimalService {
-  private readonly cats: Cat[] = [
-    { id: 0, name: 'cat', age: 3 },
-    { id: 1, name: 'catty', age: 6 },
-  ];
+  constructor(@InjectModel(Cat.name) private catModel: Model<CatDocument>) {}
 
-  create(catDTO: AnimalDTO) {
-    const cat: Cat = {
-      id: this.cats.length > 0 ? this.cats[length - 1].id + 1 : 0,
-      ...catDTO,
-    };
-    this.cats.push(cat);
+  async create_DB(catDTO: AnimalDTO): Promise<CatDocument> {
+    const createdCat = new this.catModel(catDTO);
+    return createdCat.save();
   }
 
-  getAll(): Cat[] {
-    return this.cats;
+  async findAll_DB(): Promise<CatDocument[]> {
+    return this.catModel.find().exec();
   }
 
-  getById(id: number): Cat {
-    const cat = this.cats.find((cat) => cat.id === id);
+  async findById_DB(id: number): Promise<CatDocument> {
+    const hard_id = '694ac1f93b5320db21a572a5';
+    const cat = await this.catModel.findById(hard_id).exec();
     if (!cat || id < 0) throw new AnimalException();
     return cat;
   }

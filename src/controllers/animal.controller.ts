@@ -10,7 +10,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
-import { Cat } from '../interfaces/cat.interface';
 import { type Response } from 'express';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalExceptionFilter } from '../exception_filters/animal.http.exception.filter';
@@ -22,22 +21,25 @@ export class AnimalController {
   constructor(private animalService: AnimalService) {}
 
   @Get('cat')
-  async getCats(): Promise<Cat[]> {
-    return this.animalService.getAll();
+  async getCats(): Promise<AnimalDTO[]> {
+    return await this.animalService.findAll_DB();
   }
 
   @Get('cat/:id')
   @UseFilters(AnimalExceptionFilter)
   @UseInterceptors(CatCacheInterceptor)
-  async getCatById(@Param('id', ParseIntPipe) id: number): Promise<Cat> {
-    return this.animalService.getById(id);
+  async getCatById(@Param('id', ParseIntPipe) id: number): Promise<AnimalDTO> {
+    return await this.animalService.findById_DB(id);
   }
 
   @Post('cat')
   @Roles(['admin', 'user'])
-  createCat(@Body() catDTO: AnimalDTO, @Res() response: Response): void {
-    this.animalService.create(catDTO);
-    response.json(catDTO);
+  async createCat(
+    @Body() catDTO: AnimalDTO,
+    @Res() response: Response,
+  ): Promise<void> {
+    const cat = await this.animalService.create_DB(catDTO);
+    response.json(cat);
   }
 
   @Get('admin')
