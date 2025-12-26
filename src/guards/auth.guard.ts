@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { RequestWithUser } from 'src/interfaces/request-with-user';
 import { UserRole } from 'src/types/userRole.type';
 
 @Injectable()
@@ -7,7 +8,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
 
     const roles: UserRole[] = this.GetRole(request);
 
@@ -20,8 +21,8 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  GetRole(request: any): UserRole[] {
-    const authHeader = request.headers['authorization'] as string | undefined;
+  GetRole(request: RequestWithUser): UserRole[] {
+    const authHeader = request.headers['authorization'];
 
     if (!authHeader) return [];
 

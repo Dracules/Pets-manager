@@ -30,7 +30,7 @@ export class EverythingFilter implements ExceptionFilter {
       message: `Error: ${errorMessage}`,
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
-      path: httpAdapter.getRequestUrl(ctx.getRequest()),
+      path: httpAdapter.getRequestUrl(ctx.getRequest()) as string,
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
