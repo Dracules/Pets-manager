@@ -19,11 +19,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() signInDto: Record<string, any>) {
-    const t = await this.authService.signIn(
-      signInDto.login,
-      signInDto.password,
-    );
-    return t;
+    return await this.authService.signIn(signInDto.login, signInDto.password);
   }
 
   @Get('profile')
