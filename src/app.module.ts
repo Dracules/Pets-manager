@@ -41,7 +41,7 @@ import { AuthModule } from './modules/auth.module';
           transformOptions: { enableImplicitConversion: true },
         }),
     },
-    /*
+
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
@@ -49,7 +49,7 @@ import { AuthModule } from './modules/auth.module';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    },*/
+    },
   ],
 })
 export class AppModule implements NestModule {
