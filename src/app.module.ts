@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './modules/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
     }),
     AnimalModule,
+    AuthModule,
   ],
   providers: [
     {
@@ -39,6 +41,7 @@ import { MongooseModule } from '@nestjs/mongoose';
           transformOptions: { enableImplicitConversion: true },
         }),
     },
+    /*
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
@@ -46,7 +49,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    },
+    },*/
   ],
 })
 export class AppModule implements NestModule {
