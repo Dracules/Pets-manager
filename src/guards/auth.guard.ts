@@ -5,7 +5,9 @@ import { UserRole } from 'src/types/userRole.type';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(
+  async canActivate(context: ExecutionContext): Promise<any> {}
+
+  OLD_canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
