@@ -8,13 +8,14 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-
+import { Public } from 'src/decorators/public.decorator';
 import { AuthService } from 'src/services/auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() signInDto: Record<string, any>) {
