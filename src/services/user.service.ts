@@ -7,8 +7,13 @@ export class UserService {
 
   private users: User[] = [
     { id: '1', login: 'login', password: 'password' },
-    { id: '2', login: 'admin', password: 'adminpassword' },
-    { id: '3', login: 'user', password: 'userpassword' },
+    {
+      id: '2',
+      login: 'admin',
+      password: 'adminpassword',
+      roles: ['admin', 'user'],
+    },
+    { id: '3', login: 'user', password: 'userpassword', roles: ['user'] },
   ];
 
   findUser(login: string): User | undefined {
