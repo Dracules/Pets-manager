@@ -8,24 +8,20 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { Public } from 'src/decorators/public.decorator';
 import { AuthService } from 'src/services/auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() signInDto: Record<string, any>) {
-    const t = await this.authService.signIn(
-      signInDto.login,
-      signInDto.password,
-    );
-    return t;
+    return await this.authService.signIn(signInDto.login, signInDto.password);
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
