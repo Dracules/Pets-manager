@@ -7,9 +7,9 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
-import { RequestWithUser } from 'src/interfaces/request-with-user';
-import { UserRole } from 'src/types/userRole.type';
+import { IS_PUBLIC_KEY } from 'src/shared/decorators/public.decorator';
+import { RequestWithUser } from 'src/shared/interfaces/request-with-user';
+import { UserRole } from 'src/shared/types/userRole.type';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
