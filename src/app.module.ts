@@ -5,11 +5,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AnimalModule } from '../src/animal/animal.module';
-import { LoggerMiddleware } from './middleware/logger.middleware';
-import { EverythingFilter } from './exception_filters/everything.exception.filter';
+import { LoggerMiddleware } from './shared/middleware/logger.middleware';
+import { EverythingFilter } from './shared/exception_filters/everything.exception.filter';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { RolesGuard } from './guards/roles.guard';
+import { RolesGuard } from './shared/guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
