@@ -4,15 +4,15 @@ import {
   MiddlewareConsumer,
   ValidationPipe,
 } from '@nestjs/common';
-import { AnimalModule } from './modules/animal.module';
+import { AnimalModule } from '../src/animal/animal.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { EverythingFilter } from './exception_filters/everything.exception.filter';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
-import { AuthGuard } from './guards/auth.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './modules/auth.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
