@@ -13,7 +13,7 @@ import { AnimalService } from '../services/animal.service';
 import { type Response } from 'express';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalExceptionFilter } from '../exception_filters/animal.http.exception.filter';
-import { Roles } from '../../decorators/roles.decorator';
+import { Roles } from '../../shared/decorators/roles.decorator';
 import { CatCacheInterceptor } from 'src/animal/interceptors/cat.cache.interceptor';
 
 @Controller('animals')
