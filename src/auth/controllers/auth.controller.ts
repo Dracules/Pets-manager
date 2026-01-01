@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Public } from 'src/shared/decorators/public.decorator';
 import { AuthService } from 'src/auth/services/auth.service';
+import { JwtToken } from '../interfaces/jwt.token.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInDto: Record<string, any>) {
+  async signIn(@Body() signInDto: Record<string, any>) : Promise<JwtToken> {
     return await this.authService.signIn(signInDto.login, signInDto.password);
   }
 
