@@ -23,7 +23,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Request() req: RequestWithUser): JwtPayload {
     return req.user;
   }
 }
