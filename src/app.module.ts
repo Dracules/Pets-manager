@@ -4,7 +4,7 @@ import {
   MiddlewareConsumer,
   ValidationPipe,
 } from '@nestjs/common';
-import { AnimalModule } from '../src/animal/animal.module';
+import { AnimalModule } from './animal/animal.module';
 import { LoggerMiddleware } from './shared/middleware/logger.middleware';
 import { EverythingFilter } from './shared/exception_filters/everything.exception.filter';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
