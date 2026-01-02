@@ -10,4 +10,14 @@ export class UserService {
   async findUser(userLogin: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ login: userLogin });
   }
+
+  async createUser(userLogin: string, userPassword: string): Promise<string> {
+    const newUser = new this.userModel({
+      login: userLogin,
+      password: userPassword,
+      roles: ['user'],
+    });
+    const result = await newUser.save();
+    return `Пользователь с логином ${result.login} успешно создан!`;
+  }
 }
