@@ -25,6 +25,13 @@ export class AuthController {
     return await this.authService.signIn(signInDto.login, signInDto.password);
   }
 
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('register')
+  async signUp(@Body() signInDto: SignInDTO): Promise<string> {
+    return await this.authService.signUp(signInDto.login, signInDto.password);
+  }
+
   @Get('profile')
   getProfile(@Request() req: RequestWithUser): JwtPayload {
     return req.user;
