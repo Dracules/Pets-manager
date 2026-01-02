@@ -3,6 +3,7 @@ import { UserService } from '../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../interfaces/jwt.payload.interface';
 import { JwtToken } from '../interfaces/jwt.token.interface';
+import * as bcrypt from 'node_modules/bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -12,10 +13,12 @@ export class AuthService {
   ) {}
 
   async signIn(login: string, userPassword: string): Promise<JwtToken> {
-    const user = this.userService.findUser(login);
-    if (user?.password !== userPassword) {
+    const user = await this.userService.findUser(login);
+
+    if (!user || !(await bcrypt.compare(userPassword, user.password))) {
       throw new UnauthorizedException();
     }
+
     const payload: JwtPayload = {
       sub: user.id,
       username: user.login,
