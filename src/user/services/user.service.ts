@@ -23,6 +23,6 @@ export class UserService {
       roles: userRoles,
     });
     const result = await newUser.save();
-    return `Пользователь с логином ${result.login} успешно создан!`;
+    return `User with login ${result.login} is created successfully!`;
   }
 }
