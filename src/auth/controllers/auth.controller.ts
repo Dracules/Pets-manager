@@ -13,6 +13,7 @@ import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
 import type { JwtPayload } from '../interfaces/jwt.payload.interface';
 import { JwtToken } from '../interfaces/jwt.token.interface';
 import { SignInDTO } from '../dto/sign.in.dto';
+import { Roles } from 'src/shared/decorators/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +24,23 @@ export class AuthController {
   @Post('login')
   async signIn(@Body() signInDto: SignInDTO): Promise<JwtToken> {
     return await this.authService.signIn(signInDto.login, signInDto.password);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('register')
+  async signUp(@Body() signInDto: SignInDTO): Promise<string> {
+    return await this.authService.signUp(signInDto.login, signInDto.password);
+  }
+
+  @Roles(['admin'])
+  @HttpCode(HttpStatus.OK)
+  @Post('register/admin')
+  async signUpAdmin(@Body() signInDto: SignInDTO): Promise<string> {
+    return await this.authService.signUpAdmin(
+      signInDto.login,
+      signInDto.password,
+    );
   }
 
   @Get('profile')

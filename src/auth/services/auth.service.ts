@@ -28,4 +28,15 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  async signUp(userlogin: string, userPassword: string): Promise<string> {
+    return this.userService.createUser(userlogin, userPassword, ['user']);
+  }
+
+  async signUpAdmin(userlogin: string, userPassword: string): Promise<string> {
+    return this.userService.createUser(userlogin, userPassword, [
+      'user',
+      'admin',
+    ]);
+  }
 }
