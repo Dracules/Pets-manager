@@ -14,7 +14,7 @@ import { type Response } from 'express';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalExceptionFilter } from '../exception_filters/animal.http.exception.filter';
 import { Roles } from '../../shared/decorators/roles.decorator';
-import { CatCacheInterceptor } from 'src/animal/interceptors/cat.cache.interceptor';
+import { AnimalCacheInterceptor } from 'src/animal/interceptors/animal.cache.interceptor';
 
 @Controller('animals')
 export class AnimalController {
@@ -27,7 +27,7 @@ export class AnimalController {
 
   @Get('cat/:id')
   @UseFilters(AnimalExceptionFilter)
-  @UseInterceptors(CatCacheInterceptor)
+  @UseInterceptors(AnimalCacheInterceptor)
   async getCatById(@Param('id', ParseIntPipe) id: number): Promise<AnimalDTO> {
     return await this.animalService.findById_DB(id);
   }
