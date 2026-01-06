@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AnimalException } from '../exception_filters/exceptions/animal.exception';
 import { AnimalDTO } from '../dto/animal.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Cat, CatDocument } from 'src/animal/schemas/cat.schema';
+import { Cat, CatDocument } from 'src/cats/schemas/cat.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
