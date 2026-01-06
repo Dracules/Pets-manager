@@ -7,6 +7,7 @@ import {
 import { Observable, of, tap } from 'rxjs';
 import { CacheService } from '../services/cache.service';
 import { Request } from 'express';
+import { Document } from 'mongoose';
 
 @Injectable()
 export class CacheInterceptor<T> implements NestInterceptor<T, T> {
@@ -25,9 +26,15 @@ export class CacheInterceptor<T> implements NestInterceptor<T, T> {
     return next.handle().pipe(
       tap((item: T) => {
         if (item) {
-          this.cache.saveToCache(key, item);
+          const plain = isMongooseDoc(item) ? item.toJSON() : item;
+          this.cache.saveToCache(key, plain);
         }
       }),
     );
   }
+}
+
+function isMongooseDoc(doc: any): doc is Document {
+  const b = !!doc && typeof doc.toObject === 'function';
+  return b;
 }
