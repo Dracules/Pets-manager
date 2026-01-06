@@ -1,3 +1,6 @@
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
 export class CacheService<T> {
   private readonly cache = new Map<string, T>();
 
