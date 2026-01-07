@@ -24,4 +24,15 @@ export class CatService {
     if (!cat || id < 0) throw new AnimalException();
     return cat;
   }
+
+  async updateById_DB(
+    id: string,
+    catDTO: Partial<AnimalDTO>,
+  ): Promise<CatDocument> {
+    const updatedCat = await this.catModel
+      .findByIdAndUpdate(id, catDTO, { new: true, runValidators: true })
+      .exec();
+    if (!updatedCat) throw new AnimalException();
+    return updatedCat;
+  }
 }
