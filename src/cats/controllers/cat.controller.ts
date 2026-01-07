@@ -6,8 +6,9 @@ import {
   Res,
   Param,
   UseFilters,
-  ParseIntPipe,
   UseInterceptors,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
@@ -15,6 +16,7 @@ import { AnimalDTO } from '../../animal/dto/animal.dto';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { AnimalCacheInterceptor } from 'src/animal/interceptors/animal.cache.interceptor';
+import { ParseObjectIdPipe } from '@nestjs/mongoose';
 
 @Controller('animals/cats')
 export class CatController {
@@ -28,7 +30,9 @@ export class CatController {
   @Get('/:id')
   @UseFilters(AnimalExceptionFilter)
   @UseInterceptors(AnimalCacheInterceptor)
-  async getCatById(@Param('id', ParseIntPipe) id: number): Promise<AnimalDTO> {
+  async getCatById(
+    @Param('id', ParseObjectIdPipe) id: string,
+  ): Promise<AnimalDTO> {
     return await this.catService.findById_DB(id);
   }
 
