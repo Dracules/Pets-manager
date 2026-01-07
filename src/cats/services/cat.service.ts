@@ -9,22 +9,22 @@ import { Model } from 'mongoose';
 export class CatService {
   constructor(@InjectModel(Cat.name) private catModel: Model<CatDocument>) {}
 
-  async create_DB(catDTO: AnimalDTO): Promise<CatDocument> {
+  async create(catDTO: AnimalDTO): Promise<CatDocument> {
     const createdCat = new this.catModel(catDTO);
     return createdCat.save();
   }
 
-  async findAll_DB(): Promise<CatDocument[]> {
+  async findAll(): Promise<CatDocument[]> {
     return this.catModel.find().exec();
   }
 
-  async findById_DB(id: string): Promise<CatDocument> {
+  async findById(id: string): Promise<CatDocument> {
     const cat = await this.catModel.findById(id).exec();
     if (!cat) throw new AnimalException();
     return cat;
   }
 
-  async updateById_DB(
+  async updateById(
     id: string,
     catDTO: Partial<AnimalDTO>,
   ): Promise<CatDocument> {
@@ -35,7 +35,7 @@ export class CatService {
     return updatedCat;
   }
 
-  async delete_DB(id: string): Promise<string> {
+  async delete(id: string): Promise<string> {
     const deletedCat = await this.catModel.findByIdAndDelete(id).exec();
     if (!deletedCat) throw new AnimalException();
     return 'Selected item is deleted successfully!';

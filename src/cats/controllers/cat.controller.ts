@@ -24,7 +24,7 @@ export class CatController {
 
   @Get('/')
   async getCats(): Promise<AnimalDTO[]> {
-    return await this.catService.findAll_DB();
+    return await this.catService.findAll();
   }
 
   @Get('/:id')
@@ -33,7 +33,7 @@ export class CatController {
   async getCatById(
     @Param('id', ParseObjectIdPipe) id: string,
   ): Promise<AnimalDTO> {
-    return await this.catService.findById_DB(id);
+    return await this.catService.findById(id);
   }
 
   @Post('/')
@@ -42,7 +42,7 @@ export class CatController {
     @Body() catDTO: AnimalDTO,
     @Res() response: Response,
   ): Promise<void> {
-    const cat = await this.catService.create_DB(catDTO);
+    const cat = await this.catService.create(catDTO);
     response.json(cat);
   }
 
@@ -54,7 +54,7 @@ export class CatController {
     @Body() catDTO: Partial<AnimalDTO>,
     @Res() response: Response,
   ): Promise<void> {
-    const cat = await this.catService.updateById_DB(id, catDTO);
+    const cat = await this.catService.updateById(id, catDTO);
     response.json(cat);
   }
 
@@ -65,7 +65,7 @@ export class CatController {
     @Param('id', ParseObjectIdPipe) id: string,
     @Res() response: Response,
   ): Promise<void> {
-    const cat = await this.catService.delete_DB(id);
+    const cat = await this.catService.delete(id);
     response.json(cat);
   }
 }
