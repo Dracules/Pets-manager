@@ -18,7 +18,7 @@ export class CatService {
     return this.catModel.find().exec();
   }
 
-  async findById_DB(id: number): Promise<CatDocument> {
+  async findById_DB(id: string): Promise<CatDocument> {
     const cat = await this.catModel.findById(id).exec();
     if (!cat || id < 0) throw new AnimalException();
     return cat;
