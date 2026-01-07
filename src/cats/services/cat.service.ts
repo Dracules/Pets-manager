@@ -20,7 +20,7 @@ export class CatService {
 
   async findById_DB(id: string): Promise<CatDocument> {
     const cat = await this.catModel.findById(id).exec();
-    if (!cat || id < 0) throw new AnimalException();
+    if (!cat) throw new AnimalException();
     return cat;
   }
 
