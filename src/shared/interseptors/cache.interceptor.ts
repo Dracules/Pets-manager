@@ -19,7 +19,7 @@ export class CacheInterceptor<T> implements NestInterceptor<T, T> {
 
     const cached = this.cache.getFromCache(key);
     if (cached) {
-      console.log(`Достаем из кэша переменную с url=${key}`);
+      console.log(`Take cache with url=${key}`);
       return of(cached);
     }
 
