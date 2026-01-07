@@ -35,4 +35,10 @@ export class CatService {
     if (!updatedCat) throw new AnimalException();
     return updatedCat;
   }
+
+  async delete_DB(id: string): Promise<string> {
+    const deletedCat = await this.catModel.findByIdAndDelete(id).exec();
+    if (!deletedCat) throw new AnimalException();
+    return 'Selected item is deleted successfully!';
+  }
 }
