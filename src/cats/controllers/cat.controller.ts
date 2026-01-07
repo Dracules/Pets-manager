@@ -53,4 +53,15 @@ export class CatController {
     const cat = await this.catService.updateById_DB(id, catDTO);
     response.json(cat);
   }
+
+  @Delete('/:id')
+  @Roles(['admin', 'user'])
+  @UseFilters(AnimalExceptionFilter)
+  async deleteCat(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const cat = await this.catService.delete_DB(id);
+    response.json(cat);
+  }
 }
