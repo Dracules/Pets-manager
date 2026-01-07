@@ -41,4 +41,16 @@ export class CatController {
     const cat = await this.catService.create_DB(catDTO);
     response.json(cat);
   }
+
+  @Put('/:id')
+  @Roles(['admin', 'user'])
+  @UseFilters(AnimalExceptionFilter)
+  async updateCat(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() catDTO: Partial<AnimalDTO>,
+    @Res() response: Response,
+  ): Promise<void> {
+    const cat = await this.catService.updateById_DB(id, catDTO);
+    response.json(cat);
+  }
 }
