@@ -9,19 +9,35 @@ import { Model } from 'mongoose';
 export class CatService {
   constructor(@InjectModel(Cat.name) private catModel: Model<CatDocument>) {}
 
-  async create_DB(catDTO: AnimalDTO): Promise<CatDocument> {
+  async create(catDTO: AnimalDTO): Promise<CatDocument> {
     const createdCat = new this.catModel(catDTO);
     return createdCat.save();
   }
 
-  async findAll_DB(): Promise<CatDocument[]> {
+  async findAll(): Promise<CatDocument[]> {
     return this.catModel.find().exec();
   }
 
-  async findById_DB(id: number): Promise<CatDocument> {
-    const hard_id = '694ac1f93b5320db21a572a5';
-    const cat = await this.catModel.findById(hard_id).exec();
-    if (!cat || id < 0) throw new AnimalException();
+  async findById(id: string): Promise<CatDocument> {
+    const cat = await this.catModel.findById(id).exec();
+    if (!cat) throw new AnimalException();
     return cat;
+  }
+
+  async updateById(
+    id: string,
+    catDTO: Partial<AnimalDTO>,
+  ): Promise<CatDocument> {
+    const updatedCat = await this.catModel
+      .findByIdAndUpdate(id, catDTO, { new: true, runValidators: true })
+      .exec();
+    if (!updatedCat) throw new AnimalException();
+    return updatedCat;
+  }
+
+  async delete(id: string): Promise<string> {
+    const deletedCat = await this.catModel.findByIdAndDelete(id).exec();
+    if (!deletedCat) throw new AnimalException();
+    return 'Selected item is deleted successfully!';
   }
 }
