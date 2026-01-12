@@ -11,6 +11,7 @@ describe('CatService', () => {
     find: jest.Mock<any, any, any>;
     findById: jest.Mock<any, any, any>;
     findByIdAndUpdate: jest.Mock<any, any, any>;
+    findByIdAndDelete: jest.Mock<any, any, any>;
   }
 
   let mockCatModel: MockModel;
@@ -182,6 +183,54 @@ describe('CatService', () => {
           { new: true, runValidators: true },
         );
         expect(mockCatModel.findByIdAndUpdate().exec).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
+  describe('delete', () => {
+    describe('existent id', () => {
+      it('must delete cat with ID and return hardcoded string', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+
+        const deletedCat = {
+          _id: catId,
+          name: 'Bars',
+          age: 3,
+          litterStatus: 'trained',
+        };
+
+        const expectedResponse = 'Selected item is deleted successfully!';
+
+        mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(deletedCat),
+        });
+
+        const result = await service.delete(catId);
+
+        expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledWith(catId);
+        expect(mockCatModel.findByIdAndDelete().exec).toHaveBeenCalledTimes(1);
+        expect(result).toEqual(expectedResponse);
+      });
+    });
+
+    describe('nonexistent id', () => {
+      it('must throw AnimalException', async () => {
+        const nonExistentId = '999999999999999999999999';
+
+        mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(null),
+        });
+
+        await expect(service.delete(nonExistentId)).rejects.toThrow(
+          AnimalException,
+        );
+
+        expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledWith(
+          nonExistentId,
+        );
+        expect(mockCatModel.findByIdAndDelete().exec).toHaveBeenCalledTimes(1);
       });
     });
   });
