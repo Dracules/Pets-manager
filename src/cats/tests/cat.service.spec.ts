@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { CatService } from '../services/cat.service';
+import { AnimalException } from 'src/animal/exception_filters/exceptions/animal.exception';
 import { AnimalDTO } from 'src/animal/dto/animal.dto';
 
 describe('CatService', () => {
@@ -8,6 +9,7 @@ describe('CatService', () => {
 
   interface MockModel extends jest.Mock {
     find: jest.Mock<any, any, any>;
+    findById: jest.Mock<any, any, any>;
   }
 
   let mockCatModel: MockModel;
@@ -80,6 +82,47 @@ describe('CatService', () => {
       const result = await service.findAll();
       expect(mockCatModel.find().exec).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockCats);
+    });
+  });
+
+  describe('findById', () => {
+    describe('existent id', () => {
+      it('must return cat with ID', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const mockCat = {
+          _id: catId,
+          name: 'Bars',
+          age: 3,
+          litterStatus: 'trained',
+        };
+
+        mockCatModel.findById = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(mockCat),
+        });
+
+        const result = await service.findById(catId);
+
+        expect(mockCatModel.findById).toHaveBeenCalledWith(catId);
+        expect(mockCatModel.findById().exec).toHaveBeenCalledTimes(1);
+        expect(result).toEqual(mockCat);
+      });
+    });
+
+    describe('nonexistent id', () => {
+      it('must throw AnimalException', async () => {
+        const nonExistentId = '999999999999999999999999';
+
+        mockCatModel.findById = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(null),
+        });
+
+        await expect(service.findById(nonExistentId)).rejects.toThrow(
+          AnimalException,
+        );
+
+        expect(mockCatModel.findById).toHaveBeenCalledWith(nonExistentId);
+        expect(mockCatModel.findById().exec).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });
