@@ -10,6 +10,7 @@ describe('CatService', () => {
   interface MockModel extends jest.Mock {
     find: jest.Mock<any, any, any>;
     findById: jest.Mock<any, any, any>;
+    findByIdAndUpdate: jest.Mock<any, any, any>;
   }
 
   let mockCatModel: MockModel;
@@ -122,6 +123,65 @@ describe('CatService', () => {
 
         expect(mockCatModel.findById).toHaveBeenCalledWith(nonExistentId);
         expect(mockCatModel.findById().exec).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
+  describe('updateById', () => {
+    describe('existent id', () => {
+      it('must return cat with ID and new data', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+
+        const newData: Partial<AnimalDTO> = {
+          name: 'Bart',
+          age: 13,
+        };
+
+        const updatedCat = {
+          _id: catId,
+          name: newData.name,
+          age: newData.age,
+          litterStatus: 'trained',
+        };
+
+        mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(updatedCat),
+        });
+
+        const result = await service.updateById(catId, newData);
+
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledWith(
+          catId,
+          newData,
+          { new: true, runValidators: true },
+        );
+        expect(mockCatModel.findByIdAndUpdate().exec).toHaveBeenCalledTimes(1);
+        expect(result).toEqual(updatedCat);
+      });
+    });
+
+    describe('nonexistent id', () => {
+      it('must throw AnimalException', async () => {
+        const nonExistentId = '999999999999999999999999';
+
+        const newData: Partial<AnimalDTO> = {};
+
+        mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(null),
+        });
+
+        await expect(
+          service.updateById(nonExistentId, newData),
+        ).rejects.toThrow(AnimalException);
+
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledWith(
+          nonExistentId,
+          newData,
+          { new: true, runValidators: true },
+        );
+        expect(mockCatModel.findByIdAndUpdate().exec).toHaveBeenCalledTimes(1);
       });
     });
   });
