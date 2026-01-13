@@ -11,6 +11,7 @@ export class Cat extends Animal {
     required: true,
     default: 'unknown',
     enum: LITTER_SRATUS,
+    type: String,
   })
   litterStatus: LitterStatus;
 }
