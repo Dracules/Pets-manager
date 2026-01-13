@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { AnimalException } from 'src/animal/exception_filters/exceptions/animal.exception';
-import { AnimalDTO } from 'src/animal/dto/animal.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cat, CatDocument } from 'src/cats/schemas/cat.schema';
 import { Model } from 'mongoose';
+import { CatDTO } from '../dto/cat.dto';
 
 @Injectable()
 export class CatService {
   constructor(@InjectModel(Cat.name) private catModel: Model<CatDocument>) {}
 
-  async create(catDTO: AnimalDTO): Promise<CatDocument> {
+  async create(catDTO: CatDTO): Promise<CatDocument> {
     const createdCat = new this.catModel(catDTO);
     return createdCat.save();
   }
@@ -24,10 +24,7 @@ export class CatService {
     return cat;
   }
 
-  async updateById(
-    id: string,
-    catDTO: Partial<AnimalDTO>,
-  ): Promise<CatDocument> {
+  async updateById(id: string, catDTO: Partial<CatDTO>): Promise<CatDocument> {
     const updatedCat = await this.catModel
       .findByIdAndUpdate(id, catDTO, { new: true, runValidators: true })
       .exec();
