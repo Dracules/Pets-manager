@@ -12,18 +12,18 @@ import {
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
-import { AnimalDTO } from '../../animal/dto/animal.dto';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { AnimalCacheInterceptor } from 'src/animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
+import { CatDTO } from '../dto/cat.dto';
 
 @Controller('animals/cats')
 export class CatController {
   constructor(private catService: CatService) {}
 
   @Get('/')
-  async getCats(): Promise<AnimalDTO[]> {
+  async getCats(): Promise<CatDTO[]> {
     return await this.catService.findAll();
   }
 
@@ -32,14 +32,15 @@ export class CatController {
   @UseInterceptors(AnimalCacheInterceptor)
   async getCatById(
     @Param('id', ParseObjectIdPipe) id: string,
-  ): Promise<AnimalDTO> {
+  ): Promise<CatDTO> {
     return await this.catService.findById(id);
   }
 
   @Post('/')
   @Roles(['admin', 'user'])
   async createCat(
-    @Body() catDTO: AnimalDTO,
+    @Body()
+    catDTO: CatDTO,
     @Res() response: Response,
   ): Promise<void> {
     const cat = await this.catService.create(catDTO);
@@ -51,7 +52,7 @@ export class CatController {
   @UseFilters(AnimalExceptionFilter)
   async updateCat(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() catDTO: Partial<AnimalDTO>,
+    @Body() catDTO: Partial<CatDTO>,
     @Res() response: Response,
   ): Promise<void> {
     const cat = await this.catService.updateById(id, catDTO);
