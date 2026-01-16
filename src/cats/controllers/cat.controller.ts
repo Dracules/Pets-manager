@@ -13,7 +13,6 @@ import {
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
-import { Roles } from '../../shared/decorators/roles.decorator';
 import { AnimalCacheInterceptor } from 'src/animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO } from '../dto/cat.dto';
@@ -39,7 +38,6 @@ export class CatController {
   }
 
   @Post('/')
-  @Roles(['admin', 'user'])
   async createCat(
     @Body()
     catDTO: CatDTO,
@@ -50,7 +48,6 @@ export class CatController {
   }
 
   @Put('/:id')
-  @Roles(['admin', 'user'])
   @UseFilters(AnimalExceptionFilter)
   async updateCat(
     @Param('id', ParseObjectIdPipe) id: string,
