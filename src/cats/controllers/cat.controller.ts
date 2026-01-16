@@ -17,11 +17,13 @@ import { Roles } from '../../shared/decorators/roles.decorator';
 import { AnimalCacheInterceptor } from 'src/animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO } from '../dto/cat.dto';
+import { Public } from '../../shared/decorators/public.decorator';
 
 @Controller('animals/cats')
 export class CatController {
   constructor(private catService: CatService) {}
 
+  @Public()
   @Get('/')
   async getCats(): Promise<CatDTO[]> {
     return await this.catService.findAll();
