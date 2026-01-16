@@ -59,7 +59,6 @@ export class CatController {
   }
 
   @Delete('/:id')
-  @Roles(['admin', 'user'])
   @UseFilters(AnimalExceptionFilter)
   async deleteCat(
     @Param('id', ParseObjectIdPipe) id: string,
