@@ -37,4 +37,36 @@ describe('CatDto', () => {
     console.log(catDTOWithoutLitterStatus);
     expect(errors.length).toBe(1);
   });
+
+  it('catDTO without name', async () => {
+    const catDTOWithoutName: CatDTO = plainToInstance(CatDTO, {
+      age: 3,
+      litterStatus: 'not trained',
+    });
+
+    const errors = await validate(catDTOWithoutName);
+    expect(errors.length).toBe(1);
+  });
+
+  it('catDTO with short (<2 symbols) name', async () => {
+    const catDTOWithShortName: CatDTO = plainToInstance(CatDTO, {
+      name: 'F',
+      age: 3,
+      litterStatus: 'trained',
+    });
+
+    const errors = await validate(catDTOWithShortName);
+    expect(errors.length).toBe(1);
+  });
+
+  it('catDTO with short (>=2 symbols) name', async () => {
+    const catDTOWithLongName: CatDTO = plainToInstance(CatDTO, {
+      name: 'Om',
+      age: 3,
+      litterStatus: 'trained',
+    });
+
+    const errors = await validate(catDTOWithLongName);
+    expect(errors.length).toBe(0);
+  });
 });
