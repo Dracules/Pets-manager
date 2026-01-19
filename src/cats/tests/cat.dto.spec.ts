@@ -44,7 +44,7 @@ describe('CatDto', () => {
   });
 
   it('catDTO without LitterStatus', async () => {
-    const catDTOWithoutLitterStatus: Partial<CatDTO> = plainToInstance(CatDTO, {
+    const catDTOWithoutLitterStatus: CatDTO = plainToInstance(CatDTO, {
       name: 'Bars',
       age: 3,
     });
