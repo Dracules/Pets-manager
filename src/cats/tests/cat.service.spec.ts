@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { CatService } from '../services/cat.service';
 import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
-import { AnimalDTO } from '../../animal/dto/animal.dto';
 import { mockCat, mockCatsList } from './mocks/cat.mock';
 import { Cat } from '../interfaces/cat.interface';
 
