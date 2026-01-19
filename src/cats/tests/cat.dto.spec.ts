@@ -1,64 +1,55 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CatDTO } from '../dto/cat.dto';
+import { mockCatDTO } from './mocks/cat.mock';
 
 describe('CatDto', () => {
   it('valid catDTO', async () => {
-    const validCatDTO: CatDTO = plainToInstance(CatDTO, {
-      litterStatus: 'not trained',
-      name: 'Bars',
-      age: 3,
-    });
+    const validCatDTO: CatDTO = plainToInstance(CatDTO, mockCatDTO());
 
     const errors = await validate(validCatDTO);
-    console.log(errors);
     expect(errors.length).toBe(0);
   });
 
   describe('catDTO with every LitterStatus', () => {
     it('with LitterStatus = unknown', async () => {
-      const validCatDTO: CatDTO = plainToInstance(CatDTO, {
-        litterStatus: 'unknown',
-        name: 'Bars',
-        age: 3,
-      });
+      const validCatDTO: CatDTO = plainToInstance(
+        CatDTO,
+        mockCatDTO({ litterStatus: 'unknown' }),
+      );
 
       const errors = await validate(validCatDTO);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
+
     it('with LitterStatus = not trained', async () => {
-      const validCatDTO: CatDTO = plainToInstance(CatDTO, {
-        litterStatus: 'not trained',
-        name: 'Bars',
-        age: 3,
-      });
+      const validCatDTO: CatDTO = plainToInstance(
+        CatDTO,
+        mockCatDTO({ litterStatus: 'not trained' }),
+      );
 
       const errors = await validate(validCatDTO);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
+
     it('with LitterStatus = trained', async () => {
-      const validCatDTO: CatDTO = plainToInstance(CatDTO, {
-        litterStatus: 'trained',
-        name: 'Bars',
-        age: 3,
-      });
+      const validCatDTO: CatDTO = plainToInstance(
+        CatDTO,
+        mockCatDTO({ litterStatus: 'trained' }),
+      );
 
       const errors = await validate(validCatDTO);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
   });
 
   it('catDTO without LitterStatus', async () => {
-    const catDTOWithoutLitterStatus: Partial<CatDTO> = plainToInstance(CatDTO, {
+    const catDTOWithoutLitterStatus: CatDTO = plainToInstance(CatDTO, {
       name: 'Bars',
       age: 3,
     });
 
     const errors = await validate(catDTOWithoutLitterStatus);
-    console.log(catDTOWithoutLitterStatus);
     expect(errors.length).toBe(0);
   });
 
@@ -70,7 +61,6 @@ describe('CatDto', () => {
     });
 
     const errors = await validate(catDTOWithoutLitterStatus);
-    console.log(catDTOWithoutLitterStatus);
     expect(errors.length).toBe(1);
   });
 
@@ -95,55 +85,50 @@ describe('CatDto', () => {
   });
 
   it('catDTO with short (<2 symbols) name', async () => {
-    const catDTOWithShortName: CatDTO = plainToInstance(CatDTO, {
-      name: 'F',
-      age: 3,
-      litterStatus: 'trained',
-    });
+    const catDTOWithShortName: CatDTO = plainToInstance(
+      CatDTO,
+      mockCatDTO({ name: 'F' }),
+    );
 
     const errors = await validate(catDTOWithShortName);
     expect(errors.length).toBe(1);
   });
 
   it('catDTO with short (>=2 symbols) name', async () => {
-    const catDTOWithLongName: CatDTO = plainToInstance(CatDTO, {
-      name: 'Om',
-      age: 3,
-      litterStatus: 'trained',
-    });
+    const catDTOWithLongName: CatDTO = plainToInstance(
+      CatDTO,
+      mockCatDTO({ name: 'Oz' }),
+    );
 
     const errors = await validate(catDTOWithLongName);
     expect(errors.length).toBe(0);
   });
 
   it('catDTO with negative age', async () => {
-    const catDTOWithNegativeAge: CatDTO = plainToInstance(CatDTO, {
-      name: 'Om',
-      age: -1,
-      litterStatus: 'trained',
-    });
+    const catDTOWithNegativeAge: CatDTO = plainToInstance(
+      CatDTO,
+      mockCatDTO({ age: -1 }),
+    );
 
     const errors = await validate(catDTOWithNegativeAge);
     expect(errors.length).toBe(1);
   });
 
   it('catDTO with zero age', async () => {
-    const catDTOWithZeroAge: CatDTO = plainToInstance(CatDTO, {
-      name: 'Om',
-      age: 0,
-      litterStatus: 'trained',
-    });
+    const catDTOWithZeroAge: CatDTO = plainToInstance(
+      CatDTO,
+      mockCatDTO({ age: 0 }),
+    );
 
     const errors = await validate(catDTOWithZeroAge);
     expect(errors.length).toBe(0);
   });
 
   it('catDTO with fractional age', async () => {
-    const catDTOWithFractionalAge: CatDTO = plainToInstance(CatDTO, {
-      name: 'Om',
-      age: 0.1,
-      litterStatus: 'trained',
-    });
+    const catDTOWithFractionalAge: CatDTO = plainToInstance(
+      CatDTO,
+      mockCatDTO({ age: 0.1 }),
+    );
 
     const errors = await validate(catDTOWithFractionalAge);
     expect(errors.length).toBe(1);
