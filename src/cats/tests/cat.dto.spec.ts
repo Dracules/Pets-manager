@@ -8,7 +8,6 @@ describe('CatDto', () => {
     const validCatDTO: CatDTO = plainToInstance(CatDTO, mockCatDTO());
 
     const errors = await validate(validCatDTO);
-    console.log(errors);
     expect(errors.length).toBe(0);
   });
 
@@ -20,9 +19,9 @@ describe('CatDto', () => {
       );
 
       const errors = await validate(validCatDTO);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
+
     it('with LitterStatus = not trained', async () => {
       const validCatDTO: CatDTO = plainToInstance(
         CatDTO,
@@ -30,9 +29,9 @@ describe('CatDto', () => {
       );
 
       const errors = await validate(validCatDTO);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
+
     it('with LitterStatus = trained', async () => {
       const validCatDTO: CatDTO = plainToInstance(
         CatDTO,
@@ -40,7 +39,6 @@ describe('CatDto', () => {
       );
 
       const errors = await validate(validCatDTO);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
   });
@@ -52,7 +50,6 @@ describe('CatDto', () => {
     });
 
     const errors = await validate(catDTOWithoutLitterStatus);
-    console.log(catDTOWithoutLitterStatus);
     expect(errors.length).toBe(0);
   });
 
@@ -64,7 +61,6 @@ describe('CatDto', () => {
     });
 
     const errors = await validate(catDTOWithoutLitterStatus);
-    console.log(catDTOWithoutLitterStatus);
     expect(errors.length).toBe(1);
   });
 
