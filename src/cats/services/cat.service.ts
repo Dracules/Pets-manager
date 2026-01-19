@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AnimalException } from 'src/animal/exception_filters/exceptions/animal.exception';
+import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
 import { InjectModel } from '@nestjs/mongoose';
-import { Cat, CatDocument } from 'src/cats/schemas/cat.schema';
+import { Cat, CatDocument } from '../../cats/schemas/cat.schema';
 import { Model } from 'mongoose';
 import { CatDTO } from '../dto/cat.dto';
 

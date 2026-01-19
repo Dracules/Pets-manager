@@ -7,13 +7,13 @@ import {
   Post,
   Request,
 } from '@nestjs/common';
-import { Public } from 'src/shared/decorators/public.decorator';
-import { AuthService } from 'src/auth/services/auth.service';
-import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
+import { Public } from '../../shared/decorators/public.decorator';
+import { AuthService } from '../../auth/services/auth.service';
+import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import type { JwtPayload } from '../interfaces/jwt.payload.interface';
 import { JwtToken } from '../interfaces/jwt.token.interface';
 import { SignInDTO } from '../dto/sign.in.dto';
-import { Roles } from 'src/shared/decorators/roles.decorator';
+import { Roles } from '../../shared/decorators/roles.decorator';
 
 @Controller('auth')
 export class AuthController {

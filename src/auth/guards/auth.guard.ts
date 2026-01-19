@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { IS_PUBLIC_KEY } from 'src/shared/decorators/public.decorator';
-import { RequestWithUser } from 'src/shared/interfaces/request-with-user';
+import { IS_PUBLIC_KEY } from '../../shared/decorators/public.decorator';
+import { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { JwtPayload } from '../interfaces/jwt.payload.interface';
 
 @Injectable()

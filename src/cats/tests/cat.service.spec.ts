@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { CatService } from '../services/cat.service';
-import { AnimalException } from 'src/animal/exception_filters/exceptions/animal.exception';
-import { AnimalDTO } from 'src/animal/dto/animal.dto';
+import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
+import { AnimalDTO } from '../../animal/dto/animal.dto';
 
 describe('CatService', () => {
   let service: CatService;
