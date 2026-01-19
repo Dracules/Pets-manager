@@ -15,6 +15,42 @@ describe('CatDto', () => {
     expect(errors.length).toBe(0);
   });
 
+  describe('catDTO with every LitterStatus', () => {
+    it('with LitterStatus = unknown', async () => {
+      const validCatDTO: CatDTO = plainToInstance(CatDTO, {
+        litterStatus: 'unknown',
+        name: 'Bars',
+        age: 3,
+      });
+
+      const errors = await validate(validCatDTO);
+      console.log(errors);
+      expect(errors.length).toBe(0);
+    });
+    it('with LitterStatus = not trained', async () => {
+      const validCatDTO: CatDTO = plainToInstance(CatDTO, {
+        litterStatus: 'not trained',
+        name: 'Bars',
+        age: 3,
+      });
+
+      const errors = await validate(validCatDTO);
+      console.log(errors);
+      expect(errors.length).toBe(0);
+    });
+    it('with LitterStatus = trained', async () => {
+      const validCatDTO: CatDTO = plainToInstance(CatDTO, {
+        litterStatus: 'trained',
+        name: 'Bars',
+        age: 3,
+      });
+
+      const errors = await validate(validCatDTO);
+      console.log(errors);
+      expect(errors.length).toBe(0);
+    });
+  });
+
   it('catDTO without LitterStatus', async () => {
     const catDTOWithoutLitterStatus: Partial<CatDTO> = plainToInstance(CatDTO, {
       name: 'Bars',
