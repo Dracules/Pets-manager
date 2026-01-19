@@ -14,4 +14,27 @@ describe('CatDto', () => {
     console.log(errors);
     expect(errors.length).toBe(0);
   });
+
+  it('catDTO without LitterStatus', async () => {
+    const catDTOWithoutLitterStatus: Partial<CatDTO> = plainToInstance(CatDTO, {
+      name: 'Bars',
+      age: 3,
+    });
+
+    const errors = await validate(catDTOWithoutLitterStatus);
+    console.log(catDTOWithoutLitterStatus);
+    expect(errors.length).toBe(0);
+  });
+
+  it('catDTO with invalid LitterStatus', async () => {
+    const catDTOWithoutLitterStatus: CatDTO = plainToInstance(CatDTO, {
+      name: 'Bars',
+      age: 3,
+      litterStatus: 'innocent',
+    });
+
+    const errors = await validate(catDTOWithoutLitterStatus);
+    console.log(catDTOWithoutLitterStatus);
+    expect(errors.length).toBe(1);
+  });
 });
