@@ -48,6 +48,16 @@ describe('CatDto', () => {
     expect(errors.length).toBe(1);
   });
 
+  it('catDTO without age', async () => {
+    const catDTOWithoutAge: CatDTO = plainToInstance(CatDTO, {
+      name: 'Bars',
+      litterStatus: 'trained',
+    });
+
+    const errors = await validate(catDTOWithoutAge);
+    expect(errors.length).toBe(1);
+  });
+
   it('catDTO with short (<2 symbols) name', async () => {
     const catDTOWithShortName: CatDTO = plainToInstance(CatDTO, {
       name: 'F',
@@ -68,5 +78,38 @@ describe('CatDto', () => {
 
     const errors = await validate(catDTOWithLongName);
     expect(errors.length).toBe(0);
+  });
+
+  it('catDTO with negative age', async () => {
+    const catDTOWithNegativeAge: CatDTO = plainToInstance(CatDTO, {
+      name: 'Om',
+      age: -1,
+      litterStatus: 'trained',
+    });
+
+    const errors = await validate(catDTOWithNegativeAge);
+    expect(errors.length).toBe(1);
+  });
+
+  it('catDTO with zero age', async () => {
+    const catDTOWithZeroAge: CatDTO = plainToInstance(CatDTO, {
+      name: 'Om',
+      age: 0,
+      litterStatus: 'trained',
+    });
+
+    const errors = await validate(catDTOWithZeroAge);
+    expect(errors.length).toBe(0);
+  });
+
+  it('catDTO with fractional age', async () => {
+    const catDTOWithFractionalAge: CatDTO = plainToInstance(CatDTO, {
+      name: 'Om',
+      age: 0.1,
+      litterStatus: 'trained',
+    });
+
+    const errors = await validate(catDTOWithFractionalAge);
+    expect(errors.length).toBe(1);
   });
 });
