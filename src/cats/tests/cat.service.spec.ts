@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { CatService } from '../services/cat.service';
 import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
-import { AnimalDTO } from '../../animal/dto/animal.dto';
+import { mockCat, mockCatsList } from './mocks/cat.mock';
+import { Cat } from '../interfaces/cat.interface';
 
 describe('CatService', () => {
   let service: CatService;
@@ -33,15 +34,11 @@ describe('CatService', () => {
 
   describe('create', () => {
     it('create new cat', async () => {
-      const catDTO = {
-        name: 'Bars',
-        age: 3,
-        litterStatus: 'trained',
-      } as AnimalDTO;
+      const cat = mockCat();
 
       const savedCat = {
         _id: '507f1f77bcf86cd799439011',
-        ...catDTO,
+        ...cat,
       };
 
       const saveMock = jest.fn().mockResolvedValue(savedCat);
@@ -52,35 +49,23 @@ describe('CatService', () => {
         };
       });
 
-      const result = await service.create(catDTO);
+      const result = await service.create(cat);
 
       expect(result).toEqual(savedCat);
       expect(mockCatModel).toHaveBeenCalledTimes(1);
-      expect(mockCatModel).toHaveBeenLastCalledWith(catDTO);
+      expect(mockCatModel).toHaveBeenLastCalledWith(cat);
       expect(saveMock).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('findAll', () => {
     it('return all cats', async () => {
-      const mockCats = [
-        {
-          _id: '694ac1f93b5320db21a572a5',
-          name: 'Bars',
-          age: 3,
-          litterStatus: 'trained',
-        },
-        {
-          _id: '694ac1f93b5320db21a572a5',
-          name: 'Mura',
-          age: 1,
-          litterStatus: 'trained',
-        },
-      ];
+      const mockCats = mockCatsList();
 
       mockCatModel.find = jest.fn().mockReturnValue({
         exec: jest.fn().mockResolvedValue(mockCats),
       });
+
       const result = await service.findAll();
       expect(mockCatModel.find().exec).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockCats);
@@ -91,22 +76,17 @@ describe('CatService', () => {
     describe('existent id', () => {
       it('must return cat with ID', async () => {
         const catId = '694ac1f93b5320db21a572a5';
-        const mockCat = {
-          _id: catId,
-          name: 'Bars',
-          age: 3,
-          litterStatus: 'trained',
-        };
+        const cat = mockCat({ id: catId });
 
         mockCatModel.findById = jest.fn().mockReturnValue({
-          exec: jest.fn().mockResolvedValue(mockCat),
+          exec: jest.fn().mockResolvedValue(cat),
         });
 
         const result = await service.findById(catId);
 
         expect(mockCatModel.findById).toHaveBeenCalledWith(catId);
         expect(mockCatModel.findById().exec).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(mockCat);
+        expect(result).toEqual(cat);
       });
     });
 
@@ -133,17 +113,12 @@ describe('CatService', () => {
       it('must return cat with ID and new data', async () => {
         const catId = '694ac1f93b5320db21a572a5';
 
-        const newData: Partial<AnimalDTO> = {
+        const newData: Partial<Cat> = {
           name: 'Bart',
           age: 13,
         };
 
-        const updatedCat = {
-          _id: catId,
-          name: newData.name,
-          age: newData.age,
-          litterStatus: 'trained',
-        };
+        const updatedCat = mockCat(newData);
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(updatedCat),
@@ -166,7 +141,7 @@ describe('CatService', () => {
       it('must throw AnimalException', async () => {
         const nonExistentId = '999999999999999999999999';
 
-        const newData: Partial<AnimalDTO> = {};
+        const newData: Partial<Cat> = {};
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(null),
@@ -192,12 +167,7 @@ describe('CatService', () => {
       it('must delete cat with ID and return hardcoded string', async () => {
         const catId = '694ac1f93b5320db21a572a5';
 
-        const deletedCat = {
-          _id: catId,
-          name: 'Bars',
-          age: 3,
-          litterStatus: 'trained',
-        };
+        const deletedCat = mockCat({ id: catId });
 
         const expectedResponse = 'Selected item is deleted successfully!';
 
