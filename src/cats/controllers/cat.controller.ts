@@ -13,7 +13,7 @@ import {
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
-import { AnimalCacheInterceptor } from 'src/animal/interceptors/animal.cache.interceptor';
+import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
