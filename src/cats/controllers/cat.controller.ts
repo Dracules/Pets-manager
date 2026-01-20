@@ -15,7 +15,7 @@ import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
-import { CatDTO } from '../dto/cat.dto';
+import { CatDTO, UpdateCatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
 
 @Controller('animals/cats')
@@ -51,7 +51,7 @@ export class CatController {
   @UseFilters(AnimalExceptionFilter)
   async updateCat(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() catDTO: Partial<CatDTO>,
+    @Body() catDTO: UpdateCatDTO,
     @Res() response: Response,
   ): Promise<void> {
     const cat = await this.catService.updateById(id, catDTO);
