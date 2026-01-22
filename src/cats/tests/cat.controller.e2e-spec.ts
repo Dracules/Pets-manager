@@ -1,12 +1,12 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import { CatDTO } from '../dto/cat.dto';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import mongoose, { Connection } from 'mongoose';
+import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection } from 'mongodb';
 import { AppModule } from '../../app.module';
-
 describe('CatController', () => {
   let app: INestApplication;
   let mongooseConnection: Connection;
@@ -25,6 +25,19 @@ describe('CatController', () => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async function populateCatsDB(
+    catsArray: CatDTO[],
+  ): Promise<InsertManyResult<Document>> {
+    const catsCollection = collections?.find(
+      (collection) => collection.collectionName === 'cats',
+    );
+    if (!catsCollection) {
+      throw Error('Cats collection not found');
+    }
+
+    return await catsCollection.insertMany(catsArray);
   }
 
   beforeAll(async () => {
