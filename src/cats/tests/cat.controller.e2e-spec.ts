@@ -78,4 +78,9 @@ describe('CatController', () => {
     await mongooseConnection?.close();
     await app.close();
   });
+
+  beforeEach(async () => {
+    if (!collections) collections = await mongooseConnection.db?.collections();
+    await cleanupDB();
+  });
 });
