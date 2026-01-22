@@ -414,4 +414,76 @@ describe('CatController', () => {
       expect(findedCat.name).toEqual(newName);
     });
   });
+
+  describe('deleteCat', () => {
+    it('401 - valid catId without auth', async () => {
+      const catId = new Types.ObjectId().toHexString();
+
+      await request(app.getHttpServer())
+        .delete(`/animals/cats/${catId}`)
+        .send()
+        .expect(401);
+    });
+
+    it('200 - valid catId and user role', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      await request(app.getHttpServer())
+        .delete(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send()
+        .expect(200);
+    });
+
+    it('200 - valid catId and admin role', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      await request(app.getHttpServer())
+        .delete(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send()
+        .expect(200);
+    });
+
+    it('400 - invalid catId', async () => {
+      const invalidId = '1';
+
+      await request(app.getHttpServer())
+        .delete(`/animals/cats/${invalidId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send()
+        .expect(400);
+    });
+
+    it('404 (Animal exception) - valid nonexistent catId', async () => {
+      const invalidId = '111111111111111111111111';
+
+      const response = await request(app.getHttpServer())
+        .delete(`/animals/cats/${invalidId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send()
+        .expect(404);
+
+      const error = response.body.message;
+
+      expect(error).toEqual('Animal is not found. Check id.');
+    });
+
+    it('deletes from DB', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      const response = await request(app.getHttpServer())
+        .delete(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send()
+        .expect(200);
+
+      const findedCat = await findCatDB(catId);
+      expect(findedCat).toBeNull();
+      expect(response.body).toEqual('Selected item is deleted successfully!');
+    });
+  });
 });
