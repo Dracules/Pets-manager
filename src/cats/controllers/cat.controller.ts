@@ -64,7 +64,7 @@ export class CatController {
     @Param('id', ParseObjectIdPipe) id: string,
     @Res() response: Response,
   ): Promise<void> {
-    const cat = await this.catService.delete(id);
-    response.json(cat);
+    const message = await this.catService.delete(id);
+    response.json(message);
   }
 }
