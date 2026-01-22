@@ -5,7 +5,7 @@ import { CatDTO } from '../dto/cat.dto';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection, InsertManyResult } from 'mongoose';
-import { Collection } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { AppModule } from '../../app.module';
 import { mockCatDTOList } from './mocks/cat.mock';
 import { Cat } from '../interfaces/cat.interface';
@@ -41,6 +41,19 @@ describe('CatController', () => {
     }
 
     return await catsCollection.insertMany(catsArray);
+  }
+
+  async function findCatDB(id: ObjectId): Promise<any> {
+    const catsCollection = collections?.find(
+      (collection) => collection.collectionName === 'cats',
+    );
+    if (!catsCollection) {
+      throw Error('Cats collection not found');
+    }
+
+    return await catsCollection.findOne({
+      _id: id,
+    });
   }
 
   async function findAllCatsDB(): Promise<any> {
