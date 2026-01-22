@@ -308,4 +308,110 @@ describe('CatController', () => {
       expect(findedCat).toMatchObject(correctCatDTO);
     });
   });
+
+  describe('updateCat', () => {
+    it('401 - valid CatDTO and catId without auth', async () => {
+      const correctCatDTO: Partial<CatDTO> = mockCatDTO();
+
+      const catId = '694ac1f93b5320db21a572a5';
+
+      await request(app.getHttpServer())
+        .put(`/animals/cats/${catId}`)
+        .send(correctCatDTO)
+        .expect(401);
+    });
+
+    it('200 - valid CatDTO, catId and user role', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      const newName = 'NewName';
+      const correctCatDTO: Partial<CatDTO> = { name: newName };
+
+      await request(app.getHttpServer())
+        .put(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(200);
+    });
+
+    it('200 - valid CatDTO, catId and admin role', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      const newName = 'NewName';
+      const correctCatDTO: Partial<CatDTO> = { name: newName };
+
+      await request(app.getHttpServer())
+        .put(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(correctCatDTO)
+        .expect(200);
+    });
+
+    it('400 - invalid catDTO', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      const catDTOWithIncorrectLitterStatus = mockCatDTO({
+        name: 'B',
+        age: -3,
+      });
+
+      await request(app.getHttpServer())
+        .put(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(catDTOWithIncorrectLitterStatus)
+        .expect(400);
+    });
+
+    it('400 - invalid catId', async () => {
+      const cats = mockCatDTOList(1);
+      await populateCatsDB(cats);
+      const invalidId = '1';
+
+      const correctCatDTO: Partial<CatDTO> = { name: 'newName' };
+
+      await request(app.getHttpServer())
+        .put(`/animals/cats/${invalidId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(400);
+    });
+
+    it('404 (Animal exception) - valid nonexistent catId', async () => {
+      const cats = mockCatDTOList(1);
+      await populateCatsDB(cats);
+      const invalidId = '111111111111111111111111';
+
+      const correctCatDTO: Partial<CatDTO> = { name: 'newName' };
+
+      const response = await request(app.getHttpServer())
+        .put(`/animals/cats/${invalidId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(404);
+
+      const error = response.body.message;
+
+      expect(error).toEqual('Animal is not found. Check id.');
+    });
+
+    it('updates in DB', async () => {
+      const cats = mockCatDTOList(1);
+      const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+      const newName = 'NewName';
+      const correctCatDTO: Partial<CatDTO> = { name: newName };
+
+      await request(app.getHttpServer())
+        .put(`/animals/cats/${catId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(correctCatDTO)
+        .expect(200);
+
+      const findedCat = (await findCatDB(catId)) as Cat;
+      expect(findedCat.name).toEqual(newName);
+    });
+  });
 });
