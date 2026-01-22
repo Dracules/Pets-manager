@@ -4,12 +4,27 @@ import request from 'supertest';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection } from 'mongoose';
+import { Collection } from 'mongodb';
 import { AppModule } from '../../app.module';
-
 describe('CatController', () => {
   let app: INestApplication;
   let mongooseConnection: Connection;
+  let collections: Collection[] | undefined;
   let adminToken: any, userToken: any;
+
+  async function cleanupDB(): Promise<void> {
+    try {
+      if (collections) {
+        for (const collection of collections) {
+          if (collection.collectionName !== 'users') {
+            await collection.deleteMany();
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
