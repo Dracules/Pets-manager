@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection } from 'mongoose';
 import { Collection } from 'mongodb';
 import { AppModule } from '../../app.module';
+
 describe('CatController', () => {
   let app: INestApplication;
   let mongooseConnection: Connection;
@@ -70,5 +71,11 @@ describe('CatController', () => {
 
       userToken = loginResUser.body.access_token;
     }
+  });
+
+  afterAll(async () => {
+    await cleanupDB();
+    await mongooseConnection?.close();
+    await app.close();
   });
 });
