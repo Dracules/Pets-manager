@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import request from 'supertest';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection } from 'mongoose';
@@ -8,6 +9,7 @@ import { AppModule } from '../../app.module';
 describe('CatController', () => {
   let app: INestApplication;
   let mongooseConnection: Connection;
+  let adminToken: any, userToken: any;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -32,6 +34,26 @@ describe('CatController', () => {
       mongooseConnection = mongoose.createConnection(
         configService.get<string>('MONGO_TEST_URI')!,
       );
+
+      const loginResAdmin = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          login: configService.get<string>('MONGODB_TEST_ADMIN_USER'),
+          password: configService.get<string>('MONGODB_TEST_ADMIN_PASSWORD'),
+        })
+        .expect(200);
+
+      adminToken = loginResAdmin.body.access_token;
+
+      const loginResUser = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          login: configService.get<string>('MONGODB_TEST_USER'),
+          password: configService.get<string>('MONGODB_TEST_PASSWORD'),
+        })
+        .expect(200);
+
+      userToken = loginResUser.body.access_token;
     }
   });
 });
