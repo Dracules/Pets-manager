@@ -1,5 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppModule } from '../../app.module';
 
 describe('CatController', () => {
@@ -7,7 +9,16 @@ describe('CatController', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        MongooseModule.forRootAsync({
+          inject: [ConfigService],
+          useFactory: (config: ConfigService) => ({
+            uri: config.get<string>('MONGO_TEST_URI'),
+          }),
+        }),
+        AppModule,
+      ],
     }).compile();
 
     app = moduleRef.createNestApplication();
