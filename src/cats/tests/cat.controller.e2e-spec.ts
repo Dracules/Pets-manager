@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection, ObjectId } from 'mongodb';
 import { AppModule } from '../../app.module';
-import { mockCatDTOList } from './mocks/cat.mock';
+import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
 import { Cat } from '../interfaces/cat.interface';
 
 describe('CatController', () => {
@@ -230,6 +230,82 @@ describe('CatController', () => {
         ...findedCat,
         id: _id.toString(),
       });
+    });
+  });
+
+  describe('createCat', () => {
+    it('401 - valid CatDTO without auth', async () => {
+      const correctCatDTO: CatDTO = mockCatDTO();
+
+      await request(app.getHttpServer())
+        .post('/animals/cats/')
+        .send(correctCatDTO)
+        .expect(401);
+    });
+
+    it('201 - valid CatDTO and user role', async () => {
+      const correctCatDTO: CatDTO = mockCatDTO();
+
+      await request(app.getHttpServer())
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(201);
+    });
+
+    it('201 - valid CatDTO and admin role', async () => {
+      const correctCatDTO: CatDTO = mockCatDTO();
+
+      await request(app.getHttpServer())
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(correctCatDTO)
+        .expect(201);
+    });
+
+    it('201 - catDTO without LitterStatus', async () => {
+      const catDTOWithoutLitterStatus: Partial<CatDTO> = {
+        name: 'Bars',
+        age: 3,
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(catDTOWithoutLitterStatus)
+        .expect(201);
+
+      const createdCat = response.body as CatDTO;
+      expect(createdCat.litterStatus).toEqual('unknown');
+    });
+
+    it('400 - invalid catDTO', async () => {
+      const catDTOWithIncorrectLitterStatus = mockCatDTO({
+        name: 'B',
+        age: -3,
+      });
+
+      await request(app.getHttpServer())
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(catDTOWithIncorrectLitterStatus)
+        .expect(400);
+    });
+
+    it('creates in DB', async () => {
+      const correctCatDTO: CatDTO = mockCatDTO();
+
+      const response = await request(app.getHttpServer())
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(201);
+
+      const createdCat = response.body as Cat;
+
+      const findedCat = (await findCatDB(new ObjectId(createdCat.id))) as Cat;
+      expect(findedCat).not.toBeNull();
+      expect(findedCat).toMatchObject(correctCatDTO);
     });
   });
 });
