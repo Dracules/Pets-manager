@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection, InsertManyResult } from 'mongoose';
 import { Collection } from 'mongodb';
 import { AppModule } from '../../app.module';
+import { mockCatDTOList } from './mocks/cat.mock';
+import { Cat } from '../interfaces/cat.interface';
 
 describe('CatController', () => {
   let app: INestApplication;
@@ -107,5 +109,38 @@ describe('CatController', () => {
   beforeEach(async () => {
     if (!collections) collections = await mongooseConnection.db?.collections();
     await cleanupDB();
+  });
+
+  describe('getCats', () => {
+    it('200 - without auth', async () => {
+      await request(app.getHttpServer()).get('/animals/cats/').expect(200);
+    });
+    it('200 - user role', async () => {
+      await request(app.getHttpServer())
+        .get('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .expect(200);
+    });
+    it('200 - admin role', async () => {
+      await request(app.getHttpServer())
+        .get('/animals/cats/')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+    });
+    it('gets all from DB', async () => {
+      const cats = mockCatDTOList(5);
+      const catsDeepCopy = JSON.parse(JSON.stringify(cats)) as CatDTO[];
+      await populateCatsDB(cats);
+      await request(app.getHttpServer())
+        .get('/animals/cats/')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      const allCatsDB = (await findAllCatsDB()) as Cat[];
+      expect(allCatsDB.length).toBe(cats.length);
+      catsDeepCopy.forEach((catDto) => {
+        expect(allCatsDB).toContainEqual(expect.objectContaining(catDto));
+      });
+    });
   });
 });
