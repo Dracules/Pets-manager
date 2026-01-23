@@ -8,6 +8,11 @@ export const mockCatDTO = (overrides: Partial<CatDTO> = {}): CatDTO => ({
   ...overrides,
 });
 
+export const mockCatDTOList = (count = 5): CatDTO[] =>
+  Array.from({ length: count }, (_, i) =>
+    mockCatDTO({ name: `Bars${i.toString()}` }),
+  );
+
 export const mockCat = (overrides: Partial<Cat> = {}): Cat => ({
   id: '1',
   name: 'Bars',
