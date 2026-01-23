@@ -158,77 +158,122 @@ describe('CatController', () => {
   });
 
   describe('getCatById', () => {
-    it('401 - valid catId without auth', async () => {
-      const catId = new Types.ObjectId().toHexString();
+    describe('e2e-tests', () => {
+      it('401 - valid catId without auth', async () => {
+        const catId = new Types.ObjectId().toHexString();
 
-      await request(app.getHttpServer())
-        .get(`/animals/cats/${catId}`)
-        .send()
-        .expect(401);
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .send()
+          .expect(401);
+      });
+
+      it('200 - valid catId and user role', async () => {
+        const cats = mockCatDTOList(1);
+        const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send()
+          .expect(200);
+      });
+
+      it('200 - valid catId and admin role', async () => {
+        const cats = mockCatDTOList(1);
+        const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .set('Authorization', `Bearer ${adminToken}`)
+          .send()
+          .expect(200);
+      });
+
+      it('400 - invalid catId', async () => {
+        const invalidId = '1';
+
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${invalidId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send()
+          .expect(400);
+      });
+
+      it('404 (Animal exception) - valid nonexistent catId', async () => {
+        const invalidId = '111111111111111111111111';
+
+        const response = await request(app.getHttpServer())
+          .get(`/animals/cats/${invalidId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send()
+          .expect(404);
+
+        const error = response.body.message;
+
+        expect(error).toEqual('Animal is not found. Check id.');
+      });
+
+      it('gets by id from DB', async () => {
+        const cats = mockCatDTOList(1);
+        const catId = (await populateCatsDB(cats)).insertedIds[0];
+
+        const response = await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send()
+          .expect(200);
+
+        const { _id, ...findedCat } = await findCatDB(catId);
+
+        expect(response.body).not.toBeNull();
+        expect(response.body).toMatchObject({
+          ...findedCat,
+          id: _id.toString(),
+        });
+      });
     });
 
-    it('200 - valid catId and user role', async () => {
-      const cats = mockCatDTOList(1);
-      const catId = (await populateCatsDB(cats)).insertedIds[0];
+    describe('integration-tests', () => {
+      let consoleSpy: jest.SpyInstance;
 
-      await request(app.getHttpServer())
-        .get(`/animals/cats/${catId}`)
-        .set('Authorization', `Bearer ${userToken}`)
-        .send()
-        .expect(200);
-    });
+      beforeEach(() => {
+        consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+      });
 
-    it('200 - valid catId and admin role', async () => {
-      const cats = mockCatDTOList(1);
-      const catId = (await populateCatsDB(cats)).insertedIds[0];
+      const countConsoleLogs = (text: string) =>
+        consoleSpy.mock.calls.filter(([msg]) => msg.includes(text)).length;
 
-      await request(app.getHttpServer())
-        .get(`/animals/cats/${catId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send()
-        .expect(200);
-    });
+      it('caches by url from DB', async () => {
+        const cats = mockCatDTOList(1);
+        const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-    it('400 - invalid catId', async () => {
-      const invalidId = '1';
+        expect(countConsoleLogs('Take cache')).toBe(0);
+        expect(countConsoleLogs('Put cache')).toBe(0);
 
-      await request(app.getHttpServer())
-        .get(`/animals/cats/${invalidId}`)
-        .set('Authorization', `Bearer ${userToken}`)
-        .send()
-        .expect(400);
-    });
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send();
 
-    it('404 (Animal exception) - valid nonexistent catId', async () => {
-      const invalidId = '111111111111111111111111';
+        expect(countConsoleLogs('Take cache')).toBe(0);
+        expect(countConsoleLogs('Put cache')).toBe(1);
 
-      const response = await request(app.getHttpServer())
-        .get(`/animals/cats/${invalidId}`)
-        .set('Authorization', `Bearer ${userToken}`)
-        .send()
-        .expect(404);
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send();
 
-      const error = response.body.message;
+        expect(countConsoleLogs('Take cache')).toBe(1);
+        expect(countConsoleLogs('Put cache')).toBe(1);
 
-      expect(error).toEqual('Animal is not found. Check id.');
-    });
+        await request(app.getHttpServer())
+          .get(`/animals/cats/${catId}`)
+          .set('Authorization', `Bearer ${userToken}`)
+          .send();
 
-    it('gets by id from DB', async () => {
-      const cats = mockCatDTOList(1);
-      const catId = (await populateCatsDB(cats)).insertedIds[0];
-
-      const response = await request(app.getHttpServer())
-        .get(`/animals/cats/${catId}`)
-        .set('Authorization', `Bearer ${userToken}`)
-        .send()
-        .expect(200);
-
-      const { _id, ...findedCat } = await findCatDB(catId);
-
-      expect(response.body).not.toBeNull();
-      expect(response.body).toMatchObject({
-        ...findedCat,
-        id: _id.toString(),
+        expect(countConsoleLogs('Take cache')).toBe(2);
+        expect(countConsoleLogs('Put cache')).toBe(1);
       });
     });
   });
