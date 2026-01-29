@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json",
     "test:all": "npm run test && npm run test:e2e",
-    "prestart": "npm run test:all",
+    "prestart:prod": "npm run build",
     "prestart:dev": "npm run test:all"
   },
   "dependencies": {
