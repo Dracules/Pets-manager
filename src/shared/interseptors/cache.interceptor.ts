@@ -26,7 +26,7 @@ export class CacheInterceptor<T> implements NestInterceptor<T, T> {
     return next.handle().pipe(
       tap((item: T) => {
         if (item) {
-          const plain = isMongooseDoc(item) ? item.toJSON() : item;
+          const plain = isMongooseDoc(item) ? (item.toJSON() as T) : item;
           this.cache.saveToCache(key, plain);
         }
       }),
@@ -34,7 +34,11 @@ export class CacheInterceptor<T> implements NestInterceptor<T, T> {
   }
 }
 
-function isMongooseDoc(doc: any): doc is Document {
-  const b = !!doc && typeof doc.toObject === 'function';
-  return b;
+function isMongooseDoc(doc: unknown): doc is Document {
+  return (
+    !!doc &&
+    typeof doc === 'object' &&
+    doc !== null &&
+    typeof (doc as Record<string, unknown>).toObject === 'function'
+  );
 }
