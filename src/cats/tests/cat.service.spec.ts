@@ -8,11 +8,13 @@ import { Cat } from '../interfaces/cat.interface';
 describe('CatService', () => {
   let service: CatService;
 
+  type MockFnWithExec = jest.Mock<{ exec: jest.Mock }>;
+
   interface MockModel extends jest.Mock {
-    find: jest.Mock<any, any, any>;
-    findById: jest.Mock<any, any, any>;
-    findByIdAndUpdate: jest.Mock<any, any, any>;
-    findByIdAndDelete: jest.Mock<any, any, any>;
+    find: MockFnWithExec;
+    findById: MockFnWithExec;
+    findByIdAndUpdate: MockFnWithExec;
+    findByIdAndDelete: MockFnWithExec;
   }
 
   let mockCatModel: MockModel;
@@ -64,7 +66,7 @@ describe('CatService', () => {
 
       mockCatModel.find = jest.fn().mockReturnValue({
         exec: jest.fn().mockResolvedValue(mockCats),
-      });
+      }) as MockFnWithExec;
 
       const result = await service.findAll();
       expect(mockCatModel.find().exec).toHaveBeenCalledTimes(1);
@@ -80,7 +82,7 @@ describe('CatService', () => {
 
         mockCatModel.findById = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(cat),
-        });
+        }) as MockFnWithExec;
 
         const result = await service.findById(catId);
 
@@ -96,7 +98,7 @@ describe('CatService', () => {
 
         mockCatModel.findById = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(null),
-        });
+        }) as MockFnWithExec;
 
         await expect(service.findById(nonExistentId)).rejects.toThrow(
           AnimalException,
@@ -122,7 +124,7 @@ describe('CatService', () => {
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(updatedCat),
-        });
+        }) as MockFnWithExec;
 
         const result = await service.updateById(catId, newData);
 
@@ -145,7 +147,7 @@ describe('CatService', () => {
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(null),
-        });
+        }) as MockFnWithExec;
 
         await expect(
           service.updateById(nonExistentId, newData),
@@ -173,7 +175,7 @@ describe('CatService', () => {
 
         mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(deletedCat),
-        });
+        }) as MockFnWithExec;
 
         const result = await service.delete(catId);
 
@@ -190,7 +192,7 @@ describe('CatService', () => {
 
         mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(null),
-        });
+        }) as MockFnWithExec;
 
         await expect(service.delete(nonExistentId)).rejects.toThrow(
           AnimalException,

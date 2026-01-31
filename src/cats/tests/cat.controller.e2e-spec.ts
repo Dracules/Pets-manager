@@ -9,12 +9,14 @@ import { Collection, ObjectId } from 'mongodb';
 import { AppModule } from '../../app.module';
 import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
 import { Cat } from '../interfaces/cat.interface';
+import { App } from 'supertest/types';
+import { CatDocument } from '../schemas/cat.schema';
 
 describe('CatController', () => {
   let app: INestApplication;
   let mongooseConnection: Connection;
   let collections: Collection[] | undefined;
-  let adminToken: any, userToken: any;
+  let adminToken: string, userToken: string;
 
   async function cleanupDB(): Promise<void> {
     try {
@@ -43,7 +45,7 @@ describe('CatController', () => {
     return await catsCollection.insertMany(catsArray);
   }
 
-  async function findCatDB(id: ObjectId): Promise<any> {
+  async function findCatDB(id: ObjectId) {
     const catsCollection = collections?.find(
       (collection) => collection.collectionName === 'cats',
     );
@@ -56,7 +58,7 @@ describe('CatController', () => {
     });
   }
 
-  async function findAllCatsDB(): Promise<any> {
+  async function findAllCatsDB() {
     const catsCollection = collections?.find(
       (collection) => collection.collectionName === 'cats',
     );
@@ -91,23 +93,27 @@ describe('CatController', () => {
         configService.get<string>('MONGO_TEST_URI')!,
       );
 
-      const loginResAdmin = await request(app.getHttpServer())
+      const loginResAdmin = (await request(app.getHttpServer() as App)
         .post('/auth/login')
         .send({
           login: configService.get<string>('MONGODB_TEST_ADMIN_USER'),
           password: configService.get<string>('MONGODB_TEST_ADMIN_PASSWORD'),
         })
-        .expect(200);
+        .expect(200)) as {
+        body: {
+          access_token: string;
+        };
+      };
 
       adminToken = loginResAdmin.body.access_token;
 
-      const loginResUser = await request(app.getHttpServer())
+      const loginResUser = (await request(app.getHttpServer() as App)
         .post('/auth/login')
         .send({
           login: configService.get<string>('MONGODB_TEST_USER'),
           password: configService.get<string>('MONGODB_TEST_PASSWORD'),
         })
-        .expect(200);
+        .expect(200)) as { body: { access_token: string } };
 
       userToken = loginResUser.body.access_token;
     }
@@ -126,16 +132,18 @@ describe('CatController', () => {
 
   describe('getCats', () => {
     it('200 - without auth', async () => {
-      await request(app.getHttpServer()).get('/animals/cats/').expect(200);
+      await request(app.getHttpServer() as App)
+        .get('/animals/cats/')
+        .expect(200);
     });
     it('200 - user role', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .get('/animals/cats/')
         .set('Authorization', `Bearer ${userToken}`)
         .expect(200);
     });
     it('200 - admin role', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .get('/animals/cats/')
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
@@ -144,12 +152,12 @@ describe('CatController', () => {
       const cats = mockCatDTOList(5);
       const catsDeepCopy = JSON.parse(JSON.stringify(cats)) as CatDTO[];
       await populateCatsDB(cats);
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .get('/animals/cats/')
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
-      const allCatsDB = (await findAllCatsDB()) as Cat[];
+      const allCatsDB = (await findAllCatsDB()) as unknown as Cat[];
       expect(allCatsDB.length).toBe(cats.length);
       catsDeepCopy.forEach((catDto) => {
         expect(allCatsDB).toContainEqual(expect.objectContaining(catDto));
@@ -162,7 +170,7 @@ describe('CatController', () => {
       it('401 - valid catId without auth', async () => {
         const catId = new Types.ObjectId().toHexString();
 
-        await request(app.getHttpServer())
+        await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId}`)
           .send()
           .expect(401);
@@ -172,8 +180,8 @@ describe('CatController', () => {
         const cats = mockCatDTOList(1);
         const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-        await request(app.getHttpServer())
-          .get(`/animals/cats/${catId}`)
+        await request(app.getHttpServer() as App)
+          .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send()
           .expect(200);
@@ -183,8 +191,8 @@ describe('CatController', () => {
         const cats = mockCatDTOList(1);
         const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-        await request(app.getHttpServer())
-          .get(`/animals/cats/${catId}`)
+        await request(app.getHttpServer() as App)
+          .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${adminToken}`)
           .send()
           .expect(200);
@@ -193,7 +201,7 @@ describe('CatController', () => {
       it('400 - invalid catId', async () => {
         const invalidId = '1';
 
-        await request(app.getHttpServer())
+        await request(app.getHttpServer() as App)
           .get(`/animals/cats/${invalidId}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send()
@@ -203,11 +211,11 @@ describe('CatController', () => {
       it('404 (Animal exception) - valid nonexistent catId', async () => {
         const invalidId = '111111111111111111111111';
 
-        const response = await request(app.getHttpServer())
+        const response = (await request(app.getHttpServer() as App)
           .get(`/animals/cats/${invalidId}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send()
-          .expect(404);
+          .expect(404)) as { body: { message: string } };
 
         const error = response.body.message;
 
@@ -218,13 +226,13 @@ describe('CatController', () => {
         const cats = mockCatDTOList(1);
         const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-        const response = await request(app.getHttpServer())
-          .get(`/animals/cats/${catId}`)
+        const response = await request(app.getHttpServer() as App)
+          .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send()
           .expect(200);
 
-        const { _id, ...findedCat } = await findCatDB(catId);
+        const { _id, ...findedCat } = (await findCatDB(catId)) as CatDocument;
 
         expect(response.body).not.toBeNull();
         expect(response.body).toMatchObject({
@@ -242,7 +250,9 @@ describe('CatController', () => {
       });
 
       const countConsoleLogs = (text: string) =>
-        consoleSpy.mock.calls.filter(([msg]) => msg.includes(text)).length;
+        consoleSpy.mock.calls.filter(
+          ([msg]: [unknown]) => typeof msg === 'string' && msg.includes(text),
+        ).length;
 
       it('caches by url from DB', async () => {
         const cats = mockCatDTOList(1);
@@ -251,24 +261,24 @@ describe('CatController', () => {
         expect(countConsoleLogs('Take cache')).toBe(0);
         expect(countConsoleLogs('Put cache')).toBe(0);
 
-        await request(app.getHttpServer())
-          .get(`/animals/cats/${catId}`)
+        await request(app.getHttpServer() as App)
+          .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send();
 
         expect(countConsoleLogs('Take cache')).toBe(0);
         expect(countConsoleLogs('Put cache')).toBe(1);
 
-        await request(app.getHttpServer())
-          .get(`/animals/cats/${catId}`)
+        await request(app.getHttpServer() as App)
+          .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send();
 
         expect(countConsoleLogs('Take cache')).toBe(1);
         expect(countConsoleLogs('Put cache')).toBe(1);
 
-        await request(app.getHttpServer())
-          .get(`/animals/cats/${catId}`)
+        await request(app.getHttpServer() as App)
+          .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
           .send();
 
@@ -282,7 +292,7 @@ describe('CatController', () => {
     it('401 - valid CatDTO without auth', async () => {
       const correctCatDTO: CatDTO = mockCatDTO();
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .post('/animals/cats/')
         .send(correctCatDTO)
         .expect(401);
@@ -291,7 +301,7 @@ describe('CatController', () => {
     it('201 - valid CatDTO and user role', async () => {
       const correctCatDTO: CatDTO = mockCatDTO();
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .post('/animals/cats/')
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
@@ -301,7 +311,7 @@ describe('CatController', () => {
     it('201 - valid CatDTO and admin role', async () => {
       const correctCatDTO: CatDTO = mockCatDTO();
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .post('/animals/cats/')
         .set('Authorization', `Bearer ${adminToken}`)
         .send(correctCatDTO)
@@ -314,7 +324,7 @@ describe('CatController', () => {
         age: 3,
       };
 
-      const response = await request(app.getHttpServer())
+      const response = await request(app.getHttpServer() as App)
         .post('/animals/cats/')
         .set('Authorization', `Bearer ${userToken}`)
         .send(catDTOWithoutLitterStatus)
@@ -330,7 +340,7 @@ describe('CatController', () => {
         age: -3,
       });
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .post('/animals/cats/')
         .set('Authorization', `Bearer ${userToken}`)
         .send(catDTOWithIncorrectLitterStatus)
@@ -340,7 +350,7 @@ describe('CatController', () => {
     it('creates in DB', async () => {
       const correctCatDTO: CatDTO = mockCatDTO();
 
-      const response = await request(app.getHttpServer())
+      const response = await request(app.getHttpServer() as App)
         .post('/animals/cats/')
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
@@ -348,7 +358,9 @@ describe('CatController', () => {
 
       const createdCat = response.body as Cat;
 
-      const findedCat = (await findCatDB(new ObjectId(createdCat.id))) as Cat;
+      const findedCat = (await findCatDB(
+        new ObjectId(createdCat.id),
+      )) as unknown as Cat;
       expect(findedCat).not.toBeNull();
       expect(findedCat).toMatchObject(correctCatDTO);
     });
@@ -360,7 +372,7 @@ describe('CatController', () => {
 
       const catId = '694ac1f93b5320db21a572a5';
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .put(`/animals/cats/${catId}`)
         .send(correctCatDTO)
         .expect(401);
@@ -373,8 +385,8 @@ describe('CatController', () => {
       const newName = 'NewName';
       const correctCatDTO: Partial<CatDTO> = { name: newName };
 
-      await request(app.getHttpServer())
-        .put(`/animals/cats/${catId}`)
+      await request(app.getHttpServer() as App)
+        .put(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
         .expect(200);
@@ -387,8 +399,8 @@ describe('CatController', () => {
       const newName = 'NewName';
       const correctCatDTO: Partial<CatDTO> = { name: newName };
 
-      await request(app.getHttpServer())
-        .put(`/animals/cats/${catId}`)
+      await request(app.getHttpServer() as App)
+        .put(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(correctCatDTO)
         .expect(200);
@@ -403,8 +415,8 @@ describe('CatController', () => {
         age: -3,
       });
 
-      await request(app.getHttpServer())
-        .put(`/animals/cats/${catId}`)
+      await request(app.getHttpServer() as App)
+        .put(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(catDTOWithIncorrectLitterStatus)
         .expect(400);
@@ -417,7 +429,7 @@ describe('CatController', () => {
 
       const correctCatDTO: Partial<CatDTO> = { name: 'newName' };
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .put(`/animals/cats/${invalidId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
@@ -431,11 +443,11 @@ describe('CatController', () => {
 
       const correctCatDTO: Partial<CatDTO> = { name: 'newName' };
 
-      const response = await request(app.getHttpServer())
+      const response = (await request(app.getHttpServer() as App)
         .put(`/animals/cats/${invalidId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
-        .expect(404);
+        .expect(404)) as { body: { message: string } };
 
       const error = response.body.message;
 
@@ -449,13 +461,13 @@ describe('CatController', () => {
       const newName = 'NewName';
       const correctCatDTO: Partial<CatDTO> = { name: newName };
 
-      await request(app.getHttpServer())
-        .put(`/animals/cats/${catId}`)
+      await request(app.getHttpServer() as App)
+        .put(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(correctCatDTO)
         .expect(200);
 
-      const findedCat = (await findCatDB(catId)) as Cat;
+      const findedCat = (await findCatDB(catId)) as unknown as Cat;
       expect(findedCat.name).toEqual(newName);
     });
   });
@@ -464,7 +476,7 @@ describe('CatController', () => {
     it('401 - valid catId without auth', async () => {
       const catId = new Types.ObjectId().toHexString();
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${catId}`)
         .send()
         .expect(401);
@@ -474,8 +486,8 @@ describe('CatController', () => {
       const cats = mockCatDTOList(1);
       const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-      await request(app.getHttpServer())
-        .delete(`/animals/cats/${catId}`)
+      await request(app.getHttpServer() as App)
+        .delete(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send()
         .expect(200);
@@ -485,8 +497,8 @@ describe('CatController', () => {
       const cats = mockCatDTOList(1);
       const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-      await request(app.getHttpServer())
-        .delete(`/animals/cats/${catId}`)
+      await request(app.getHttpServer() as App)
+        .delete(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send()
         .expect(200);
@@ -495,7 +507,7 @@ describe('CatController', () => {
     it('400 - invalid catId', async () => {
       const invalidId = '1';
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${invalidId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send()
@@ -505,11 +517,11 @@ describe('CatController', () => {
     it('404 (Animal exception) - valid nonexistent catId', async () => {
       const invalidId = '111111111111111111111111';
 
-      const response = await request(app.getHttpServer())
+      const response = (await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${invalidId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send()
-        .expect(404);
+        .expect(404)) as { body: { message: string } };
 
       const error = response.body.message;
 
@@ -520,8 +532,8 @@ describe('CatController', () => {
       const cats = mockCatDTOList(1);
       const catId = (await populateCatsDB(cats)).insertedIds[0];
 
-      const response = await request(app.getHttpServer())
-        .delete(`/animals/cats/${catId}`)
+      const response = await request(app.getHttpServer() as App)
+        .delete(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send()
         .expect(200);
