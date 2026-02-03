@@ -9,11 +9,15 @@ let appPass = getEnv('MONGO_APP_PASSWORD');
 let appDb = getEnv('MONGO_INITDB_DATABASE');
 
 db = db.getSiblingDB('admin');
-db.createUser({
-  user: appUser,
-  pwd: appPass,
-  roles: [{ role: 'readWrite', db: appDb }],
-});
+if (!db.getUser(appUser)) {
+  db.createUser({
+    user: appUser,
+    pwd: appPass,
+    roles: [{ role: 'readWrite', db: appDb }],
+  });
+} else {
+  console.log('User exist!');
+}
 
 //Create default users in users collection
 
