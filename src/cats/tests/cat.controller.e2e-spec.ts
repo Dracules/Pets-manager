@@ -105,15 +105,6 @@ describe('CatController', () => {
 
       await initMongoDB(configService, mongooseConnection);
 
-      console.table(
-        mongoose.connections.map((conn) => ({
-          name: conn.name,
-          host: conn.host,
-          port: conn.port,
-          readyState: conn.readyState,
-        })),
-      );
-
       const loginResAdmin = (await request(app.getHttpServer() as App)
         .post('/auth/login')
         .send({

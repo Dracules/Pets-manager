@@ -13,5 +13,25 @@ jobs:
       - name: Run linting
         run: npm run lint
 
-      - name: Run tests
-        run: npm run test
+      - name: Start MongoDB
+        run: |
+          docker run -d -p 27017:27017 \
+            --name mongodb-test \
+            mongo:6
+          sleep 15
+          docker exec mongodb-test mongosh --eval "db.adminCommand('ismaster')"
+
+      - name: Run all tests
+        env:
+          MONGODB_USER: appuser
+          MONGODB_PASSWORD: apppass
+          MONGODB_TEST_DB: testdb
+          MONGO_TEST_URI: mongodb://localhost:27017/testdb
+          MONGODB_TEST_ADMIN_USER: admin_user
+          MONGODB_TEST_ADMIN_PASSWORD: admin_userpassword
+          MONGODB_TEST_USER: user_user
+          MONGODB_TEST_PASSWORD: user_userpassword
+          JWT_SECRET: JWT_SECRET
+          NODE_ENV: test
+
+        run: npm run test:all

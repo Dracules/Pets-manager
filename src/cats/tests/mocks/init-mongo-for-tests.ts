@@ -1,4 +1,6 @@
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcryptjs';
+
 import { Connection } from 'mongoose';
 
 export async function initMongoDB(
@@ -23,17 +25,15 @@ export async function initMongoDB(
       pwd: appPass,
       roles: [{ role: 'readWrite', db: appDb }],
     });
-    console.log(`✅ DB user '${appUser}' created/updated`);
+    console.log(`DB user '${appUser}' created`);
   } else console.log('User exist!');
 
-  const adminUser: string = configService.get('MONGODB_USERS_ADMIN_LOGIN')!;
+  const adminUser: string = configService.get('MONGODB_TEST_ADMIN_USER')!;
   const adminUserPass: string = configService.get(
-    'MONGODB_USERS_ADMIN_PASSWORD_HASH',
+    'MONGODB_TEST_ADMIN_PASSWORD',
   )!;
-  const userUser: string = configService.get('MONGODB_USERS_USER_LOGIN')!;
-  const userUserPass: string = configService.get(
-    'MONGODB_USERS_USER_PASSWORD_HASH',
-  )!;
+  const userUser: string = configService.get('MONGODB_TEST_USER')!;
+  const userUserPass: string = configService.get('MONGODB_TEST_PASSWORD')!;
 
   const appDbInstance = mongooseConnection.useDb(appDb);
 
@@ -44,12 +44,12 @@ export async function initMongoDB(
       await userCollection.insertMany([
         {
           login: adminUser,
-          password: adminUserPass,
+          password: await bcrypt.hash(adminUserPass, 12),
           roles: ['user', 'admin'],
         },
         {
           login: userUser,
-          password: userUserPass,
+          password: await bcrypt.hash(userUserPass, 12),
           roles: ['user'],
         },
       ]);
