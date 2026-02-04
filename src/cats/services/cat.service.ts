@@ -43,4 +43,16 @@ export class CatService {
     if (!deletedCat) throw new AnimalException();
     return 'Selected item is deleted successfully!';
   }
+
+  private async isExistedWithIdAndUser(
+    catId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const cats = await this.catModel
+      .where('_id')
+      .equals(catId)
+      .where('owner')
+      .equals(new Types.ObjectId(userId));
+    return !!cats.length;
+  }
 }
