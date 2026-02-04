@@ -30,6 +30,10 @@ export class CatService {
     return cat;
   }
 
+  async findByUser(userId: string): Promise<CatDocument[]> {
+    return this.catModel.where('owner').equals(new Types.ObjectId(userId));
+  }
+
   async updateById(
     userId: string,
     catId: string,

@@ -30,6 +30,14 @@ export class CatController {
     return await this.catService.findAll();
   }
 
+  @Get('/user')
+  async getCatByUser(
+    @Req() request: Request & { user: JwtPayload },
+  ): Promise<CatDTO[]> {
+    const userId = request.user.sub;
+    return await this.catService.findByUser(userId);
+  }
+
   @Get('/:id')
   @UseFilters(AnimalExceptionFilter)
   @UseInterceptors(AnimalCacheInterceptor)
