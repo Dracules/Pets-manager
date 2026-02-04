@@ -21,8 +21,11 @@ export class CatService {
     return this.catModel.find().exec();
   }
 
-  async findById(id: string): Promise<CatDocument> {
-    const cat = await this.catModel.findById(id).exec();
+  async findById(catId: string): Promise<CatDocument> {
+    const cat = await this.catModel
+      .findById(catId)
+      .populate('owner', 'login')
+      .exec();
     if (!cat) throw new AnimalException();
     return cat;
   }
