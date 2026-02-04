@@ -57,8 +57,10 @@ export class CatController {
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() catDTO: UpdateCatDTO,
     @Res() response: Response,
+    @Req() request: Request & { user: JwtPayload },
   ): Promise<void> {
-    const cat = await this.catService.updateById(id, catDTO);
+    const userId = request.user.sub;
+    const cat = await this.catService.updateById(userId, id, catDTO);
     response.json(cat);
   }
 

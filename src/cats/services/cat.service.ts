@@ -30,12 +30,19 @@ export class CatService {
     return cat;
   }
 
-  async updateById(id: string, catDTO: Partial<CatDTO>): Promise<CatDocument> {
-    const updatedCat = await this.catModel
-      .findByIdAndUpdate(id, catDTO, { new: true, runValidators: true })
-      .exec();
-    if (!updatedCat) throw new AnimalException();
-    return updatedCat;
+  async updateById(
+    userId: string,
+    catId: string,
+    catDTO: Partial<CatDTO>,
+  ): Promise<CatDocument> {
+    if (await this.isExistedWithIdAndUser(catId, userId)) {
+      const updatedCat = await this.catModel
+        .findByIdAndUpdate(catId, catDTO, { new: true, runValidators: true })
+        .exec();
+      if (!updatedCat) throw new AnimalException();
+      return updatedCat;
+    }
+    throw new AnimalException();
   }
 
   async delete(userId: string, catId: string): Promise<string> {
