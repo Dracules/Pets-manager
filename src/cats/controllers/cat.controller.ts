@@ -67,8 +67,10 @@ export class CatController {
   async deleteCat(
     @Param('id', ParseObjectIdPipe) id: string,
     @Res() response: Response,
+    @Req() request: Request & { user: JwtPayload },
   ): Promise<void> {
-    const message = await this.catService.delete(id);
+    const userId = request.user.sub;
+    const message = await this.catService.delete(userId, id);
     response.json(message);
   }
 }

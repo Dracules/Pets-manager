@@ -38,10 +38,13 @@ export class CatService {
     return updatedCat;
   }
 
-  async delete(id: string): Promise<string> {
-    const deletedCat = await this.catModel.findByIdAndDelete(id).exec();
-    if (!deletedCat) throw new AnimalException();
-    return 'Selected item is deleted successfully!';
+  async delete(userId: string, catId: string): Promise<string> {
+    if (await this.isExistedWithIdAndUser(catId, userId)) {
+      const deletedCat = await this.catModel.findByIdAndDelete(catId).exec();
+      if (!deletedCat) throw new AnimalException();
+      return 'Selected item is deleted successfully!';
+    }
+    throw new AnimalException();
   }
 
   private async isExistedWithIdAndUser(
