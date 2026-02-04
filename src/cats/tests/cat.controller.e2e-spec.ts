@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { CatDTO } from '../dto/cat.dto';
-import { MongooseModule } from '@nestjs/mongoose';
+import { getConnectionToken, MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection, ObjectId } from 'mongodb';
@@ -11,6 +11,7 @@ import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
 import { Cat } from '../interfaces/cat.interface';
 import { App } from 'supertest/types';
 import { CatDocument } from '../schemas/cat.schema';
+import { initMongoDB } from './mocks/init-mongo-for-tests';
 
 describe('CatController', () => {
   let app: INestApplication;
@@ -74,6 +75,7 @@ describe('CatController', () => {
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
+          connectionName: 'TEST_CONNECTION',
           inject: [ConfigService],
           useFactory: (config: ConfigService) => ({
             uri: config.get<string>('MONGO_TEST_URI'),
@@ -81,17 +83,27 @@ describe('CatController', () => {
         }),
         AppModule,
       ],
-    }).compile();
-
+    })
+      .overrideProvider(getConnectionToken())
+      .useFactory({
+        inject: [ConfigService],
+        factory: (configService: ConfigService) => {
+          const uri = configService.get<string>('MONGO_TEST_URI');
+          return mongoose.createConnection(uri!);
+        },
+      })
+      .compile();
     app = moduleRef.createNestApplication();
     await app.init();
 
     {
       const configService = app.get(ConfigService);
 
-      mongooseConnection = mongoose.createConnection(
-        configService.get<string>('MONGO_TEST_URI')!,
+      mongooseConnection = moduleRef.get<Connection>(
+        getConnectionToken('TEST_CONNECTION'),
       );
+
+      await initMongoDB(configService, mongooseConnection);
 
       const loginResAdmin = (await request(app.getHttpServer() as App)
         .post('/auth/login')
