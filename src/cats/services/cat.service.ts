@@ -2,15 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cat, CatDocument } from '../../cats/schemas/cat.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CatDTO } from '../dto/cat.dto';
 
 @Injectable()
 export class CatService {
   constructor(@InjectModel(Cat.name) private catModel: Model<CatDocument>) {}
 
-  async create(catDTO: CatDTO): Promise<CatDocument> {
-    const createdCat = new this.catModel(catDTO);
+  async create(catDTO: CatDTO, userId: string): Promise<CatDocument> {
+    const createdCat = new this.catModel({
+      ...catDTO,
+      owner: new Types.ObjectId(userId),
+    });
     return createdCat.save();
   }
 

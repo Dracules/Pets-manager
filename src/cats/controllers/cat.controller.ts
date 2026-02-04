@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   Put,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
@@ -17,6 +18,7 @@ import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.i
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO, UpdateCatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
+import { JwtPayload } from 'src/auth/interfaces/jwt.payload.interface';
 
 @Controller('animals/cats')
 export class CatController {
@@ -42,8 +44,10 @@ export class CatController {
     @Body()
     catDTO: CatDTO,
     @Res() response: Response,
+    @Req() request: Request & { user: JwtPayload },
   ): Promise<void> {
-    const cat = await this.catService.create(catDTO);
+    const userId = request.user.sub;
+    const cat = await this.catService.create(catDTO, userId);
     response.json(cat);
   }
 
