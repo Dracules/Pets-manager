@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   Put,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
@@ -17,6 +18,7 @@ import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.i
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO, UpdateCatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
+import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
 
 @Controller('animals/cats')
 export class CatController {
@@ -26,6 +28,12 @@ export class CatController {
   @Get('/')
   async getCats(): Promise<CatDTO[]> {
     return await this.catService.findAll();
+  }
+
+  @Get('/user')
+  async getCatByUser(@Req() request: RequestWithUser): Promise<CatDTO[]> {
+    const userId = request.user.sub;
+    return await this.catService.findByUser(userId);
   }
 
   @Get('/:id')
@@ -42,8 +50,10 @@ export class CatController {
     @Body()
     catDTO: CatDTO,
     @Res() response: Response,
+    @Req() request: RequestWithUser,
   ): Promise<void> {
-    const cat = await this.catService.create(catDTO);
+    const userId = request.user.sub;
+    const cat = await this.catService.create(catDTO, userId);
     response.json(cat);
   }
 
@@ -53,8 +63,10 @@ export class CatController {
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() catDTO: UpdateCatDTO,
     @Res() response: Response,
+    @Req() request: RequestWithUser,
   ): Promise<void> {
-    const cat = await this.catService.updateById(id, catDTO);
+    const userId = request.user.sub;
+    const cat = await this.catService.updateById(userId, id, catDTO);
     response.json(cat);
   }
 
@@ -63,8 +75,10 @@ export class CatController {
   async deleteCat(
     @Param('id', ParseObjectIdPipe) id: string,
     @Res() response: Response,
+    @Req() request: RequestWithUser,
   ): Promise<void> {
-    const message = await this.catService.delete(id);
+    const userId = request.user.sub;
+    const message = await this.catService.delete(userId, id);
     response.json(message);
   }
 }

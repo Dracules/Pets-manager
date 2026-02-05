@@ -1,5 +1,5 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Animal, createAnimalSchema } from '../../animal/schemas/animal.schema';
 import { LITTER_STATUS, type LitterStatus } from '../types/litterStatus.type';
 
@@ -14,6 +14,12 @@ export class Cat extends Animal {
     type: String,
   })
   litterStatus: LitterStatus;
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
+  })
+  owner: string;
 }
 
 export const CatSchema = createAnimalSchema(Cat);
