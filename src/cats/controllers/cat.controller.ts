@@ -18,7 +18,7 @@ import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.i
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO, UpdateCatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
-import { JwtPayload } from 'src/auth/interfaces/jwt.payload.interface';
+import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
 
 @Controller('animals/cats')
 export class CatController {
@@ -31,9 +31,7 @@ export class CatController {
   }
 
   @Get('/user')
-  async getCatByUser(
-    @Req() request: Request & { user: JwtPayload },
-  ): Promise<CatDTO[]> {
+  async getCatByUser(@Req() request: RequestWithUser): Promise<CatDTO[]> {
     const userId = request.user.sub;
     return await this.catService.findByUser(userId);
   }
@@ -52,7 +50,7 @@ export class CatController {
     @Body()
     catDTO: CatDTO,
     @Res() response: Response,
-    @Req() request: Request & { user: JwtPayload },
+    @Req() request: RequestWithUser,
   ): Promise<void> {
     const userId = request.user.sub;
     const cat = await this.catService.create(catDTO, userId);
@@ -65,7 +63,7 @@ export class CatController {
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() catDTO: UpdateCatDTO,
     @Res() response: Response,
-    @Req() request: Request & { user: JwtPayload },
+    @Req() request: RequestWithUser,
   ): Promise<void> {
     const userId = request.user.sub;
     const cat = await this.catService.updateById(userId, id, catDTO);
@@ -77,7 +75,7 @@ export class CatController {
   async deleteCat(
     @Param('id', ParseObjectIdPipe) id: string,
     @Res() response: Response,
-    @Req() request: Request & { user: JwtPayload },
+    @Req() request: RequestWithUser,
   ): Promise<void> {
     const userId = request.user.sub;
     const message = await this.catService.delete(userId, id);
