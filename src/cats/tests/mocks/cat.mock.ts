@@ -18,6 +18,7 @@ export const mockCat = (overrides: Partial<Cat> = {}): Cat => ({
   name: 'Bars',
   age: 3,
   litterStatus: 'unknown',
+  owner: '111',
   ...overrides,
 });
 
