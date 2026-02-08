@@ -6,12 +6,12 @@ A Node.js backend for managing user data and their cats' data with REST endpoint
 
 - MongoDB database + Mongoose ODM
 - JWT authentication and authorization
-- Request validation using class-vaidator
+- Request validation using class-validator
 - Custom error filters for error handling
 - Middleware for console-logging
 - Caching for specific endpoints
 - Unit and E2E tests for cat-related endpoints
-- Docker conteinerization
+- Docker containerization
 - CI using GitHub Actions with tests and linter
   
 ## Technology Stack
