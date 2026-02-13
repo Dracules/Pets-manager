@@ -14,12 +14,6 @@ export class Cat extends Animal {
     type: String,
   })
   litterStatus: LitterStatus;
-  @Prop({
-    type: Types.ObjectId,
-    ref: 'User',
-    required: true,
-  })
-  owner: string;
 }
 
 export const CatSchema = createAnimalSchema(Cat);
