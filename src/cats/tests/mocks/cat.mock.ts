@@ -1,4 +1,4 @@
-import { CatDTO } from 'src/cats/dto/cat.dto';
+import { CatDTO } from '../../../cats/dto/cat.dto';
 import { Cat } from '../../../cats/interfaces/cat.interface';
 
 export const mockCatDTO = (overrides: Partial<CatDTO> = {}): CatDTO => ({

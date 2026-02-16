@@ -18,7 +18,7 @@ import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.i
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { DogDTO, UpdateDogDTO } from '../dto/dog.dto';
 import { Public } from '../../shared/decorators/public.decorator';
-import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
+import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 
 @Controller('animals/dogs')
 export class DogController {
