@@ -5,12 +5,16 @@ import {
   Body,
   Res,
   Param,
+  UseFilters,
+  UseInterceptors,
   Put,
   Delete,
   Req,
 } from '@nestjs/common';
 import { DogService } from '../services/dog.service';
 import { type Response } from 'express';
+import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
+import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { DogDTO, UpdateDogDTO } from '../dto/dog.dto';
 import { Public } from '../../shared/decorators/public.decorator';
@@ -33,6 +37,8 @@ export class DogController {
   }
 
   @Get('/:id')
+  @UseFilters(AnimalExceptionFilter)
+  @UseInterceptors(AnimalCacheInterceptor)
   async getDogById(
     @Param('id', ParseObjectIdPipe) id: string,
   ): Promise<DogDTO> {
@@ -52,6 +58,7 @@ export class DogController {
   }
 
   @Put('/:id')
+  @UseFilters(AnimalExceptionFilter)
   async updateDog(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() dogDTO: UpdateDogDTO,
@@ -64,6 +71,7 @@ export class DogController {
   }
 
   @Delete('/:id')
+  @UseFilters(AnimalExceptionFilter)
   async deleteDog(
     @Param('id', ParseObjectIdPipe) id: string,
     @Res() response: Response,
