@@ -1,5 +1,5 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { Animal, createAnimalSchema } from '../../animal/schemas/animal.schema';
 import { LITTER_STATUS, type LitterStatus } from '../types/litterStatus.type';
 
