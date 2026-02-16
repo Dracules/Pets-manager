@@ -6,7 +6,7 @@ export type DogDocument = HydratedDocument<Dog>;
 
 @Schema({ versionKey: false })
 export class Dog extends Animal {
-  @Prop({ type: [String], _id: false })
+  @Prop({ type: [String], _id: false, default: undefined })
   trainedCommands?: string[];
 }
 
