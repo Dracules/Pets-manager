@@ -8,6 +8,13 @@ export class Animal {
 
   @Prop({ required: true })
   age: number;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
+  })
+  owner: string;
 }
 
 export const createAnimalSchema = (specificSchema: Type<any>) => {
