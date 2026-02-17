@@ -19,21 +19,23 @@ import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { DogDTO, UpdateDogDTO } from '../dto/dog.dto';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
+import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
 
 @Controller('animals/dogs')
-export class DogController {
-  constructor(private dogService: DogService) {}
+export class DogController extends BaseAnimalController<DogDTO> {
+  constructor(private dogService: DogService) {
+    super(dogService);
+  }
 
   @Public()
   @Get('/')
   async getDogs(): Promise<DogDTO[]> {
-    return await this.dogService.findAll();
+    return await super.getAnimals();
   }
 
   @Get('/user')
   async getDogByUser(@Req() request: RequestWithUser): Promise<DogDTO[]> {
-    const userId = request.user.sub;
-    return await this.dogService.findByUser(userId);
+    return await super.getAnimalByUser(request);
   }
 
   @Get('/:id')
@@ -42,7 +44,7 @@ export class DogController {
   async getDogById(
     @Param('id', ParseObjectIdPipe) id: string,
   ): Promise<DogDTO> {
-    return await this.dogService.findById(id);
+    return await super.getAnimalById(id);
   }
 
   @Post('/')
@@ -52,9 +54,7 @@ export class DogController {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
-    const dog = await this.dogService.create(dogDTO, userId);
-    response.json(dog);
+    return await super.createAnimal(dogDTO, response, request);
   }
 
   @Put('/:id')
@@ -65,9 +65,7 @@ export class DogController {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
-    const dog = await this.dogService.updateById(userId, id, dogDTO);
-    response.json(dog);
+    return await super.updateAnimal(id, dogDTO, response, request);
   }
 
   @Delete('/:id')
@@ -77,8 +75,6 @@ export class DogController {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
-    const message = await this.dogService.delete(userId, id);
-    response.json(message);
+    return await super.deleteAnimal(id, response, request);
   }
 }
