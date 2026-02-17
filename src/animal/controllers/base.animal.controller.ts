@@ -7,16 +7,16 @@ export abstract class BaseAnimalController<T extends AnimalDTO> {
   constructor(private animalService: BaseAnimalService<any, T>) {}
 
   protected async getAnimals(): Promise<T[]> {
-    return await this.animalService.findAll();
+    return this.animalService.findAll();
   }
 
   protected async getAnimalByUser(request: RequestWithUser): Promise<T[]> {
     const userId = request.user.sub;
-    return await this.animalService.findByUser(userId);
+    return this.animalService.findByUser(userId);
   }
 
   protected async getAnimalById(id: string): Promise<T> {
-    return await this.animalService.findById(id);
+    return this.animalService.findById(id);
   }
 
   protected async createAnimal(
