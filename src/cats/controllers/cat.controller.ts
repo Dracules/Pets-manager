@@ -20,21 +20,22 @@ import { CatDTO, UpdateCatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
+import { CatResponse } from '../interfaces/cat.interface';
 
 @Controller('animals/cats')
-export class CatController extends BaseAnimalController<CatDTO> {
+export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   constructor(private catService: CatService) {
     super(catService);
   }
 
   @Public()
   @Get('/')
-  async getCats(): Promise<CatDTO[]> {
+  async getCats(): Promise<CatResponse[]> {
     return await super.getAnimals();
   }
 
   @Get('/user')
-  async getCatByUser(@Req() request: RequestWithUser): Promise<CatDTO[]> {
+  async getCatByUser(@Req() request: RequestWithUser): Promise<CatResponse[]> {
     return await super.getAnimalByUser(request);
   }
 
@@ -43,7 +44,7 @@ export class CatController extends BaseAnimalController<CatDTO> {
   @UseInterceptors(AnimalCacheInterceptor)
   async getCatById(
     @Param('id', ParseObjectIdPipe) id: string,
-  ): Promise<CatDTO> {
+  ): Promise<CatResponse> {
     return await super.getAnimalById(id);
   }
 

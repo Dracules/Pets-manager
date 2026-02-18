@@ -20,21 +20,22 @@ import { DogDTO, UpdateDogDTO } from '../dto/dog.dto';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
+import { DogResponse } from '../interfaces/dog.interface';
 
 @Controller('animals/dogs')
-export class DogController extends BaseAnimalController<DogDTO> {
+export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
   constructor(private dogService: DogService) {
     super(dogService);
   }
 
   @Public()
   @Get('/')
-  async getDogs(): Promise<DogDTO[]> {
+  async getDogs(): Promise<DogResponse[]> {
     return await super.getAnimals();
   }
 
   @Get('/user')
-  async getDogByUser(@Req() request: RequestWithUser): Promise<DogDTO[]> {
+  async getDogByUser(@Req() request: RequestWithUser): Promise<DogResponse[]> {
     return await super.getAnimalByUser(request);
   }
 
@@ -43,7 +44,7 @@ export class DogController extends BaseAnimalController<DogDTO> {
   @UseInterceptors(AnimalCacheInterceptor)
   async getDogById(
     @Param('id', ParseObjectIdPipe) id: string,
-  ): Promise<DogDTO> {
+  ): Promise<DogResponse> {
     return await super.getAnimalById(id);
   }
 
