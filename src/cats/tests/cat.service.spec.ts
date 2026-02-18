@@ -3,7 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { CatService } from '../services/cat.service';
 import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
 import { mockCat, mockCatsList } from './mocks/cat.mock';
-import { Cat } from '../interfaces/cat.interface';
+import { CatResponse } from '../interfaces/cat.interface';
 import { Types } from 'mongoose';
 
 describe('CatService', () => {
@@ -88,7 +88,7 @@ describe('CatService', () => {
     describe('existent id', () => {
       it('must return cat with ID', async () => {
         const catId = '694ac1f93b5320db21a572a5';
-        const cat: Cat & { login: string } = {
+        const cat: CatResponse & { login: string } = {
           ...mockCat({ id: catId }),
           login: 'string',
         };
@@ -131,7 +131,7 @@ describe('CatService', () => {
     describe('existent user id', () => {
       it('must return cats of user', async () => {
         const userId = '694ac1f93b5320db21a572a5';
-        const cats: Cat[] = mockCatsList(5);
+        const cats: CatResponse[] = mockCatsList(5);
         cats.forEach((cat) => (cat.owner = userId));
 
         mockCatModel.where = jest.fn().mockReturnValue({
@@ -148,7 +148,7 @@ describe('CatService', () => {
     describe('nonexistent user id', () => {
       it('must return empty array', async () => {
         const nonExistentId = '999999999999999999999999';
-        const cats: Cat[] = [];
+        const cats: CatResponse[] = [];
 
         mockCatModel.where = jest.fn().mockReturnValue({
           equals: jest.fn().mockResolvedValue(cats),
@@ -168,7 +168,7 @@ describe('CatService', () => {
         const catId = '694ac1f93b5320db21a572a5';
         const userId = '694ac1f93b5320db21a11111';
 
-        const newData: Partial<Cat> = {
+        const newData: Partial<CatResponse> = {
           name: 'Bart',
           age: 13,
         };
@@ -205,7 +205,7 @@ describe('CatService', () => {
         const nonExistentCatId = '999999999999999999999999';
         const userId = '694ac1f93b5320db21a11111';
 
-        const newData: Partial<Cat> = {};
+        const newData: Partial<CatResponse> = {};
 
         mockCatModel.where = jest.fn().mockReturnValue({
           equals: jest.fn().mockReturnValue({
@@ -229,7 +229,7 @@ describe('CatService', () => {
         const catId = '694ac1f93b5320db21a11111';
         const nonExistentUserId = '999999999999999999999999';
 
-        const newData: Partial<Cat> = {};
+        const newData: Partial<CatResponse> = {};
 
         mockCatModel.where = jest.fn().mockReturnValue({
           equals: jest.fn().mockReturnValue({
