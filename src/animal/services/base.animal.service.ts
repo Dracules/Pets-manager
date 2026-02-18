@@ -3,46 +3,48 @@ import { AnimalDTO } from '../dto/animal.dto';
 import { HydratedDocument, Model, Types, UpdateQuery } from 'mongoose';
 import { AnimalException } from '../exception_filters/exceptions/animal.exception';
 import { Animal } from '../schemas/animal.schema';
+import { AnimalResponse } from '../interfaces/animal.interface';
 
 @Injectable()
 export abstract class BaseAnimalService<
   T extends HydratedDocument<Animal>,
   DTO extends AnimalDTO,
+  Response extends AnimalResponse,
 > {
   constructor(protected model: Model<T>) {}
 
-  async create(animalDTO: DTO, userId: string): Promise<DTO> {
+  async create(animalDTO: DTO, userId: string): Promise<Response> {
     const createdAnimal = new this.model({
       ...animalDTO,
       owner: new Types.ObjectId(userId),
     });
-    return createdAnimal.save() as unknown as Promise<DTO>;
+    return createdAnimal.save() as unknown as Promise<Response>;
   }
 
-  async findAll(): Promise<DTO[]> {
-    return this.model.find().exec() as unknown as Promise<DTO[]>;
+  async findAll(): Promise<Response[]> {
+    return this.model.find().exec() as unknown as Promise<Response[]>;
   }
 
-  async findById(animalId: string): Promise<DTO> {
+  async findById(animalId: string): Promise<Response> {
     const animal = await this.model
       .findById(animalId)
       .populate('owner', 'login')
       .exec();
     if (!animal) throw new AnimalException();
-    return animal as unknown as Promise<DTO>;
+    return animal as unknown as Promise<Response>;
   }
 
-  async findByUser(userId: string): Promise<DTO[]> {
+  async findByUser(userId: string): Promise<Response[]> {
     return this.model
       .where('owner')
-      .equals(new Types.ObjectId(userId)) as unknown as Promise<DTO[]>;
+      .equals(new Types.ObjectId(userId)) as unknown as Promise<Response[]>;
   }
 
   async updateById(
     userId: string,
     animalId: string,
     animalDTO: Partial<DTO>,
-  ): Promise<DTO> {
+  ): Promise<Response> {
     if (await this.isExistedWithIdAndUser(animalId, userId)) {
       const updatedAnimal = await this.model
         .findByIdAndUpdate(animalId, animalDTO as unknown as UpdateQuery<T>, {
@@ -51,7 +53,7 @@ export abstract class BaseAnimalService<
         })
         .exec();
       if (!updatedAnimal) throw new AnimalException();
-      return updatedAnimal as unknown as DTO;
+      return updatedAnimal as unknown as Response;
     }
     throw new AnimalException();
   }
