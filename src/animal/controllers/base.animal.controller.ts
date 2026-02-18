@@ -2,25 +2,29 @@ import { type Response } from 'express';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalService } from '../services/base.animal.service';
 import { AnimalDTO } from '../dto/animal.dto';
+import { AnimalResponse } from '../interfaces/animal.interface';
 
-export abstract class BaseAnimalController<T extends AnimalDTO> {
-  constructor(private animalService: BaseAnimalService<any, T>) {}
+export abstract class BaseAnimalController<
+  DTO extends AnimalDTO,
+  Resp extends AnimalResponse,
+> {
+  constructor(private animalService: BaseAnimalService<any, DTO, Resp>) {}
 
-  protected async getAnimals(): Promise<T[]> {
+  protected async getAnimals(): Promise<Resp[]> {
     return this.animalService.findAll();
   }
 
-  protected async getAnimalByUser(request: RequestWithUser): Promise<T[]> {
+  protected async getAnimalByUser(request: RequestWithUser): Promise<Resp[]> {
     const userId = request.user.sub;
     return this.animalService.findByUser(userId);
   }
 
-  protected async getAnimalById(id: string): Promise<T> {
+  protected async getAnimalById(id: string): Promise<Resp> {
     return this.animalService.findById(id);
   }
 
   protected async createAnimal(
-    animalDTO: T,
+    animalDTO: DTO,
     response: Response,
     request: RequestWithUser,
   ): Promise<void> {
@@ -31,7 +35,7 @@ export abstract class BaseAnimalController<T extends AnimalDTO> {
 
   protected async updateAnimal(
     id: string,
-    animalDTO: Partial<T>,
+    animalDTO: Partial<DTO>,
     response: Response,
     request: RequestWithUser,
   ): Promise<void> {
