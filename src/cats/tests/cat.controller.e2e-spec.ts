@@ -8,7 +8,7 @@ import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection, ObjectId } from 'mongodb';
 import { AppModule } from '../../app.module';
 import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
-import { Cat } from '../interfaces/cat.interface';
+import { CatResponse } from '../interfaces/cat.interface';
 import { App } from 'supertest/types';
 import { CatDocument } from '../schemas/cat.schema';
 import { initMongoDB } from './mocks/init-mongo-for-tests';
@@ -169,7 +169,7 @@ describe('CatController', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
-      const allCatsDB = (await findAllCatsDB()) as unknown as Cat[];
+      const allCatsDB = (await findAllCatsDB()) as unknown as CatResponse[];
       expect(allCatsDB.length).toBe(cats.length);
       catsDeepCopy.forEach((catDto) => {
         expect(allCatsDB).toContainEqual(expect.objectContaining(catDto));
@@ -345,8 +345,8 @@ describe('CatController', () => {
         .send()
         .expect(200);
 
-      expect((userResponse.body as Cat[]).length).toBe(1);
-      expect((adminResponse.body as Cat[]).length).toBe(0);
+      expect((userResponse.body as CatResponse[]).length).toBe(1);
+      expect((adminResponse.body as CatResponse[]).length).toBe(0);
     });
   });
 
@@ -418,11 +418,11 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const createdCat = response.body as Cat;
+      const createdCat = response.body as CatResponse;
 
       const findedCat = (await findCatDB(
         new ObjectId(createdCat.id),
-      )) as unknown as Cat;
+      )) as unknown as CatResponse;
       expect(findedCat).not.toBeNull();
       expect(findedCat).toMatchObject(correctCatDTO);
     });
@@ -449,7 +449,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       const newName = 'NewName';
       const updateCatDTO: Partial<CatDTO> = { name: newName };
@@ -470,7 +470,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       const newName = 'NewName';
       const updateCatDTO: Partial<CatDTO> = { name: newName };
@@ -539,7 +539,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       const response = (await request(app.getHttpServer() as App)
         .put(`/animals/cats/${cat.id}`)
@@ -561,7 +561,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const createdCat = createResponse.body as Cat;
+      const createdCat = createResponse.body as CatResponse;
 
       const newName = 'NewName';
       const updateCatDTO: Partial<CatDTO> = { name: newName };
@@ -574,7 +574,7 @@ describe('CatController', () => {
 
       const findedCat = (await findCatDB(
         new ObjectId(createdCat.id),
-      )) as unknown as Cat;
+      )) as unknown as CatResponse;
       expect(findedCat.name).toEqual(newName);
       expect(findedCat.name).not.toEqual(createdCat.name);
     });
@@ -599,7 +599,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${cat.id}`)
@@ -617,7 +617,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${cat.id}`)
@@ -659,7 +659,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       const response = (await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${cat.id}`)
@@ -681,7 +681,7 @@ describe('CatController', () => {
         .send(correctCatDTO)
         .expect(201);
 
-      const cat = createResponse.body as Cat;
+      const cat = createResponse.body as CatResponse;
 
       const response = await request(app.getHttpServer() as App)
         .delete(`/animals/cats/${cat.id}`)
