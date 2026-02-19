@@ -19,21 +19,23 @@ import { ParseObjectIdPipe } from '@nestjs/mongoose';
 import { CatDTO, UpdateCatDTO } from '../dto/cat.dto';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
+import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
 
 @Controller('animals/cats')
-export class CatController {
-  constructor(private catService: CatService) {}
+export class CatController extends BaseAnimalController<CatDTO> {
+  constructor(private catService: CatService) {
+    super(catService);
+  }
 
   @Public()
   @Get('/')
   async getCats(): Promise<CatDTO[]> {
-    return await this.catService.findAll();
+    return await super.getAnimals();
   }
 
   @Get('/user')
   async getCatByUser(@Req() request: RequestWithUser): Promise<CatDTO[]> {
-    const userId = request.user.sub;
-    return await this.catService.findByUser(userId);
+    return await super.getAnimalByUser(request);
   }
 
   @Get('/:id')
@@ -42,7 +44,7 @@ export class CatController {
   async getCatById(
     @Param('id', ParseObjectIdPipe) id: string,
   ): Promise<CatDTO> {
-    return await this.catService.findById(id);
+    return await super.getAnimalById(id);
   }
 
   @Post('/')
@@ -52,9 +54,7 @@ export class CatController {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
-    const cat = await this.catService.create(catDTO, userId);
-    response.json(cat);
+    return await super.createAnimal(catDTO, response, request);
   }
 
   @Put('/:id')
@@ -65,9 +65,7 @@ export class CatController {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
-    const cat = await this.catService.updateById(userId, id, catDTO);
-    response.json(cat);
+    return await super.updateAnimal(id, catDTO, response, request);
   }
 
   @Delete('/:id')
@@ -77,8 +75,6 @@ export class CatController {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
-    const message = await this.catService.delete(userId, id);
-    response.json(message);
+    return await super.deleteAnimal(id, response, request);
   }
 }
