@@ -19,6 +19,7 @@ describe('CatService', () => {
     findByIdAndUpdate: MockFnWithExec;
     findByIdAndDelete: MockFnWithExec;
     where: MockFnWhereEquals;
+    toJSON: jest.Mock;
   }
 
   let mockCatModel: MockModel;
@@ -50,7 +51,7 @@ describe('CatService', () => {
         owner: userId,
       };
 
-      const saveMock = jest.fn().mockResolvedValue(savedCat);
+      const saveMock = jest.fn().mockResolvedValue({ toJSON: () => savedCat });
 
       mockCatModel.mockImplementation(() => {
         return {
@@ -75,7 +76,11 @@ describe('CatService', () => {
       const mockCats = mockCatsList();
 
       mockCatModel.find = jest.fn().mockReturnValue({
-        exec: jest.fn().mockResolvedValue(mockCats),
+        exec: jest.fn().mockResolvedValue(
+          mockCats.map((cat) => ({
+            toJSON: () => cat,
+          })),
+        ),
       }) as MockFnWithExec;
 
       const result = await service.findAll();
@@ -93,7 +98,7 @@ describe('CatService', () => {
           login: 'string',
         };
 
-        const execFunc = jest.fn().mockResolvedValue(cat);
+        const execFunc = jest.fn().mockResolvedValue({ toJSON: () => cat });
         mockCatModel.findById = jest.fn().mockReturnValue({
           populate: jest.fn().mockReturnValue({ exec: execFunc }),
         });
@@ -135,7 +140,11 @@ describe('CatService', () => {
         cats.forEach((cat) => (cat.owner = userId));
 
         mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockResolvedValue(cats),
+          equals: jest.fn().mockResolvedValue(
+            cats.map((cat) => ({
+              toJSON: () => cat,
+            })),
+          ),
         }) as MockFnWhereEquals;
 
         const result = await service.findByUser(userId);
@@ -184,7 +193,7 @@ describe('CatService', () => {
         }) as MockFnWhereEquals;
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
-          exec: jest.fn().mockResolvedValue(updatedCat),
+          exec: jest.fn().mockResolvedValue({ toJSON: () => updatedCat }),
         }) as MockFnWithExec;
 
         const result = await service.updateById(userId, catId, newData);
