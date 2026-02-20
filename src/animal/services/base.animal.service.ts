@@ -18,11 +18,15 @@ export abstract class BaseAnimalService<
       ...animalDTO,
       owner: new Types.ObjectId(userId),
     });
-    return createdAnimal.save() as unknown as Promise<Response>;
+    const savedAnimal = await createdAnimal.save();
+    return savedAnimal.toJSON() as unknown as Promise<Response>;
   }
 
   async findAll(): Promise<Response[]> {
-    return this.model.find().exec() as unknown as Promise<Response[]>;
+    const findedAnimals = await this.model.find().exec();
+    return findedAnimals.map((obj) => obj.toJSON()) as unknown as Promise<
+      Response[]
+    >;
   }
 
   async findById(animalId: string): Promise<Response> {
@@ -31,13 +35,16 @@ export abstract class BaseAnimalService<
       .populate('owner', 'login')
       .exec();
     if (!animal) throw new AnimalException();
-    return animal as unknown as Promise<Response>;
+    return animal.toJSON() as unknown as Promise<Response>;
   }
 
   async findByUser(userId: string): Promise<Response[]> {
-    return this.model
+    const findedAnimals = await this.model
       .where('owner')
-      .equals(new Types.ObjectId(userId)) as unknown as Promise<Response[]>;
+      .equals(new Types.ObjectId(userId));
+    return findedAnimals.map((obj) => obj.toJSON()) as unknown as Promise<
+      Response[]
+    >;
   }
 
   async updateById(
@@ -53,7 +60,7 @@ export abstract class BaseAnimalService<
         })
         .exec();
       if (!updatedAnimal) throw new AnimalException();
-      return updatedAnimal as unknown as Response;
+      return updatedAnimal.toJSON() as unknown as Response;
     }
     throw new AnimalException();
   }
