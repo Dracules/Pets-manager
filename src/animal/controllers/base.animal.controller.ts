@@ -38,9 +38,15 @@ export abstract class BaseAnimalController<
     animalDTO: Partial<DTO>,
     response: Response,
     request: RequestWithUser,
+    updateProps?: unknown,
   ): Promise<void> {
     const userId = request.user.sub;
-    const animal = await this.animalService.updateById(userId, id, animalDTO);
+    const animal = await this.animalService.updateById(
+      userId,
+      id,
+      animalDTO,
+      updateProps,
+    );
     response.json(animal);
   }
 

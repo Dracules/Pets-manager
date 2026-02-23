@@ -66,6 +66,12 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
+    if (dogDTO.trainedCommands && dogDTO.trainedCommands.length === 0) {
+      dogDTO.trainedCommands = undefined;
+      return await super.updateAnimal(id, dogDTO, response, request, {
+        $unset: { trainedCommands: '' },
+      });
+    }
     return await super.updateAnimal(id, dogDTO, response, request);
   }
 

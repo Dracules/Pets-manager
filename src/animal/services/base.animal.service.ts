@@ -47,10 +47,14 @@ export abstract class BaseAnimalService<
     userId: string,
     animalId: string,
     animalDTO: Partial<DTO>,
+    updateProps: unknown,
   ): Promise<Response> {
     if (await this.isExistedWithIdAndUser(animalId, userId)) {
+      const updateObj = animalDTO as unknown as UpdateQuery<T>;
+      if (updateProps) Object.assign(updateObj, updateProps);
+
       const updatedAnimal = await this.model
-        .findByIdAndUpdate(animalId, animalDTO as unknown as UpdateQuery<T>, {
+        .findByIdAndUpdate(animalId, updateObj, {
           new: true,
           runValidators: true,
         })
