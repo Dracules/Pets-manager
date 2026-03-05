@@ -1,13 +1,20 @@
-async function fetchJSON(Url: string): Promise<unknown> {
-  const response = await fetch(Url);
+import axios from 'axios';
+import { Dog } from './interfaces/dog.interface';
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+class ApiClient {
+  async get<T>(Url: string): Promise<T> {
+    return axios
+      .get<T>(Url)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
   }
-  const result: unknown = await response.json();
-  return result;
 }
 
-export default async function fetchAllDogs(): Promise<unknown> {
-  return fetchJSON('/animals/dogs');
+const api = new ApiClient();
+
+export async function getDogs(): Promise<Dog[]> {
+  return api.get<Dog[]>('/animals/dogs');
 }
