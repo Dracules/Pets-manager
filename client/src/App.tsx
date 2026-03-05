@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import DogTable from './DogTable';
-import fetchAllDogs from './fetch.data';
+import { getDogs } from './apiClient';
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -14,7 +14,7 @@ export default function App() {
   const loadDogs = async () => {
     try {
       setLoading(true);
-      const result = (await fetchAllDogs()) as [];
+      const result = (await getDogs()) as [];
       setData(result);
     } catch (err) {
       err instanceof Error
