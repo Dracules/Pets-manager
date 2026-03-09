@@ -3,9 +3,7 @@ import { Dog } from './interfaces/dog.interface';
 import BaseTable from './BaseTable';
 import { BaseTableProps } from './interfaces/BaseTableProps';
 
-type DogColumn = ColumnDef<Dog>;
-
-const dogColumns: DogColumn[] = [
+const dogColumns: ColumnDef<Dog>[] = [
   { accessorKey: 'id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
