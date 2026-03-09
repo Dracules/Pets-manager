@@ -1,14 +1,10 @@
 import {
-  ColumnDef,
   useReactTable,
   getCoreRowModel,
   flexRender,
 } from '@tanstack/react-table';
 
-interface BaseTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
-}
+import { BaseTableProps } from './interfaces/BaseTableProps';
 
 export default function BaseTable<T>({ data, columns }: BaseTableProps<T>) {
   const table = useReactTable({
