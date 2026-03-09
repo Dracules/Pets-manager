@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DogsPage from './DogPage';
+import CatsPage from './CatPage';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'dogs' | 'cats'>('dogs');
@@ -12,7 +13,7 @@ export default function App() {
         <button onClick={() => setActiveTab('cats')}>Cats</button>
         <div style={{ margin: 20 }}>
           {activeTab === 'dogs' && <DogsPage />}
-          {activeTab === 'cats' && <h1>Cats</h1>}
+          {activeTab === 'cats' && <CatsPage />}
         </div>
       </div>
     </div>
