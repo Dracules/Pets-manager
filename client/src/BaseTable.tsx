@@ -4,8 +4,12 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { BaseTableProps } from './interfaces/BaseTableProps';
+import { Animal } from './interfaces/animal.interface';
 
-export default function BaseTable<T>({ data, columns }: BaseTableProps<T>) {
+export default function BaseTable<T extends Animal>({
+  data,
+  columns,
+}: BaseTableProps<T>) {
   if (!columns) columns = [];
   const table = useReactTable({
     data,
