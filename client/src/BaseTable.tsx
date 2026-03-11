@@ -1,16 +1,16 @@
 import {
-  ColumnDef,
   useReactTable,
   getCoreRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import { BaseTableProps } from './interfaces/BaseTableProps';
+import { Animal } from './interfaces/animal.interface';
 
-interface BaseTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
-}
-
-export default function BaseTable<T>({ data, columns }: BaseTableProps<T>) {
+export default function BaseTable<T extends Animal>({
+  data,
+  columns,
+}: BaseTableProps<T>) {
+  if (!columns) columns = [];
   const table = useReactTable({
     data,
     columns,
