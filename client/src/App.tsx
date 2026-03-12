@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import DogsPage from './DogPage';
-import CatsPage from './CatPage';
+import DogsPage from './domains/dog/ui/DogPage';
+import CatsPage from './domains/cat/ui/CatPage';
 
 function ucFirst(str: String) {
   if (!str) return str;
