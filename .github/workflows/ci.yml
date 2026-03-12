@@ -11,8 +11,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install backend dependencies
-        run: cd backend && npm ci
+      - name: Install server dependencies
+        run: cd server && npm ci
 
       - name: Install client dependencies
         run: cd client && npm ci
@@ -29,7 +29,7 @@ jobs:
           docker exec mongodb-test mongosh --eval "db.adminCommand('ismaster')"
 
       - name: Run all tests
-        working-directory: ./backend
+        working-directory: ./server
         env:
           MONGODB_USER: appuser
           MONGODB_PASSWORD: apppass
