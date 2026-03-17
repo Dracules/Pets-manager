@@ -9,7 +9,7 @@ interface IFormInput {
 export default function LoginPage() {
   const methods = useForm<IFormInput>();
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const result = await Auth.signUp(data.login, data.password);
+    const result = await Auth.signIn(data.login, data.password);
     localStorage.setItem('jwtToken', result.access_token);
   };
   return (
