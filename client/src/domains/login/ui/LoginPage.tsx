@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Auth } from '../../../shared/api/apiClient';
 
 interface IFormInput {
   login: string;
@@ -7,7 +8,10 @@ interface IFormInput {
 
 export default function LoginPage() {
   const methods = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {};
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    const result = await Auth.signUp(data.login, data.password);
+    localStorage.setItem('jwtToken', result.access_token);
+  };
   return (
     <div>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
