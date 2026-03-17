@@ -20,7 +20,7 @@ const api = new ApiClient();
 export class Auth {
   static async signUp(login: string, password: string): Promise<JwtToken> {
     return axios
-      .post('/auth/login', { login: login, password: password })
+      .post<JwtToken>('/auth/login', { login: login, password: password })
       .then((response) => response.data)
       .catch((error) => {
         console.log(error);
