@@ -1,9 +1,11 @@
-import { getCats } from '../../../shared/api/apiClient';
+import { getCats, getUserCats } from '../../../shared/api/apiClient';
 import BaseAnimalPage from '../../base/ui/BaseAnimalPage';
 import CatTable from './CatTable';
 
-const CatsPage = () => {
+export const CatsPage = () => {
   return BaseAnimalPage(getCats, CatTable);
 };
 
-export default CatsPage;
+export const UserCatsPage = () => {
+  return BaseAnimalPage(getUserCats, CatTable);
+};
