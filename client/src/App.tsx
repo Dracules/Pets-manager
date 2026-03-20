@@ -10,7 +10,7 @@ function ucFirst(str: String) {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<
-    'dogs' | 'cats' | 'userCats' | 'login'
+    'dogs' | 'cats' | 'userCats' | 'login' | 'logout'
   >('dogs');
 
   return (
@@ -21,7 +21,12 @@ export default function App() {
         <button onClick={() => setActiveTab('cats')}>Cats</button>
         <button onClick={() => setActiveTab('login')}>Login</button>
         {localStorage.getItem('jwtToken') && (
-          <button onClick={() => setActiveTab('userCats')}>MyCats</button>
+          <>
+            <button onClick={() => setActiveTab('userCats')}>MyCats</button>
+            <button onClick={() => localStorage.removeItem('jwtToken')}>
+              Logout
+            </button>
+          </>
         )}
         <div style={{ margin: 20 }}>
           {activeTab === 'dogs' && <DogsPage />}
