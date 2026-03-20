@@ -1,5 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Auth } from '../../../shared/api/apiClient';
+import { useState } from 'react';
 
 interface IFormInput {
   login: string;
@@ -8,12 +9,20 @@ interface IFormInput {
 
 export default function LoginPage() {
   const methods = useForm<IFormInput>();
+  const [message, setMessage] = useState('');
 
   const errors = methods.formState.errors;
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const result = await Auth.signIn(data.login, data.password);
-    localStorage.setItem('jwtToken', result.access_token);
+    try {
+      const result = await Auth.signIn(data.login, data.password);
+      if (result.access_token) {
+        localStorage.setItem('jwtToken', result.access_token);
+        setMessage('Successfull enter!');
+      } else setMessage('Something wrong!');
+    } catch (e) {
+      setMessage('Error: ' + e);
+    }
   };
   return (
     <div>
@@ -42,6 +51,7 @@ export default function LoginPage() {
           <span>Minimal password length is 2!</span>
         )}
         <input type="submit" />
+        <p>{message}</p>
       </form>
     </div>
   );
