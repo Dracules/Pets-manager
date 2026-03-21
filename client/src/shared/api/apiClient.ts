@@ -4,7 +4,6 @@ import { Dog } from '../../domains/dog/model/dog.interface';
 import { JwtToken } from '../../domains/login/model/jwtToken.interface';
 
 const api = axios.create();
-api.interceptors.request.use();
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('jwtToken');
   if (token) {
