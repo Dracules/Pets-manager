@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Auth } from '../../../shared/api/apiClient';
+import { Auth, isApiError } from '../../../shared/api/apiClient';
 import { useState } from 'react';
 
 interface IFormInput {
@@ -21,7 +21,11 @@ export default function LoginPage() {
         setMessage('Successfull enter!');
       } else setMessage('Something wrong!');
     } catch (e) {
-      setMessage('Error: ' + e);
+      if (isApiError(e) && e.response?.status === 401) {
+        setMessage('Wrong login or password!');
+      } else {
+        setMessage('Error: ' + e);
+      }
     }
   };
   return (

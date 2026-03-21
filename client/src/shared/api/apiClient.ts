@@ -23,6 +23,10 @@ api.interceptors.response.use(
   },
 );
 
+export function isApiError(e: unknown): e is AxiosError {
+  return axios.isAxiosError(e);
+}
+
 class ApiClient {
   async get<T>(Url: string): Promise<T> {
     return api
