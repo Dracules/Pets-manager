@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
 import { JwtToken } from '../../domains/login/model/jwtToken.interface';
@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  (error: AxiosError) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('jwtToken');
     }
