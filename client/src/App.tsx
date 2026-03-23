@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import DogsPage from './domains/dog/ui/DogPage';
-import CatsPage from './domains/cat/ui/CatPage';
+import { CatsPage, UserCatsPage } from './domains/cat/ui/CatPage';
 import LoginPage from './domains/login/ui/LoginPage';
 
 function ucFirst(str: String) {
@@ -9,7 +9,9 @@ function ucFirst(str: String) {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'dogs' | 'cats' | 'login'>('dogs');
+  const [activeTab, setActiveTab] = useState<
+    'dogs' | 'cats' | 'userCats' | 'login' | 'logout'
+  >('dogs');
 
   return (
     <div style={{ padding: 20 }}>
@@ -18,10 +20,19 @@ export default function App() {
         <button onClick={() => setActiveTab('dogs')}>Dogs</button>
         <button onClick={() => setActiveTab('cats')}>Cats</button>
         <button onClick={() => setActiveTab('login')}>Login</button>
+        {localStorage.getItem('jwtToken') && (
+          <>
+            <button onClick={() => setActiveTab('userCats')}>MyCats</button>
+            <button onClick={() => localStorage.removeItem('jwtToken')}>
+              Logout
+            </button>
+          </>
+        )}
         <div style={{ margin: 20 }}>
           {activeTab === 'dogs' && <DogsPage />}
           {activeTab === 'cats' && <CatsPage />}
           {activeTab === 'login' && <LoginPage />}
+          {activeTab === 'userCats' && <UserCatsPage />}
         </div>
       </div>
     </div>
