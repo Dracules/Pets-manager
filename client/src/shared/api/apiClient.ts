@@ -1,26 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
-import { JwtToken } from '../../domains/login/model/jwtToken.interface';
-
-const api = axios.create();
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwtToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('jwtToken');
-    }
-    return Promise.reject(error);
-  },
-);
+import api from './axiosApi';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
