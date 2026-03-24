@@ -1,6 +1,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Auth, isApiError } from '../../../shared/api/apiClient';
+import { isApiError } from '../../../shared/api/apiClient';
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { Auth } from '../../../shared/api/authApi';
 
 interface IFormInput {
   login: string;
@@ -10,6 +12,7 @@ interface IFormInput {
 export default function LoginPage() {
   const methods = useForm<IFormInput>();
   const [message, setMessage] = useState('');
+  const { token, login } = useAuth();
 
   const errors = methods.formState.errors;
 
@@ -17,8 +20,7 @@ export default function LoginPage() {
     try {
       const result = await Auth.signIn(data.login, data.password);
       if (result.access_token) {
-        localStorage.setItem('jwtToken', result.access_token);
-        setMessage('Successfull enter!');
+        login(result.access_token);
       } else setMessage('Something wrong!');
     } catch (e) {
       if (isApiError(e) && e.response?.status === 401) {
@@ -28,7 +30,9 @@ export default function LoginPage() {
       }
     }
   };
-  return (
+  return token ? (
+    <h3>You have already been athorized!</h3>
+  ) : (
     <div>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div>
