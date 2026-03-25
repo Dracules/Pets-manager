@@ -1,40 +1,13 @@
-import { useState } from 'react';
-import DogsPage from './domains/dog/ui/DogPage';
-import { CatsPage, UserCatsPage } from './domains/cat/ui/CatPage';
-import LoginPage from './domains/login/ui/LoginPage';
-
-function ucFirst(str: String) {
-  if (!str) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+import { BrowserRouter } from 'react-router';
+import { AppRoutes } from './shared/routes/routes';
+import { AuthProvider } from './domains/login/context/AuthContext';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<
-    'dogs' | 'cats' | 'userCats' | 'login' | 'logout'
-  >('dogs');
-
   return (
-    <div style={{ padding: 20 }}>
-      <h1>{ucFirst(activeTab)}</h1>
-      <div style={{ margin: 20 }}>
-        <button onClick={() => setActiveTab('dogs')}>Dogs</button>
-        <button onClick={() => setActiveTab('cats')}>Cats</button>
-        <button onClick={() => setActiveTab('login')}>Login</button>
-        {localStorage.getItem('jwtToken') && (
-          <>
-            <button onClick={() => setActiveTab('userCats')}>MyCats</button>
-            <button onClick={() => localStorage.removeItem('jwtToken')}>
-              Logout
-            </button>
-          </>
-        )}
-        <div style={{ margin: 20 }}>
-          {activeTab === 'dogs' && <DogsPage />}
-          {activeTab === 'cats' && <CatsPage />}
-          {activeTab === 'login' && <LoginPage />}
-          {activeTab === 'userCats' && <UserCatsPage />}
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }

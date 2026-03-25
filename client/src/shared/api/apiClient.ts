@@ -1,26 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
-import { JwtToken } from '../../domains/login/model/jwtToken.interface';
-
-const api = axios.create();
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwtToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('jwtToken');
-    }
-    return Promise.reject(error);
-  },
-);
+import api from './axiosApi';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -39,18 +20,6 @@ class ApiClient {
 }
 
 const apiClient = new ApiClient();
-
-export class Auth {
-  static async signIn(login: string, password: string): Promise<JwtToken> {
-    return axios
-      .post<JwtToken>('/auth/login', { login: login, password: password })
-      .then((response) => response.data)
-      .catch((error) => {
-        console.log(error);
-        throw error;
-      });
-  }
-}
 
 export async function getDogs(): Promise<Dog[]> {
   return apiClient.get<Dog[]>('/animals/dogs');
