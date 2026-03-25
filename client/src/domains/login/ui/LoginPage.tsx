@@ -36,7 +36,7 @@ export default function LoginPage() {
     <div>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div>
-          <label style={{ padding: 20 }}>Login</label>
+          <label style={{ margin: 20 }}>Login</label>
           <input
             {...methods.register('login', { required: true, minLength: 2 })}
             placeholder="Login"
@@ -51,7 +51,7 @@ export default function LoginPage() {
           </div>
         </div>
         <div>
-          <label style={{ padding: 20 }}>Password</label>
+          <label style={{ margin: 20 }}>Password</label>
           <input
             {...methods.register('password', { required: true, minLength: 2 })}
             placeholder="Password"
