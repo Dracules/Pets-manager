@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
+import { Animal } from '../../domains/base/model/animal.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -31,4 +32,8 @@ export async function getCats(): Promise<Cat[]> {
 
 export async function getUserCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats/user');
+}
+
+export async function getAnimals(): Promise<Animal[]> {
+  return apiClient.get<Animal[]>('/animals');
 }
