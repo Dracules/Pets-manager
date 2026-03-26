@@ -5,9 +5,4 @@ import { Roles } from '../../shared/decorators/roles.decorator';
 export class AnimalController {
   constructor() {}
 
-  @Get('admin')
-  @Roles(['admin'])
-  getAdmin(): string {
-    return 'Hello, Admin!';
-  }
 }
