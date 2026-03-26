@@ -9,5 +9,6 @@ import { AnimalCacheService } from '../animal/services/animal.cache.service';
   imports: [MongooseModule.forFeature([{ name: Dog.name, schema: DogSchema }])],
   controllers: [DogController],
   providers: [DogService, AnimalCacheService],
+  exports: [MongooseModule],
 })
 export class DogModule {}
