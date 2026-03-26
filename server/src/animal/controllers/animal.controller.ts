@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
 import { AnimalResponse } from '../interfaces/animal.interface';
-import { Public } from 'src/shared/decorators/public.decorator';
+import { Public } from '../../shared/decorators/public.decorator';
 
 @Controller('animals')
 export class AnimalController {
