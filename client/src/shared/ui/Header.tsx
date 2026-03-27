@@ -8,6 +8,7 @@ export function Header() {
   return (
     <nav>
       <div style={{ display: 'flex', gap: '12px' }}>
+        <Link to="/">All</Link>
         <Link to="/cats">Cats</Link>
         <Link to="/dogs">Dogs</Link>
         {token ? (
