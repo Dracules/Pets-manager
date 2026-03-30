@@ -15,7 +15,7 @@ export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Sidebar collapsed={collapsed}>
+    <Sidebar collapsed={collapsed} style={{ backgroundColor: '#f6f6f6ff' }}>
       <div
         style={{
           display: 'flex',
