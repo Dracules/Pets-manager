@@ -25,21 +25,41 @@ export function AppSidebar() {
         }}
       >
         <Menu>
-          <MenuItem onClick={() => setCollapsed(!collapsed)}></MenuItem>
+          <MenuItem
+            icon={collapsed ? <FiChevronsRight /> : <FiChevronsLeft />}
+            onClick={() => setCollapsed(!collapsed)}
+          ></MenuItem>
         </Menu>
         <Menu style={{ flex: 1, overflowY: 'auto', margin: 0 }}>
-          <MenuItem component={<Link to="/" />}>All animals</MenuItem>
+          <MenuItem
+            icon={<TbCircleLetterA size={35} />}
+            component={<Link to="/" />}
+          >
+            All animals
+          </MenuItem>
           {token && (
             <>
-              <MenuItem component={<Link to="/mycats" />}>My animals</MenuItem>
+              <MenuItem
+                icon={<TbCircleLetterM size={35} />}
+                component={<Link to="/mycats" />}
+              >
+                My animals
+              </MenuItem>
             </>
           )}
         </Menu>
         <Menu>
           {token ? (
-            <MenuItem onClick={logout}>Logout</MenuItem>
+            <MenuItem icon={<RxExit size={35} />} onClick={logout}>
+              Logout
+            </MenuItem>
           ) : (
-            <MenuItem component={<Link to="/login" />}>Login</MenuItem>
+            <MenuItem
+              icon={<TbCircleLetterL size={35} />}
+              component={<Link to="/login" />}
+            >
+              Login
+            </MenuItem>
           )}
         </Menu>
       </div>
