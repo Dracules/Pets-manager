@@ -11,7 +11,6 @@ const animalColumns: ColumnDef<Animal>[] = [
 ];
 
 function AnimalTable({ data }: BaseTableProps<Animal>) {
-  console.log(data);
   return <BaseTable data={data} columns={animalColumns} />;
 }
 
