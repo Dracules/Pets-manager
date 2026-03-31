@@ -13,6 +13,7 @@ export function AppRoutes() {
         <Route path="dogs" element={<DogsPage />} />
         <Route path="cats" element={<CatsPage />} />
         <Route path="mycats" element={<UserCatsPage />} />
+        <Route path="mydogs" element={<UserDogsPage />} />
         <Route path="login" element={<LoginPage />} />
       </Route>
     </Routes>
