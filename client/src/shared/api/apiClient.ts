@@ -34,6 +34,10 @@ export async function getUserCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats/user');
 }
 
+export async function getUserDogs(): Promise<Dog[]> {
+  return apiClient.get<Dog[]>('/animals/dogs/user');
+}
+
 export async function getAnimals(): Promise<Animal[]> {
   return apiClient.get<Animal[]>('/animals');
 }
