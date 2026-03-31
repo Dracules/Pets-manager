@@ -30,6 +30,8 @@ export default function AppLayout() {
         return 'Cats';
       case '/mycats':
         return 'My cats';
+      case '/mydogs':
+        return 'My dogs';
       case '/login':
         return 'Login';
       default:
