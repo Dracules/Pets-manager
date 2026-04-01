@@ -20,7 +20,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const login = (newToken: string) => {
     localStorage.setItem('jwtToken', newToken);
     setToken(newToken);
-    navigate('/');
+    navigate('/my');
   };
 
   const logout = () => {

@@ -13,7 +13,7 @@ export default function AppLayout() {
     switch (pathname) {
       case '/':
         return setHeaderType('all');
-      case '/mycats':
+      case '/my':
         return setHeaderType('user');
       case '/login':
         return setHeaderType('login');
@@ -28,6 +28,8 @@ export default function AppLayout() {
         return 'Dogs';
       case '/cats':
         return 'Cats';
+      case '/my':
+        return 'My animals';
       case '/mycats':
         return 'My cats';
       case '/mydogs':

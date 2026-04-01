@@ -41,3 +41,7 @@ export async function getUserDogs(): Promise<Dog[]> {
 export async function getAnimals(): Promise<Animal[]> {
   return apiClient.get<Animal[]>('/animals');
 }
+
+export async function getUserAnimals(): Promise<Animal[]> {
+  return apiClient.get<Animal[]>('/animals/user');
+}

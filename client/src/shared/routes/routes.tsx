@@ -3,7 +3,10 @@ import { DogsPage, UserDogsPage } from '../../domains/dog/ui/DogPage';
 import { CatsPage, UserCatsPage } from '../../domains/cat/ui/CatPage';
 import LoginPage from '../../domains/login/ui/LoginPage';
 import AppLayout from '../ui/AppLayout';
-import AnimalsPage from '../../domains/animal/ui/AnimalPage';
+import {
+  AnimalsPage,
+  UserAnimalsPage,
+} from '../../domains/animal/ui/AnimalPage';
 
 export function AppRoutes() {
   return (
@@ -12,6 +15,7 @@ export function AppRoutes() {
         <Route index element={<AnimalsPage />} />
         <Route path="dogs" element={<DogsPage />} />
         <Route path="cats" element={<CatsPage />} />
+        <Route path="my" element={<UserAnimalsPage />} />
         <Route path="mycats" element={<UserCatsPage />} />
         <Route path="mydogs" element={<UserDogsPage />} />
         <Route path="login" element={<LoginPage />} />
