@@ -18,7 +18,12 @@ export function Header({ type }: { type: HeaderType }) {
           </>
         );
       case 'user':
-        return <Link to="/mycats">Cats</Link>;
+        return (
+          <>
+            <Link to="/mycats">Cats</Link>
+            <Link to="/mydogs">Dogs</Link>
+          </>
+        );
       case 'login':
         return <></>;
     }
