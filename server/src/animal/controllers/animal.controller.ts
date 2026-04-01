@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { Public } from '../../shared/decorators/public.decorator';
+import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
 
 @Controller('animals')
 export class AnimalController {
@@ -11,5 +12,13 @@ export class AnimalController {
   @Get('/')
   async getAllAnimals(): Promise<AnimalResponse[]> {
     return this.animalService.findAllAnimals();
+  }
+
+  @Get('/user')
+  async getUserAnimals(
+    @Req() request: RequestWithUser,
+  ): Promise<AnimalResponse[]> {
+    const userId = request.user.sub;
+    return await this.animalService.findAnimalsByUser(userId);
   }
 }
