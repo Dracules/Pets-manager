@@ -28,6 +28,8 @@ export default function AppLayout() {
         return 'Dogs';
       case '/cats':
         return 'Cats';
+      case '/my':
+        return 'My animals';
       case '/mycats':
         return 'My cats';
       case '/mydogs':
