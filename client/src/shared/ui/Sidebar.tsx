@@ -41,7 +41,7 @@ export function AppSidebar() {
             <>
               <MenuItem
                 icon={<TbCircleLetterM size={35} />}
-                component={<Link to="/mycats" />}
+                component={<Link to="/my" />}
               >
                 My animals
               </MenuItem>
