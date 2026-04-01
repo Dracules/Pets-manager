@@ -20,6 +20,7 @@ export function Header({ type }: { type: HeaderType }) {
       case 'user':
         return (
           <>
+            <Link to="/my">All</Link>
             <Link to="/mycats">Cats</Link>
             <Link to="/mydogs">Dogs</Link>
           </>
