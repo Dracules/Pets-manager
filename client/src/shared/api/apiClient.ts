@@ -18,6 +18,16 @@ class ApiClient {
         throw error;
       });
   }
+
+  async delete<T>(Url: string): Promise<string> {
+    return api
+      .delete<string>(Url)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
 }
 
 const apiClient = new ApiClient();
