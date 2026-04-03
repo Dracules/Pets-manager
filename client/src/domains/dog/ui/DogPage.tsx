@@ -1,4 +1,8 @@
-import { getDogs, getUserDogs } from '../../../shared/api/apiClient';
+import {
+  deleteDogs,
+  getDogs,
+  getUserDogs,
+} from '../../../shared/api/apiClient';
 import BaseAnimalPage from '../../base/ui/BaseAnimalPage';
 import DogTable from './DogTable';
 
@@ -7,5 +11,5 @@ export const DogsPage = () => {
 };
 
 export const UserDogsPage = () => {
-  return BaseAnimalPage(DogTable, getUserDogs);
+  return BaseAnimalPage(DogTable, getUserDogs, deleteDogs);
 };
