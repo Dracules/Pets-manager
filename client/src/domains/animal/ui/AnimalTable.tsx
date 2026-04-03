@@ -1,7 +1,7 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import BaseTable from '../../base/ui/BaseTable';
 import { BaseTableProps } from '../../base/model/BaseTableProps';
-import { Animal } from '../../base/model/animal.interface';
+import { Animal } from '../model/animal.interface';
 
 const animalColumns: ColumnDef<Animal>[] = [
   { accessorKey: '_id', header: 'ID' },

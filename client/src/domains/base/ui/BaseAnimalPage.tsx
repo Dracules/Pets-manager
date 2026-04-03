@@ -1,5 +1,5 @@
 import useFetchData from '../model/useFetchData';
-import { Animal } from '../model/animal.interface';
+import { Animal } from '../../animal/model/animal.interface';
 import { BaseTableProps } from '../model/BaseTableProps';
 
 function BaseAnimalPage<T extends Animal>(

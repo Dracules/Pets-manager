@@ -5,7 +5,8 @@ import {
   ColumnDef,
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
-import { Animal } from '../model/animal.interface';
+import { Animal } from '../../animal/model/animal.interface';
+
 
 export default function BaseTable<T extends Animal>({
   data,
