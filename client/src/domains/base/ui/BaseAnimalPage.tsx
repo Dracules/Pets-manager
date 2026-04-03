@@ -3,8 +3,8 @@ import { Animal } from '../model/animal.interface';
 import { BaseTableProps } from '../model/BaseTableProps';
 
 function BaseAnimalPage<T extends Animal>(
-  fetchFn: () => Promise<T[]>,
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
+  fetchFn: () => Promise<T[]>,
 ) {
   const { data, loading, error } = useFetchData(fetchFn);
 

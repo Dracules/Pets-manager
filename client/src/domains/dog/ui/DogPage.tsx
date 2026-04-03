@@ -3,9 +3,9 @@ import BaseAnimalPage from '../../base/ui/BaseAnimalPage';
 import DogTable from './DogTable';
 
 export const DogsPage = () => {
-  return BaseAnimalPage(getDogs, DogTable);
+  return BaseAnimalPage(DogTable, getDogs);
 };
 
 export const UserDogsPage = () => {
-  return BaseAnimalPage(getUserDogs, DogTable);
+  return BaseAnimalPage(DogTable, getUserDogs);
 };
