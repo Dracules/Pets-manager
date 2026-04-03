@@ -40,6 +40,14 @@ export async function getCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats');
 }
 
+export async function deleteDogs(id: string): Promise<string> {
+  return apiClient.delete<Dog[]>(`/animals/dogs/${id}`);
+}
+
+export async function deleteCats(id: string): Promise<string> {
+  return apiClient.delete<Cat[]>(`/animals/cats/${id}`);
+}
+
 export async function getUserCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats/user');
 }
