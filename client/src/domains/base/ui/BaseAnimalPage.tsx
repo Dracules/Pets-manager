@@ -5,6 +5,7 @@ import { BaseTableProps } from '../model/BaseTableProps';
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
+  deleteFn?: (id: string) => Promise<string>,
 ) {
   const { data, loading, error } = useFetchData(fetchFn);
 
@@ -13,7 +14,7 @@ function BaseAnimalPage<T extends Animal>(
 
   return (
     <div>
-      <AnimalTable data={data ?? []} />
+      <AnimalTable data={data ?? []} onDelete={deleteFn} />
     </div>
   );
 }
