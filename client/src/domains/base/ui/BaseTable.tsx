@@ -2,18 +2,35 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  ColumnDef,
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
-import { Animal } from '../model/animal.interface';
+import { Animal } from '../../animal/model/animal.interface';
+
 
 export default function BaseTable<T extends Animal>({
   data,
-  columns,
+  columns = [],
+  onDelete,
 }: BaseTableProps<T>) {
-  if (!columns) columns = [];
+  const actionColumn: ColumnDef<T> = {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => (
+      <button
+        onClick={async () => {
+          await onDelete?.(row.original.id);
+        }}
+      >
+        Delete
+      </button>
+    ),
+  };
+  const finalColumns = onDelete ? [...columns, actionColumn] : columns;
+
   const table = useReactTable({
     data,
-    columns,
+    columns: finalColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 

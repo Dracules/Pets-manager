@@ -1,4 +1,4 @@
-import { Animal } from '../../base/model/animal.interface';
+import { Animal } from '../../animal/model/animal.interface';
 import { LitterStatus } from './litterStatus.type';
 
 export interface Cat extends Animal {

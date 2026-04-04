@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
-import { Animal } from '../../domains/base/model/animal.interface';
+import { Animal } from '../../domains/animal/model/animal.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -12,6 +12,16 @@ class ApiClient {
   async get<T>(Url: string): Promise<T> {
     return api
       .get<T>(Url)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+
+  async delete(Url: string): Promise<string> {
+    return api
+      .delete<string>(Url)
       .then((response) => response.data)
       .catch((error) => {
         console.log(error);
@@ -28,6 +38,14 @@ export async function getDogs(): Promise<Dog[]> {
 
 export async function getCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats');
+}
+
+export async function deleteDogs(id: string): Promise<string> {
+  return apiClient.delete(`/animals/dogs/${id}`);
+}
+
+export async function deleteCats(id: string): Promise<string> {
+  return apiClient.delete(`/animals/cats/${id}`);
 }
 
 export async function getUserCats(): Promise<Cat[]> {

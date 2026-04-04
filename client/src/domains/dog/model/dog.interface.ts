@@ -1,4 +1,4 @@
-import { Animal } from '../../base/model/animal.interface';
+import { Animal } from '../../animal/model/animal.interface';
 
 export interface Dog extends Animal {
   trainedCommands?: string[];

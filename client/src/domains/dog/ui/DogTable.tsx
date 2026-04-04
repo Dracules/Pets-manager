@@ -11,8 +11,8 @@ const dogColumns: ColumnDef<Dog>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function DogTable({ data }: BaseTableProps<Dog>) {
-  return <BaseTable data={data} columns={dogColumns} />;
+function DogTable({ data, onDelete }: BaseTableProps<Dog>) {
+  return <BaseTable data={data} columns={dogColumns} onDelete={onDelete} />;
 }
 
 export default DogTable;
