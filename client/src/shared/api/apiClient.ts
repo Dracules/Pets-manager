@@ -19,7 +19,7 @@ class ApiClient {
       });
   }
 
-  async delete<T>(Url: string): Promise<string> {
+  async delete(Url: string): Promise<string> {
     return api
       .delete<string>(Url)
       .then((response) => response.data)
@@ -41,11 +41,11 @@ export async function getCats(): Promise<Cat[]> {
 }
 
 export async function deleteDogs(id: string): Promise<string> {
-  return apiClient.delete<Dog[]>(`/animals/dogs/${id}`);
+  return apiClient.delete(`/animals/dogs/${id}`);
 }
 
 export async function deleteCats(id: string): Promise<string> {
-  return apiClient.delete<Cat[]>(`/animals/cats/${id}`);
+  return apiClient.delete(`/animals/cats/${id}`);
 }
 
 export async function getUserCats(): Promise<Cat[]> {
