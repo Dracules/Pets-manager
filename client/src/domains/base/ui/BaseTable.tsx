@@ -7,7 +7,6 @@ import {
 import { BaseTableProps } from '../model/BaseTableProps';
 import { Animal } from '../../animal/model/animal.interface';
 
-
 export default function BaseTable<T extends Animal>({
   data,
   columns = [],
@@ -19,7 +18,7 @@ export default function BaseTable<T extends Animal>({
     cell: ({ row }) => (
       <button
         onClick={async () => {
-          await onDelete?.(row.original.id);
+          await onDelete?.(row.original._id);
         }}
       >
         Delete
