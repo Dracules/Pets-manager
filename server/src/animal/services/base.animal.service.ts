@@ -47,7 +47,7 @@ export abstract class BaseAnimalService<
     userId: string,
     animalId: string,
     animalDTO: Partial<DTO>,
-    updateProps: unknown,
+    updateProps?: unknown,
   ): Promise<Response> {
     if (await this.isExistedWithIdAndUser(animalId, userId)) {
       const updateObj = animalDTO as unknown as UpdateQuery<T>;
