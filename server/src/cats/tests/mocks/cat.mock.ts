@@ -14,7 +14,7 @@ export const mockCatDTOList = (count = 5): CatDTO[] =>
   );
 
 export const mockCat = (overrides: Partial<CatResponse> = {}): CatResponse => ({
-  id: '1',
+  _id: '1',
   name: 'Bars',
   age: 3,
   litterStatus: 'unknown',
@@ -23,4 +23,4 @@ export const mockCat = (overrides: Partial<CatResponse> = {}): CatResponse => ({
 });
 
 export const mockCatsList = (count = 5): CatResponse[] =>
-  Array.from({ length: count }, (_, i) => mockCat({ id: i.toString() }));
+  Array.from({ length: count }, (_, i) => mockCat({ _id: i.toString() }));
