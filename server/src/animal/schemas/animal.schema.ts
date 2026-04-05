@@ -18,19 +18,5 @@ export class Animal {
 }
 
 export const createAnimalSchema = (specificSchema: Type<any>) => {
-  const schema = SchemaFactory.createForClass(specificSchema);
-
-  schema.virtual('id').get(function (this: Document & { _id: Types.ObjectId }) {
-    return this._id.toString();
-  });
-
-  schema.set('toJSON', {
-    virtuals: true,
-    transform: (_doc, ret) => {
-      delete ret._id;
-      return ret;
-    },
-  });
-
-  return schema;
+  return SchemaFactory.createForClass(specificSchema);
 };

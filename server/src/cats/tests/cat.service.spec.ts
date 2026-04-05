@@ -46,7 +46,6 @@ describe('CatService', () => {
       const userId = '507f1f77bcf86cd799439333';
 
       const savedCat = {
-        _id: '507f1f77bcf86cd799439011',
         ...cat,
         owner: userId,
       };
@@ -94,7 +93,7 @@ describe('CatService', () => {
       it('must return cat with ID', async () => {
         const catId = '694ac1f93b5320db21a572a5';
         const cat: CatResponse & { login: string } = {
-          ...mockCat({ id: catId }),
+          ...mockCat({ _id: catId }),
           login: 'string',
         };
 
@@ -264,7 +263,7 @@ describe('CatService', () => {
         const catId = '694ac1f93b5320db21a572a5';
         const userId = '694ac1f93b5320db21a11111';
 
-        const deletedCat = mockCat({ id: catId });
+        const deletedCat = mockCat({ _id: catId });
 
         const expectedResponse = 'Selected item is deleted successfully!';
 

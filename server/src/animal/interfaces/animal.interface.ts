@@ -1,5 +1,5 @@
 export interface AnimalResponse {
-  id: string;
+  _id: string;
   name: string;
   age: number;
   owner: string;

@@ -54,9 +54,11 @@ describe('CatController', () => {
       throw Error('Cats collection not found');
     }
 
-    return await catsCollection.findOne({
+    const doc = await catsCollection.findOne({
       _id: id,
     });
+
+    return JSON.parse(JSON.stringify(doc));
   }
 
   async function findAllCatsDB() {
@@ -244,13 +246,12 @@ describe('CatController', () => {
           .send()
           .expect(200);
 
-        const { _id, ...findedCat } = (await findCatDB(catId)) as CatDocument;
+        const findedCat = (await findCatDB(catId)) as CatResponse;
 
         expect(response.body).not.toBeNull();
-        expect(response.body).toMatchObject({
-          ...findedCat,
-          id: _id.toString(),
-        });
+        console.table(response.body);
+        console.table(findedCat);
+        expect(response.body).toMatchObject(findedCat);
       });
     });
 
@@ -421,7 +422,7 @@ describe('CatController', () => {
       const createdCat = response.body as CatResponse;
 
       const findedCat = (await findCatDB(
-        new ObjectId(createdCat.id),
+        new ObjectId(createdCat._id),
       )) as unknown as CatResponse;
       expect(findedCat).not.toBeNull();
       expect(findedCat).toMatchObject(correctCatDTO);
@@ -455,7 +456,7 @@ describe('CatController', () => {
       const updateCatDTO: Partial<CatDTO> = { name: newName };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${cat.id}`)
+        .put(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(updateCatDTO)
         .expect(200);
@@ -476,7 +477,7 @@ describe('CatController', () => {
       const updateCatDTO: Partial<CatDTO> = { name: newName };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${cat.id}`)
+        .put(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(updateCatDTO)
         .expect(200);
@@ -542,7 +543,7 @@ describe('CatController', () => {
       const cat = createResponse.body as CatResponse;
 
       const response = (await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${cat.id}`)
+        .put(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(correctCatDTO)
         .expect(404)) as { body: { message: string } };
@@ -567,13 +568,13 @@ describe('CatController', () => {
       const updateCatDTO: Partial<CatDTO> = { name: newName };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${createdCat.id}`)
+        .put(`/animals/cats/${createdCat._id}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(updateCatDTO)
         .expect(200);
 
       const findedCat = (await findCatDB(
-        new ObjectId(createdCat.id),
+        new ObjectId(createdCat._id),
       )) as unknown as CatResponse;
       expect(findedCat.name).toEqual(newName);
       expect(findedCat.name).not.toEqual(createdCat.name);
@@ -602,7 +603,7 @@ describe('CatController', () => {
       const cat = createResponse.body as CatResponse;
 
       await request(app.getHttpServer() as App)
-        .delete(`/animals/cats/${cat.id}`)
+        .delete(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send()
         .expect(200);
@@ -620,7 +621,7 @@ describe('CatController', () => {
       const cat = createResponse.body as CatResponse;
 
       await request(app.getHttpServer() as App)
-        .delete(`/animals/cats/${cat.id}`)
+        .delete(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send()
         .expect(200);
@@ -662,7 +663,7 @@ describe('CatController', () => {
       const cat = createResponse.body as CatResponse;
 
       const response = (await request(app.getHttpServer() as App)
-        .delete(`/animals/cats/${cat.id}`)
+        .delete(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send()
         .expect(404)) as { body: { message: string } };
@@ -684,12 +685,12 @@ describe('CatController', () => {
       const cat = createResponse.body as CatResponse;
 
       const response = await request(app.getHttpServer() as App)
-        .delete(`/animals/cats/${cat.id}`)
+        .delete(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send()
         .expect(200);
 
-      const findedCat = await findCatDB(new ObjectId(cat.id));
+      const findedCat = await findCatDB(new ObjectId(cat._id));
       expect(findedCat).toBeNull();
       expect(response.body).toEqual('Selected item is deleted successfully!');
     });

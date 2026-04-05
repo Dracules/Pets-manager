@@ -7,8 +7,6 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ versionKey: false })
 export class User {
-  id: string;
-
   @Prop({ required: true, unique: true })
   login: string;
 
@@ -20,18 +18,6 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.virtual('id').get(function () {
-  return this._id.toString();
-});
-
-UserSchema.set('toJSON', {
-  virtuals: true,
-  transform: (_doc, ret: Record<string, any>) => {
-    delete ret._id;
-    return ret;
-  },
-});
 
 UserSchema.pre<UserDocument>('save', async function () {
   if (this.isModified('password')) {
