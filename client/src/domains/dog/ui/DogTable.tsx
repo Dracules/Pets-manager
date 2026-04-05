@@ -4,7 +4,7 @@ import BaseTable from '../../base/ui/BaseTable';
 import { BaseTableProps } from '../../base/model/BaseTableProps';
 
 const dogColumns: ColumnDef<Dog>[] = [
-  { accessorKey: 'id', header: 'ID' },
+  { accessorKey: '_id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'trainedCommands', header: 'Commands' },
