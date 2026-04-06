@@ -2,6 +2,7 @@ import useFetchData from '../model/useFetchData';
 import { Animal } from '../../animal/model/animal.interface';
 import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalType } from '../../animal/model/animal.type';
+import { toast } from 'react-toastify';
 
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
@@ -15,8 +16,9 @@ function BaseAnimalPage<T extends Animal>(
 
   async function handleDelete(id: string, type?: AnimalType | undefined) {
     try {
-      await deleteFn!(id, type);
+      const response = await deleteFn!(id, type);
       setData((current) => current!.filter((animal) => animal._id !== id));
+      toast(response);
     } catch {}
   }
 
