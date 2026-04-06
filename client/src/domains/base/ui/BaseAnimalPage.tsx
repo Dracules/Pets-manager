@@ -20,7 +20,10 @@ function BaseAnimalPage<T extends Animal>(
 
   return (
     <div>
-      <AnimalTable data={data ?? []} onDelete={deleteFn} />
+      <AnimalTable
+        data={data ?? []}
+        onDelete={deleteFn ? handleDelete : undefined}
+      />
     </div>
   );
 }
