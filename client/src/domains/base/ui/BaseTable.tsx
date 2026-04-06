@@ -6,7 +6,6 @@ import {
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
 import { Animal } from '../../animal/model/animal.interface';
-import { toast } from 'react-toastify';
 import { AnimalType } from '../../animal/model/animal.type';
 
 export default function BaseTable<T extends Animal>({
@@ -22,14 +21,12 @@ export default function BaseTable<T extends Animal>({
         cell: ({ row }) => (
           <button
             onClick={async () => {
-              const response =
-                'type' in row.original
-                  ? await onDelete(
-                      row.original._id,
-                      row.original.type as AnimalType,
-                    )
-                  : await onDelete(row.original._id);
-              toast(response);
+              'type' in row.original
+                ? await onDelete(
+                    row.original._id,
+                    row.original.type as AnimalType,
+                  )
+                : await onDelete(row.original._id);
             }}
           >
             Delete
