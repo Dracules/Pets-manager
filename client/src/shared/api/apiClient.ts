@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
+import { AnimalType } from '../../domains/animal/model/animal.type';
 import { AnimalResponse } from '../../domains/animal/model/animal.response.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
@@ -46,6 +47,20 @@ export async function deleteDogs(id: string): Promise<string> {
 
 export async function deleteCats(id: string): Promise<string> {
   return apiClient.delete(`/animals/cats/${id}`);
+}
+
+export async function deleteAnimals(
+  id: string,
+  type?: AnimalType,
+): Promise<string> {
+  switch (type) {
+    case 'cat':
+      return deleteCats(id);
+    case 'dog':
+      return deleteDogs(id);
+    default:
+      throw Error('Undefined animal type!');
+  }
 }
 
 export async function getUserCats(): Promise<Cat[]> {
