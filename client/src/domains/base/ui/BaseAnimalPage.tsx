@@ -1,11 +1,12 @@
 import useFetchData from '../model/useFetchData';
 import { Animal } from '../../animal/model/animal.interface';
 import { BaseTableProps } from '../model/BaseTableProps';
+import { AnimalType } from '../../animal/model/animal.type';
 
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
-  deleteFn?: (id: string) => Promise<string>,
+  deleteFn?: (id: string, type?: AnimalType) => Promise<string>,
 ) {
   const { data, loading, error } = useFetchData(fetchFn);
 
