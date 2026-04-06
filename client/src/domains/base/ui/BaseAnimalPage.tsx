@@ -8,10 +8,15 @@ function BaseAnimalPage<T extends Animal>(
   fetchFn: () => Promise<T[]>,
   deleteFn?: (id: string, type?: AnimalType) => Promise<string>,
 ) {
-  const { data, loading, error } = useFetchData(fetchFn);
+  const { data, loading, error, setData } = useFetchData(fetchFn);
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;
+
+  async function handleDelete(id: string, type?: AnimalType | undefined) {
+    setData((current) => current!.filter((animal) => animal._id !== id));
+    return deleteFn!(id, type);
+  }
 
   return (
     <div>
