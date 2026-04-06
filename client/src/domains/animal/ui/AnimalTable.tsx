@@ -10,8 +10,8 @@ const animalColumns: ColumnDef<AnimalResponse>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function AnimalTable({ data }: BaseTableProps<AnimalResponse>) {
-  return <BaseTable data={data} columns={animalColumns} />;
+function AnimalTable({ data, onDelete }: BaseTableProps<AnimalResponse>) {
+  return <BaseTable data={data} columns={animalColumns} onDelete={onDelete} />;
 }
 
 export default AnimalTable;
