@@ -7,31 +7,43 @@ import {
 import { BaseTableProps } from '../model/BaseTableProps';
 import { Animal } from '../../animal/model/animal.interface';
 import { toast } from 'react-toastify';
+import { AnimalType } from '../../animal/model/animal.type';
 
 export default function BaseTable<T extends Animal>({
   data,
   columns = [],
   onDelete,
 }: BaseTableProps<T>) {
-  const actionColumn: ColumnDef<T> = {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => (
-      <button
-        onClick={async () => {
-          const response = await onDelete?.(row.original.id);
-          toast(response);
-        }}
-      >
-        Delete
-      </button>
-    ),
-  };
-  const finalColumns = onDelete ? [...columns, actionColumn] : columns;
+  function getFinalColumns() {
+    if (onDelete) {
+      const actionColumn: ColumnDef<T> = {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }) => (
+          <button
+            onClick={async () => {
+              const response =
+                'type' in row.original
+                  ? await onDelete(
+                      row.original._id,
+                      row.original.type as AnimalType,
+                    )
+                  : await onDelete(row.original._id);
+              toast(response);
+            }}
+          >
+            Delete
+          </button>
+        ),
+      };
+      return [...columns, actionColumn];
+    }
+    return columns;
+  }
 
   const table = useReactTable({
     data,
-    columns: finalColumns,
+    columns: getFinalColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 

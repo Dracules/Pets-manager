@@ -2,7 +2,8 @@ import axios, { AxiosError } from 'axios';
 import { Cat } from '../../domains/cat/model/cat.interface';
 import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
-import { Animal } from '../../domains/animal/model/animal.interface';
+import { AnimalType } from '../../domains/animal/model/animal.type';
+import { AnimalResponse } from '../../domains/animal/model/animal.response.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -48,6 +49,20 @@ export async function deleteCats(id: string): Promise<string> {
   return apiClient.delete(`/animals/cats/${id}`);
 }
 
+export async function deleteAnimals(
+  id: string,
+  type?: AnimalType,
+): Promise<string> {
+  switch (type) {
+    case 'cat':
+      return deleteCats(id);
+    case 'dog':
+      return deleteDogs(id);
+    default:
+      throw Error('Undefined animal type!');
+  }
+}
+
 export async function getUserCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats/user');
 }
@@ -56,10 +71,10 @@ export async function getUserDogs(): Promise<Dog[]> {
   return apiClient.get<Dog[]>('/animals/dogs/user');
 }
 
-export async function getAnimals(): Promise<Animal[]> {
-  return apiClient.get<Animal[]>('/animals');
+export async function getAnimals(): Promise<AnimalResponse[]> {
+  return apiClient.get<AnimalResponse[]>('/animals');
 }
 
-export async function getUserAnimals(): Promise<Animal[]> {
-  return apiClient.get<Animal[]>('/animals/user');
+export async function getUserAnimals(): Promise<AnimalResponse[]> {
+  return apiClient.get<AnimalResponse[]>('/animals/user');
 }
