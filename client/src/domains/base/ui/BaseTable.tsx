@@ -13,25 +13,30 @@ export default function BaseTable<T extends Animal>({
   columns = [],
   onDelete,
 }: BaseTableProps<T>) {
-  const actionColumn: ColumnDef<T> = {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => (
-      <button
-        onClick={async () => {
-          const response = await onDelete?.(row.original.id);
-          toast(response);
-        }}
-      >
-        Delete
-      </button>
-    ),
-  };
-  const finalColumns = onDelete ? [...columns, actionColumn] : columns;
+  function getFinalColumns() {
+    if (onDelete) {
+      const actionColumn: ColumnDef<T> = {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }) => (
+          <button
+            onClick={async () => {
+              const response = await onDelete?.(row.original._id);
+              toast(response);
+            }}
+          >
+            Delete
+          </button>
+        ),
+      };
+      return [...columns, actionColumn];
+    }
+    return columns;
+  }
 
   const table = useReactTable({
     data,
-    columns: finalColumns,
+    columns: getFinalColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
