@@ -14,8 +14,10 @@ function BaseAnimalPage<T extends Animal>(
   if (error) return <h1>Error: {error}</h1>;
 
   async function handleDelete(id: string, type?: AnimalType | undefined) {
-    setData((current) => current!.filter((animal) => animal._id !== id));
-    return deleteFn!(id, type);
+    try {
+      await deleteFn!(id, type);
+      setData((current) => current!.filter((animal) => animal._id !== id));
+    } catch {}
   }
 
   return (
