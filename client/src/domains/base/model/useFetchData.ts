@@ -24,7 +24,7 @@ function useFetchData<T>(fetchFn: () => Promise<T>) {
     }
   };
 
-  return { data, loading, error };
+  return { data, loading, error, setData };
 }
 
 export default useFetchData;
