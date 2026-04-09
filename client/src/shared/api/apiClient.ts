@@ -29,6 +29,16 @@ class ApiClient {
         throw error;
       });
   }
+
+  async post(Url: string, data: object): Promise<Cat> {
+    return api
+      .post<Cat>(Url, data)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
 }
 
 const apiClient = new ApiClient();
@@ -47,6 +57,10 @@ export async function deleteDogs(id: string): Promise<string> {
 
 export async function deleteCats(id: string): Promise<string> {
   return apiClient.delete(`/animals/cats/${id}`);
+}
+
+export async function createCat(data: object): Promise<Cat> {
+  return apiClient.post(`/animals/cats`, data);
 }
 
 export async function deleteAnimals(

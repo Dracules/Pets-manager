@@ -9,6 +9,7 @@ import {
   TbCircleLetterM,
 } from 'react-icons/tb';
 import { RxExit } from 'react-icons/rx';
+import { IoMdAddCircleOutline } from 'react-icons/io';
 
 export function AppSidebar() {
   const { token, logout } = useAuth();
@@ -44,6 +45,12 @@ export function AppSidebar() {
                 component={<Link to="/my" />}
               >
                 My animals
+              </MenuItem>
+              <MenuItem
+                icon={<IoMdAddCircleOutline size={35} />}
+                component={<Link to="/edit" />}
+              >
+                Add animal
               </MenuItem>
             </>
           )}
