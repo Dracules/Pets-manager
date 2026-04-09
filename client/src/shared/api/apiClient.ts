@@ -59,6 +59,10 @@ export async function deleteCats(id: string): Promise<string> {
   return apiClient.delete(`/animals/cats/${id}`);
 }
 
+export async function createCat(data: object): Promise<Cat> {
+  return apiClient.post(`/animals/cats`, data);
+}
+
 export async function deleteAnimals(
   id: string,
   type?: AnimalType,
