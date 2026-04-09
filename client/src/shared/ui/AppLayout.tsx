@@ -16,6 +16,7 @@ export default function AppLayout() {
       case '/my':
         return setHeaderType('user');
       case '/login':
+      case '/edit':
         return setHeaderType('login');
     }
   }, [pathname]);
@@ -36,6 +37,8 @@ export default function AppLayout() {
         return 'My dogs';
       case '/login':
         return 'Login';
+      case '/edit':
+        return 'Edit';
       default:
         return 'Animals';
     }

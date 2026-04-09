@@ -7,6 +7,7 @@ import {
   AnimalsPage,
   UserAnimalsPage,
 } from '../../domains/animal/ui/AnimalPage';
+import AnimalEditorPage from '../../domains/editor/ui/AnimalEditorPage';
 
 export function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export function AppRoutes() {
         <Route path="mycats" element={<UserCatsPage />} />
         <Route path="mydogs" element={<UserDogsPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="edit" element={<AnimalEditorPage />} />
       </Route>
     </Routes>
   );
