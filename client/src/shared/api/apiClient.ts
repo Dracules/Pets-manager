@@ -29,6 +29,16 @@ class ApiClient {
         throw error;
       });
   }
+
+  async post(Url: string, data: object): Promise<Cat> {
+    return api
+      .post<Cat>(Url, data)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
 }
 
 const apiClient = new ApiClient();
