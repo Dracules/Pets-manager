@@ -35,6 +35,9 @@ export function MultiTagsSelect({
       isMulti
       isClearable
       placeholder="Commands..."
+      isValidNewOption={(input) => {
+        return input.length > 1;
+      }}
     />
   );
 }
