@@ -34,6 +34,7 @@ export function MultiTagsSelect({
       }}
       isMulti
       isClearable
+      placeholder="Commands..."
     />
   );
 }
