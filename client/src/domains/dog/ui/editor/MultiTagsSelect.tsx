@@ -40,7 +40,12 @@ export function MultiTagsSelect({
         return `Add "${formatted}"`;
       }}
       isValidNewOption={(input) => {
-        return input.length > 1;
+        const normalizedInput = capitalizeFirstLetter(input);
+
+        const exists = selectValue.some((option) => {
+          return capitalizeFirstLetter(option.value) === normalizedInput;
+        });
+        return !exists && normalizedInput.length > 1;
       }}
     />
   );
