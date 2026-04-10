@@ -35,6 +35,10 @@ export function MultiTagsSelect({
       isMulti
       isClearable
       placeholder="Commands..."
+      formatCreateLabel={(input) => {
+        const formatted = capitalizeFirstLetter(input);
+        return `Add "${formatted}"`;
+      }}
       isValidNewOption={(input) => {
         return input.length > 1;
       }}
