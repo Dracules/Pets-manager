@@ -19,12 +19,16 @@ export function MultiTagsSelect({
     label: element,
   }));
 
+  function capitalizeFirstLetter(s: string): string {
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  }
+
   return (
     <CreatableSelect<Option, true>
       value={selectValue}
       onChange={(newValue) => {
         const stringValues = newValue?.length
-          ? newValue.map((element) => element.value)
+          ? newValue.map((element) => capitalizeFirstLetter(element.value))
           : undefined;
         onChange(stringValues);
       }}
