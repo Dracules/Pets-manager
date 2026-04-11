@@ -10,8 +10,8 @@ export function DogEditor() {
   return (
     <AnimalEditor<Dog>
       fields={
-        <div>
-          <label style={{ margin: 20 }}>Trained commands</label>
+        <div style={{ marginLeft: 20, width: '30%' }}>
+          <label>Trained commands</label>
           <Controller
             name="trainedCommands"
             control={methods.control}
