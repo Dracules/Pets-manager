@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AnimalType } from '../../animal/model/animal.type';
 import { CatEditor } from '../../cat/ui/CatEditor';
+import { DogEditor } from '../../dog/ui/editor/DogEditor';
 
 function AnimalEditorPage() {
   const [animalType, setAnimalType] = useState<AnimalType>('cat');
@@ -26,8 +27,10 @@ function AnimalEditorPage() {
           Dog
         </label>
       </div>
-
-      {animalType === 'cat' && <CatEditor />}
+      <div style={{ marginBottom: 20 }}>
+        {animalType === 'cat' && <CatEditor />}
+        {animalType === 'dog' && <DogEditor />}
+      </div>
     </div>
   );
 }
