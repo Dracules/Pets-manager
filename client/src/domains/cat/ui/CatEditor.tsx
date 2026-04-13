@@ -5,14 +5,14 @@ import { LITTER_STATUS } from '../model/litterStatus.type';
 import { AnimalEditor } from '../../editor/ui/AnimalEditor';
 
 export function CatEditor() {
-  const methods = useForm<Cat>();
+  const methods = useForm<Cat>({ defaultValues: { litterStatus: 'unknown' } });
 
   return (
     <AnimalEditor<Cat>
       fields={
         <div>
           <label style={{ margin: 20 }}>Litter status</label>
-          <select {...methods.register('litterStatus')} defaultValue="unknown">
+          <select {...methods.register('litterStatus')}>
             {LITTER_STATUS.map((status) => (
               <option key={status} value={status}>
                 {status === 'unknown'
