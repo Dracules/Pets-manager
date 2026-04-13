@@ -5,33 +5,35 @@ import { DogEditor } from '../../dog/ui/editor/DogEditor';
 
 type EditorPageMode = 'edit' | 'create';
 interface AnimalEditorPageProps {
-  type: EditorPageMode;
+  mode: EditorPageMode;
 }
 
-function AnimalEditorPage() {
+function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
   const [animalType, setAnimalType] = useState<AnimalType>('cat');
   return (
     <div>
-      <div style={{ marginBottom: 20 }}>
-        <label>
-          <input
-            type="radio"
-            name="animalType"
-            checked={animalType === 'cat'}
-            onChange={() => setAnimalType('cat')}
-          />
-          Cat
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="animalType"
-            checked={animalType === 'dog'}
-            onChange={() => setAnimalType('dog')}
-          />
-          Dog
-        </label>
-      </div>
+      {mode === 'create' && (
+        <div style={{ marginBottom: 20 }}>
+          <label>
+            <input
+              type="radio"
+              name="animalType"
+              checked={animalType === 'cat'}
+              onChange={() => setAnimalType('cat')}
+            />
+            Cat
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="animalType"
+              checked={animalType === 'dog'}
+              onChange={() => setAnimalType('dog')}
+            />
+            Dog
+          </label>
+        </div>
+      )}
       <div style={{ marginBottom: 20 }}>
         {animalType === 'cat' && <CatEditor />}
         {animalType === 'dog' && <DogEditor />}
