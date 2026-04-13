@@ -20,7 +20,8 @@ export function AppRoutes() {
         <Route path="mycats" element={<UserCatsPage />} />
         <Route path="mydogs" element={<UserDogsPage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route path="edit" element={<AnimalEditorPage />} />
+        <Route path="edit" element={<AnimalEditorPage mode="create" />} />
+        <Route path="edit/:id" element={<AnimalEditorPage mode="edit" />} />
       </Route>
     </Routes>
   );
