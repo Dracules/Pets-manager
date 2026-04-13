@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
 import {
+  createCat,
   getCatById,
+  updateCat,
 } from '../../../shared/api/apiClient';
 import { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
@@ -24,6 +26,22 @@ export function CatEditor() {
     loadCat();
   }, [id, methods]);
 
+  const onSubmit = id
+    ? async (data: Cat) => {
+        if (Object.keys(methods.formState.dirtyFields).length !== 0) {
+          const changedFields = Object.fromEntries(
+            Object.entries(data).filter(
+              ([key]) => methods.formState.dirtyFields[key as keyof Cat],
+            ),
+          );
+          await updateCat(id, changedFields);
+        }
+      }
+    : async (data: Cat) => {
+        const { name, age, litterStatus } = data;
+        await createCat({ name, age, litterStatus });
+      };
+
   return (
     <AnimalEditor<Cat>
       fields={
@@ -40,11 +58,7 @@ export function CatEditor() {
           </select>
         </div>
       }
-      onSubmit={async (data) => {
-        const { name, age, litterStatus } = data;
-        const result = await createCat({ name, age, litterStatus });
-        console.log(`Cat created: ${JSON.stringify(result)}`);
-      }}
+      onSubmit={onSubmit}
       methods={methods}
     />
   );
