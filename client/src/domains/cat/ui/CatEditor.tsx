@@ -1,11 +1,28 @@
 import { useForm } from 'react-hook-form';
-import { createCat } from '../../../shared/api/apiClient';
+import {
+  getCatById,
+} from '../../../shared/api/apiClient';
 import { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
 import { AnimalEditor } from '../../editor/ui/AnimalEditor';
+import { useParams } from 'react-router';
+import { useEffect } from 'react';
 
 export function CatEditor() {
+  const { id } = useParams();
   const methods = useForm<Cat>({ defaultValues: { litterStatus: 'unknown' } });
+
+  useEffect(() => {
+    const loadCat = async () => {
+      if (!id) return;
+      const cat = await getCatById(id);
+      if (cat) {
+        methods.reset(cat);
+      }
+    };
+
+    loadCat();
+  }, [id, methods]);
 
   return (
     <AnimalEditor<Cat>
