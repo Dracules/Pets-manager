@@ -95,6 +95,10 @@ export async function getUserCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats/user');
 }
 
+export async function getCatById(id: string): Promise<Cat> {
+  return apiClient.get<Cat>(`/animals/cats/${id}`);
+}
+
 export async function updateCat<Cat>(id: string, data: object): Promise<Cat> {
   return apiClient.put(`/animals/cats/${id}`, data);
 }
