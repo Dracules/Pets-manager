@@ -3,6 +3,11 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { CatEditor } from '../../cat/ui/CatEditor';
 import { DogEditor } from '../../dog/ui/editor/DogEditor';
 
+type EditorPageMode = 'edit' | 'create';
+interface AnimalEditorPageProps {
+  type: EditorPageMode;
+}
+
 function AnimalEditorPage() {
   const [animalType, setAnimalType] = useState<AnimalType>('cat');
   return (
