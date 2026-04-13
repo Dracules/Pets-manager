@@ -7,12 +7,13 @@ import {
 import { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
 import { AnimalEditor } from '../../editor/ui/AnimalEditor';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useEffect } from 'react';
 
 export function CatEditor() {
   const { id } = useParams();
   const methods = useForm<Cat>({ defaultValues: { litterStatus: 'unknown' } });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadCat = async () => {
@@ -35,11 +36,13 @@ export function CatEditor() {
             ),
           );
           await updateCat(id, changedFields);
+          navigate(`/mycats`);
         }
       }
     : async (data: Cat) => {
         const { name, age, litterStatus } = data;
         await createCat({ name, age, litterStatus });
+        navigate(`/mycats`);
       };
 
   return (
