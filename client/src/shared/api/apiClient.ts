@@ -63,6 +63,10 @@ export async function createCat(data: object): Promise<Cat> {
   return apiClient.post(`/animals/cats`, data);
 }
 
+export async function createDog(data: object): Promise<Dog> {
+  return apiClient.post(`/animals/dogs`, data);
+}
+
 export async function deleteAnimals(
   id: string,
   type?: AnimalType,
