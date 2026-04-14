@@ -3,6 +3,7 @@ import { Animal } from '../../animal/model/animal.interface';
 import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
@@ -10,6 +11,7 @@ function BaseAnimalPage<T extends Animal>(
   deleteFn?: (id: string, type?: AnimalType) => Promise<string>,
 ) {
   const { data, loading, error, setData } = useFetchData(fetchFn);
+  const navigate = useNavigate();
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;
@@ -27,11 +29,16 @@ function BaseAnimalPage<T extends Animal>(
     }
   }
 
+  async function handleEdit(id: string) {
+    navigate(`/edit/${id}`);
+  }
+
   return (
     <div>
       <AnimalTable
         data={data ?? []}
         onDelete={deleteFn ? handleDelete : undefined}
+        onEdit={deleteFn ? handleEdit : undefined}
       />
     </div>
   );

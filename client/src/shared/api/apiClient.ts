@@ -39,6 +39,16 @@ class ApiClient {
         throw error;
       });
   }
+
+  async put<T>(Url: string, data: object): Promise<T> {
+    return api
+      .put<T>(Url, data)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
 }
 
 const apiClient = new ApiClient();
@@ -83,6 +93,14 @@ export async function deleteAnimals(
 
 export async function getUserCats(): Promise<Cat[]> {
   return apiClient.get<Cat[]>('/animals/cats/user');
+}
+
+export async function getCatById(id: string): Promise<Cat> {
+  return apiClient.get<Cat>(`/animals/cats/${id}`);
+}
+
+export async function updateCat<Cat>(id: string, data: object): Promise<Cat> {
+  return apiClient.put(`/animals/cats/${id}`, data);
 }
 
 export async function getUserDogs(): Promise<Dog[]> {

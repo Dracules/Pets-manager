@@ -6,4 +6,5 @@ export interface BaseTableProps<T extends Animal> {
   data: T[];
   columns?: ColumnDef<T>[];
   onDelete?: ((id: string, type?: AnimalType) => Promise<void>) | undefined;
+  onEdit?: ((id: string) => Promise<void>) | undefined;
 }

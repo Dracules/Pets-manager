@@ -12,25 +12,35 @@ export default function BaseTable<T extends Animal>({
   data,
   columns = [],
   onDelete,
+  onEdit,
 }: BaseTableProps<T>) {
   function getFinalColumns() {
-    if (onDelete) {
+    if (onDelete && onEdit) {
       const actionColumn: ColumnDef<T> = {
         id: 'actions',
         header: 'Actions',
         cell: ({ row }) => (
-          <button
-            onClick={async () => {
-              'type' in row.original
-                ? await onDelete(
-                    row.original._id,
-                    row.original.type as AnimalType,
-                  )
-                : await onDelete(row.original._id);
-            }}
-          >
-            Delete
-          </button>
+          <>
+            <button
+              onClick={() => {
+                onEdit(row.original._id);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              onClick={async () => {
+                'type' in row.original
+                  ? await onDelete(
+                      row.original._id,
+                      row.original.type as AnimalType,
+                    )
+                  : await onDelete(row.original._id);
+              }}
+            >
+              Delete
+            </button>
+          </>
         ),
       };
       return [...columns, actionColumn];

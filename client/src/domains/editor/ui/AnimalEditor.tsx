@@ -28,7 +28,9 @@ export function AnimalEditor<T extends Animal>({
           <label style={{ margin: 20 }}>Age</label>
           <input
             type="number"
-            {...methods.register('age' as Path<T>)}
+            {...methods.register('age' as Path<T>, {
+              valueAsNumber: true,
+            })}
             placeholder="Age"
           />
         </div>
