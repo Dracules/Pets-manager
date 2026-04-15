@@ -9,7 +9,7 @@ interface AnimalEditorPageProps {
 }
 
 function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
-  const [animalType, setAnimalType] = useState<AnimalType>('cat');
+  const [animalType, setAnimalType] = useState<AnimalType>();
   return (
     <div>
       {mode === 'create' && (
