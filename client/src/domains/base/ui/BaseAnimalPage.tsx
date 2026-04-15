@@ -5,6 +5,11 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
+type BaseAnimalPageOptions = {
+  deleteFn: (id: string, type?: AnimalType) => Promise<string>;
+  animalType: AnimalType;
+};
+
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
