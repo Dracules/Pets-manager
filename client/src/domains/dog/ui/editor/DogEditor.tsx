@@ -7,12 +7,13 @@ import {
   getDogById,
   updateDog,
 } from '../../../../shared/api/apiClient';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useEffect } from 'react';
 
 export function DogEditor() {
   const methods = useForm<Dog>();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadDog = async () => {
@@ -35,11 +36,13 @@ export function DogEditor() {
             ),
           );
           await updateDog(id, changedFields);
+          navigate(`/mydogs`);
         }
       }
     : async (data: Dog) => {
         const { name, age, trainedCommands } = data;
         await createDog({ name, age, trainedCommands });
+        navigate(`/mydogs`);
       };
 
   return (
