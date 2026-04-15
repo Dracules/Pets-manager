@@ -13,7 +13,7 @@ type BaseAnimalPageOptions = {
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
-  deleteFn?: (id: string, type?: AnimalType) => Promise<string>,
+  options?: BaseAnimalPageOptions,
 ) {
   const { data, loading, error, setData } = useFetchData(fetchFn);
   const navigate = useNavigate();
