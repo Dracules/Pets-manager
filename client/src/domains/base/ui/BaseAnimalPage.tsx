@@ -38,7 +38,7 @@ function BaseAnimalPage<T extends Animal>(
     }
 
     async function handleEdit(id: string) {
-      navigate(`/edit/${id}`);
+      navigate(`/edit/${id}?type=${animalType}`);
     }
 
     return (
