@@ -107,6 +107,10 @@ export async function updateCat<Cat>(id: string, data: object): Promise<Cat> {
   return apiClient.put(`/animals/cats/${id}`, data);
 }
 
+export async function updateDog<Dog>(id: string, data: object): Promise<Dog> {
+  return apiClient.put(`/animals/dogs/${id}`, data);
+}
+
 export async function getUserDogs(): Promise<Dog[]> {
   return apiClient.get<Dog[]>('/animals/dogs/user');
 }
