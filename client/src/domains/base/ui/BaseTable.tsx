@@ -11,11 +11,12 @@ import { AnimalType } from '../../animal/model/animal.type';
 export default function BaseTable<T extends Animal>({
   data,
   columns = [],
-  onDelete,
-  onEdit,
+  options,
 }: BaseTableProps<T>) {
   function getFinalColumns() {
-    if (onDelete && onEdit) {
+    if (options) {
+      const { onDelete, onEdit } = options;
+
       const actionColumn: ColumnDef<T> = {
         id: 'actions',
         header: 'Actions',
