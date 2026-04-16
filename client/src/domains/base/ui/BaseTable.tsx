@@ -24,7 +24,9 @@ export default function BaseTable<T extends Animal>({
           <>
             <button
               onClick={() => {
-                onEdit(row.original._id);
+                'type' in row.original
+                  ? onEdit(row.original._id, row.original.type as AnimalType)
+                  : onEdit(row.original._id);
               }}
             >
               Edit
