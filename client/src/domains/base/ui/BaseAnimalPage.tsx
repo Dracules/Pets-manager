@@ -37,8 +37,12 @@ function BaseAnimalPage<T extends Animal>(
       }
     }
 
-    async function handleEdit(id: string) {
-      navigate(`/edit/${id}?type=${animalType}`);
+    async function handleEdit(id: string, type?: AnimalType | undefined) {
+      if (!!type === !!animalType)
+        throw new Error(
+          'AnimalTypeError: AnimalType value duplication detected - cannot proceed to editor.',
+        );
+      navigate(`/edit/${id}?type=${type || animalType}`);
     }
 
     return (
