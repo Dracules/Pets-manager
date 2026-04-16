@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 
 type BaseAnimalPageOptions = {
   deleteFn: (id: string, type?: AnimalType) => Promise<string>;
-  animalType: AnimalType;
+  animalType?: AnimalType;
 };
 
 function BaseAnimalPage<T extends Animal>(
