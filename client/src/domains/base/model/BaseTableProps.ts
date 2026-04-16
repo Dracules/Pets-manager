@@ -4,7 +4,7 @@ import { AnimalType } from '../../animal/model/animal.type';
 
 type BaseTablePropsOptions = {
   onDelete: (id: string, type?: AnimalType) => Promise<void>;
-  onEdit: (id: string) => Promise<void>;
+  onEdit: (id: string, type?: AnimalType) => Promise<void>;
 };
 
 export interface BaseTableProps<T extends Animal> {
