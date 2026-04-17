@@ -22,6 +22,10 @@ export default function AppLayout() {
   }, [pathname]);
 
   const getPageTitle = (): string => {
+    if (pathname.startsWith('/edit')) {
+      if (pathname === '/edit') return 'Create animal';
+      else return 'Update animal';
+    }
     switch (pathname) {
       case '/':
         return 'Animals';
@@ -37,10 +41,8 @@ export default function AppLayout() {
         return 'My dogs';
       case '/login':
         return 'Login';
-      case '/edit':
-        return 'Edit';
       default:
-        return 'Animals';
+        return '';
     }
   };
 
