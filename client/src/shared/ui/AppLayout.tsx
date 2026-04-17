@@ -9,16 +9,16 @@ export default function AppLayout() {
   const location = useLocation();
   const pathname = location.pathname;
 
+  const userPaths = ['/my', '/mycats', '/mydogs'];
+
   useEffect(() => {
-    switch (pathname) {
-      case '/':
-        return setHeaderType('all');
-      case '/my':
-        return setHeaderType('user');
-      case '/login':
-      case '/edit':
-        return setHeaderType('login');
+    if (pathname === '/login' || pathname.startsWith('/edit/')) {
+      return setHeaderType('login');
     }
+    if (userPaths.includes(pathname)) {
+      return setHeaderType('user');
+    }
+    return setHeaderType('all');
   }, [pathname]);
 
   const getPageTitle = (): string => {
