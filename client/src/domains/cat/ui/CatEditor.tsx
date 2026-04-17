@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form';
 import {
   createCat,
   getCatById,
@@ -7,43 +6,19 @@ import {
 import { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
 import { AnimalEditor } from '../../editor/ui/AnimalEditor';
-import { useNavigate, useParams } from 'react-router';
-import { useEffect } from 'react';
+import { useAnimalEditor } from '../../editor/model/useAnimalEditor';
 
 export function CatEditor() {
-  const { id } = useParams();
-  const methods = useForm<Cat>({ defaultValues: { litterStatus: 'unknown' } });
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadCat = async () => {
-      if (!id) return;
-      const cat = await getCatById(id);
-      if (cat) {
-        methods.reset(cat);
-      }
-    };
-
-    loadCat();
-  }, [id, methods]);
-
-  const onSubmit = id
-    ? async (data: Cat) => {
-        if (Object.keys(methods.formState.dirtyFields).length !== 0) {
-          const changedFields = Object.fromEntries(
-            Object.entries(data).filter(
-              ([key]) => methods.formState.dirtyFields[key as keyof Cat],
-            ),
-          );
-          await updateCat(id, changedFields);
-          navigate(`/mycats`);
-        }
-      }
-    : async (data: Cat) => {
-        const { name, age, litterStatus } = data;
-        await createCat({ name, age, litterStatus });
-        navigate(`/mycats`);
-      };
+  const { methods, onSubmit } = useAnimalEditor<Cat>({
+    loadById: getCatById,
+    createItem: async (data: Cat) => {
+      const { name, age, litterStatus } = data;
+      await createCat({ name, age, litterStatus });
+    },
+    updateItem: updateCat,
+    afterSubmit: `/mycats`,
+    defaultValues: { litterStatus: 'unknown' },
+  });
 
   return (
     <AnimalEditor<Cat>
