@@ -3,12 +3,15 @@ import { CatController } from './controllers/cat.controller';
 import { CatService } from './services/cat.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Cat, CatSchema } from './schemas/cat.schema';
-import { AnimalCacheService } from '../animal/services/animal.cache.service';
+import { AnimalCacheModule } from 'src/animal/controllers/animal.cache.controller';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Cat.name, schema: CatSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Cat.name, schema: CatSchema }]),
+    AnimalCacheModule,
+  ],
   controllers: [CatController],
-  providers: [CatService, AnimalCacheService],
+  providers: [CatService],
   exports: [MongooseModule],
 })
 export class CatModule {}
