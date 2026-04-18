@@ -3,12 +3,16 @@ import type { RequestWithUser } from '../../shared/interfaces/request-with-user'
 import { BaseAnimalService } from '../services/base.animal.service';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalResponse } from '../interfaces/animal.interface';
+import { AnimalCacheService } from '../services/animal.cache.service';
 
 export abstract class BaseAnimalController<
   DTO extends AnimalDTO,
   Resp extends AnimalResponse,
 > {
-  constructor(private animalService: BaseAnimalService<any, DTO, Resp>) {}
+  constructor(
+    private animalService: BaseAnimalService<any, DTO, Resp>,
+    private readonly сacheService: AnimalCacheService,
+  ) {}
 
   protected async getAnimals(): Promise<Resp[]> {
     return this.animalService.findAll();
@@ -47,6 +51,7 @@ export abstract class BaseAnimalController<
       animalDTO,
       updateProps,
     );
+    this.сacheService.saveToCache(request.url, animal);
     response.json(animal);
   }
 
