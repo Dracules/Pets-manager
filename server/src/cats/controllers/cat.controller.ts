@@ -21,7 +21,7 @@ import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
 import { CatResponse } from '../interfaces/cat.interface';
-import { AnimalCacheService } from 'src/animal/services/animal.cache.service';
+import { AnimalCacheService } from '../../animal/services/animal.cache.service';
 
 @Controller('animals/cats')
 export class CatController extends BaseAnimalController<CatDTO, CatResponse> {

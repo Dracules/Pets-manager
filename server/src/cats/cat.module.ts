@@ -3,7 +3,7 @@ import { CatController } from './controllers/cat.controller';
 import { CatService } from './services/cat.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Cat, CatSchema } from './schemas/cat.schema';
-import { AnimalCacheModule } from 'src/animal/controllers/animal.cache.controller';
+import { AnimalCacheModule } from '../animal/controllers/animal.cache.controller';
 
 @Module({
   imports: [
