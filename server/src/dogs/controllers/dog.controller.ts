@@ -21,11 +21,12 @@ import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
 import { DogResponse } from '../interfaces/dog.interface';
+import { AnimalCacheService } from 'src/animal/services/animal.cache.service';
 
 @Controller('animals/dogs')
 export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
-  constructor(private dogService: DogService) {
-    super(dogService);
+  constructor(dogService: DogService, cache: AnimalCacheService) {
+    super(dogService, cache);
   }
 
   @Public()
