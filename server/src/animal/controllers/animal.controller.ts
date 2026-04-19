@@ -2,7 +2,7 @@ import { Controller, Get, Req } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { Public } from '../../shared/decorators/public.decorator';
-import type { RequestWithUser } from 'src/shared/interfaces/request-with-user';
+import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 
 @Controller('animals')
 export class AnimalController {
