@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { Animal } from '../../animal/model/animal.interface';
+import { toast } from 'react-toastify';
 
 type UseAnimalEditorOptions<T> = {
   loadById: (id: string) => Promise<T>;
@@ -38,24 +39,35 @@ export function useAnimalEditor<T extends Animal>({
   }, [id, methods]);
 
   const onSubmit = async (data: T) => {
-    if (id) {
-      const dirtyKeys = Object.keys(methods.formState.dirtyFields);
-      if (dirtyKeys.length !== 0) {
-        const dirtyFields = methods.formState.dirtyFields as Partial<
-          Record<keyof T, boolean>
-        >;
+    const toastId = toast.loading(id ? 'Updating...' : 'Creating...');
+    try {
+      if (id) {
+        const dirtyKeys = Object.keys(methods.formState.dirtyFields);
+        if (dirtyKeys.length !== 0) {
+          const dirtyFields = methods.formState.dirtyFields as Partial<
+            Record<keyof T, boolean>
+          >;
 
-        const changedFields = Object.fromEntries(
-          Object.entries(data).filter(([key]) => dirtyFields[key as keyof T]),
-        ) as Partial<T>;
+          const changedFields = Object.fromEntries(
+            Object.entries(data).filter(([key]) => dirtyFields[key as keyof T]),
+          ) as Partial<T>;
 
-        await updateItem(id, changedFields);
+          await updateItem(id, changedFields);
+          toast.success(`Animal ${data.name} updated!`);
+        } else {
+          toast.error(`Error: nothing is changed!`);
+          return;
+        }
+      } else {
+        await createItem(data);
+        toast.success(`Animal ${data.name} created!`);
       }
-    } else {
-      await createItem(data);
+      navigate(afterSubmit);
+    } catch {
+      toast.error(id ? 'Update failed!' : 'Creation failed!');
+    } finally {
+      toast.dismiss(toastId);
     }
-
-    navigate(afterSubmit);
   };
 
   return { methods, onSubmit };
