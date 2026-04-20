@@ -39,7 +39,7 @@ export function useAnimalEditor<T extends Animal>({
   }, [id, methods]);
 
   const onSubmit = async (data: T) => {
-    toast.loading(id ? 'Updating...' : 'Creation...');
+    const toastId = toast.loading(id ? 'Updating...' : 'Creation...');
     try {
       if (id) {
         const dirtyKeys = Object.keys(methods.formState.dirtyFields);
@@ -65,6 +65,8 @@ export function useAnimalEditor<T extends Animal>({
       navigate(afterSubmit);
     } catch {
       toast.error(id ? 'Update failed!' : 'Creation failed!');
+    } finally {
+      toast.dismiss(toastId);
     }
   };
 
