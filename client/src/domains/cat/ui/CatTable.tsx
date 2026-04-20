@@ -11,8 +11,15 @@ const catColumns: ColumnDef<Cat>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function CatTable({ data, options }: BaseTableProps<Cat>) {
-  return <BaseTable data={data} columns={catColumns} options={options} />;
+function CatTable({ data, onDelete, onEdit }: BaseTableProps<Cat>) {
+  return (
+    <BaseTable
+      data={data}
+      columns={catColumns}
+      onDelete={onDelete}
+      onEdit={onEdit}
+    />
+  );
 }
 
 export default CatTable;

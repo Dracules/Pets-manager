@@ -1,24 +1,12 @@
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { AnimalEditor } from '../../../editor/ui/AnimalEditor';
 import { Dog } from '../../model/dog.interface';
 import { MultiTagsSelect } from './MultiTagsSelect';
-import {
-  createDog,
-  getDogById,
-  updateDog,
-} from '../../../../shared/api/apiClient';
-import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
+import { createDog } from '../../../../shared/api/apiClient';
 
 export function DogEditor() {
-  const { methods, onSubmit } = useAnimalEditor<Dog>({
-    loadById: getDogById,
-    createItem: async (data: Dog) => {
-      const { name, age, trainedCommands } = data;
-      await createDog({ name, age, trainedCommands });
-    },
-    updateItem: updateDog,
-    afterSubmit: `/mydogs`,
-  });
+  const methods = useForm<Dog>();
+
   return (
     <AnimalEditor<Dog>
       fields={
@@ -33,7 +21,11 @@ export function DogEditor() {
           />
         </div>
       }
-      onSubmit={onSubmit}
+      onSubmit={async (data) => {
+        const { name, age, trainedCommands } = data;
+        const result = await createDog({ name, age, trainedCommands });
+        console.log(`Dog created: ${JSON.stringify(result)}`);
+      }}
       methods={methods}
     />
   );

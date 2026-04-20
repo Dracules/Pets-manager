@@ -5,15 +5,10 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-type BaseAnimalPageOptions = {
-  deleteFn: (id: string, type?: AnimalType) => Promise<string>;
-  animalType?: AnimalType;
-};
-
 function BaseAnimalPage<T extends Animal>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
-  options?: BaseAnimalPageOptions,
+  deleteFn?: (id: string, type?: AnimalType) => Promise<string>,
 ) {
   const { data, loading, error, setData } = useFetchData(fetchFn);
   const navigate = useNavigate();
@@ -21,44 +16,32 @@ function BaseAnimalPage<T extends Animal>(
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;
 
-  if (options) {
-    const { deleteFn, animalType } = options;
-
-    async function handleDelete(id: string, type?: AnimalType | undefined) {
-      const toastId = toast.loading('Deleting...');
-      try {
-        const response = await deleteFn(id, type);
-        setData((current) => current!.filter((animal) => animal._id !== id));
-        toast(response);
-      } catch {
-        toast('Deletion failed!');
-      } finally {
-        toast.dismiss(toastId);
-      }
+  async function handleDelete(id: string, type?: AnimalType | undefined) {
+    const toastId = toast.loading('Deleting...');
+    try {
+      const response = await deleteFn!(id, type);
+      setData((current) => current!.filter((animal) => animal._id !== id));
+      toast(response);
+    } catch {
+      toast('Deletion failed!');
+    } finally {
+      toast.dismiss(toastId);
     }
+  }
 
-    async function handleEdit(id: string, type?: AnimalType | undefined) {
-      if (!!type === !!animalType)
-        throw new Error(
-          'AnimalTypeError: AnimalType value duplication detected - cannot proceed to editor.',
-        );
-      navigate(`/edit/${id}?type=${type || animalType}`);
-    }
+  async function handleEdit(id: string) {
+    navigate(`/edit/${id}`);
+  }
 
-    return (
-      <div>
-        <AnimalTable
-          data={data ?? []}
-          options={{ onDelete: handleDelete, onEdit: handleEdit }}
-        />
-      </div>
-    );
-  } else
-    return (
-      <div>
-        <AnimalTable data={data ?? []} />
-      </div>
-    );
+  return (
+    <div>
+      <AnimalTable
+        data={data ?? []}
+        onDelete={deleteFn ? handleDelete : undefined}
+        onEdit={deleteFn ? handleEdit : undefined}
+      />
+    </div>
+  );
 }
 
 export default BaseAnimalPage;
