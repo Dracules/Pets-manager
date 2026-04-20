@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { AnimalEditor } from '../../../editor/ui/AnimalEditor';
 import { Dog } from '../../model/dog.interface';
 import { MultiTagsSelect } from './MultiTagsSelect';
@@ -7,44 +7,18 @@ import {
   getDogById,
   updateDog,
 } from '../../../../shared/api/apiClient';
-import { useNavigate, useParams } from 'react-router';
-import { useEffect } from 'react';
+import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
 
 export function DogEditor() {
-  const methods = useForm<Dog>();
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadDog = async () => {
-      if (!id) return;
-      const dog = await getDogById(id);
-      if (dog) {
-        methods.reset(dog);
-      }
-    };
-
-    loadDog();
-  }, [id, methods]);
-
-  const onSubmit = id
-    ? async (data: Dog) => {
-        if (Object.keys(methods.formState.dirtyFields).length !== 0) {
-          const changedFields = Object.fromEntries(
-            Object.entries(data).filter(
-              ([key]) => methods.formState.dirtyFields[key as keyof Dog],
-            ),
-          );
-          await updateDog(id, changedFields);
-          navigate(`/mydogs`);
-        }
-      }
-    : async (data: Dog) => {
-        const { name, age, trainedCommands } = data;
-        await createDog({ name, age, trainedCommands });
-        navigate(`/mydogs`);
-      };
-
+  const { methods, onSubmit } = useAnimalEditor<Dog>({
+    loadById: getDogById,
+    createItem: async (data: Dog) => {
+      const { name, age, trainedCommands } = data;
+      await createDog({ name, age, trainedCommands });
+    },
+    updateItem: updateDog,
+    afterSubmit: `/mydogs`,
+  });
   return (
     <AnimalEditor<Dog>
       fields={
