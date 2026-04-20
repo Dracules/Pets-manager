@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { Animal } from '../../animal/model/animal.interface';
+import { toast } from 'react-toastify';
 
 type UseAnimalEditorOptions<T> = {
   loadById: (id: string) => Promise<T>;
@@ -38,6 +39,8 @@ export function useAnimalEditor<T extends Animal>({
   }, [id, methods]);
 
   const onSubmit = async (data: T) => {
+    toast.loading(id ? 'Updating...' : 'Creation...');
+
     if (id) {
       const dirtyKeys = Object.keys(methods.formState.dirtyFields);
       if (dirtyKeys.length !== 0) {
@@ -50,11 +53,15 @@ export function useAnimalEditor<T extends Animal>({
         ) as Partial<T>;
 
         await updateItem(id, changedFields);
+        toast.success(`Animal ${data.name} updated!`);
+      } else {
+        toast.error(`Error: nothing is changed!`);
+        return;
       }
     } else {
       await createItem(data);
+      toast.success(`Animal ${data.name} created!`);
     }
-
     navigate(afterSubmit);
   };
 
