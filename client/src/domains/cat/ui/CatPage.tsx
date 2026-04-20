@@ -11,5 +11,8 @@ export const CatsPage = () => {
 };
 
 export const UserCatsPage = () => {
-  return BaseAnimalPage(CatTable, getUserCats, deleteCats);
+  return BaseAnimalPage(CatTable, getUserCats, {
+    deleteFn: deleteCats,
+    animalType: 'cat',
+  });
 };

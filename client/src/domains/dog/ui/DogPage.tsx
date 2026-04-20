@@ -11,5 +11,8 @@ export const DogsPage = () => {
 };
 
 export const UserDogsPage = () => {
-  return BaseAnimalPage(DogTable, getUserDogs, deleteDogs);
+  return BaseAnimalPage(DogTable, getUserDogs, {
+    deleteFn: deleteDogs,
+    animalType: 'dog',
+  });
 };

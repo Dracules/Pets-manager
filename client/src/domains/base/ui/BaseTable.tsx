@@ -11,11 +11,12 @@ import { AnimalType } from '../../animal/model/animal.type';
 export default function BaseTable<T extends Animal>({
   data,
   columns = [],
-  onDelete,
-  onEdit,
+  options,
 }: BaseTableProps<T>) {
   function getFinalColumns() {
-    if (onDelete && onEdit) {
+    if (options) {
+      const { onDelete, onEdit } = options;
+
       const actionColumn: ColumnDef<T> = {
         id: 'actions',
         header: 'Actions',
@@ -23,7 +24,9 @@ export default function BaseTable<T extends Animal>({
           <>
             <button
               onClick={() => {
-                onEdit(row.original._id);
+                'type' in row.original
+                  ? onEdit(row.original._id, row.original.type as AnimalType)
+                  : onEdit(row.original._id);
               }}
             >
               Edit
