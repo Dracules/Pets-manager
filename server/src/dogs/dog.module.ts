@@ -3,15 +3,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Dog, DogSchema } from './schemas/dog.schema';
 import { DogController } from './controllers/dog.controller';
 import { DogService } from './services/dog.service';
-import { AnimalCacheModule } from '../animal/controllers/animal.cache.controller';
+import { AnimalCacheService } from '../animal/services/animal.cache.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Dog.name, schema: DogSchema }]),
-    AnimalCacheModule,
-  ],
+  imports: [MongooseModule.forFeature([{ name: Dog.name, schema: DogSchema }])],
   controllers: [DogController],
-  providers: [DogService],
+  providers: [DogService, AnimalCacheService],
   exports: [MongooseModule],
 })
 export class DogModule {}
