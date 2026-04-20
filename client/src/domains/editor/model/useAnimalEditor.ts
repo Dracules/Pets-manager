@@ -39,7 +39,7 @@ export function useAnimalEditor<T extends Animal>({
   }, [id, methods]);
 
   const onSubmit = async (data: T) => {
-    const toastId = toast.loading(id ? 'Updating...' : 'Creation...');
+    const toastId = toast.loading(id ? 'Updating...' : 'Creating...');
     try {
       if (id) {
         const dirtyKeys = Object.keys(methods.formState.dirtyFields);
