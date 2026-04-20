@@ -40,29 +40,32 @@ export function useAnimalEditor<T extends Animal>({
 
   const onSubmit = async (data: T) => {
     toast.loading(id ? 'Updating...' : 'Creation...');
+    try {
+      if (id) {
+        const dirtyKeys = Object.keys(methods.formState.dirtyFields);
+        if (dirtyKeys.length !== 0) {
+          const dirtyFields = methods.formState.dirtyFields as Partial<
+            Record<keyof T, boolean>
+          >;
 
-    if (id) {
-      const dirtyKeys = Object.keys(methods.formState.dirtyFields);
-      if (dirtyKeys.length !== 0) {
-        const dirtyFields = methods.formState.dirtyFields as Partial<
-          Record<keyof T, boolean>
-        >;
+          const changedFields = Object.fromEntries(
+            Object.entries(data).filter(([key]) => dirtyFields[key as keyof T]),
+          ) as Partial<T>;
 
-        const changedFields = Object.fromEntries(
-          Object.entries(data).filter(([key]) => dirtyFields[key as keyof T]),
-        ) as Partial<T>;
-
-        await updateItem(id, changedFields);
-        toast.success(`Animal ${data.name} updated!`);
+          await updateItem(id, changedFields);
+          toast.success(`Animal ${data.name} updated!`);
+        } else {
+          toast.error(`Error: nothing is changed!`);
+          return;
+        }
       } else {
-        toast.error(`Error: nothing is changed!`);
-        return;
+        await createItem(data);
+        toast.success(`Animal ${data.name} created!`);
       }
-    } else {
-      await createItem(data);
-      toast.success(`Animal ${data.name} created!`);
+      navigate(afterSubmit);
+    } catch {
+      toast.error(id ? 'Update failed!' : 'Creation failed!');
     }
-    navigate(afterSubmit);
   };
 
   return { methods, onSubmit };
