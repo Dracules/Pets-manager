@@ -11,4 +11,14 @@ export class Auth {
         throw error;
       });
   }
+
+  static async signUp(login: string, password: string): Promise<string> {
+    return axios
+      .post<string>('/auth/register', { login: login, password: password })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
 }

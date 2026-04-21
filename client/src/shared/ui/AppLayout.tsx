@@ -10,9 +10,10 @@ export default function AppLayout() {
   const pathname = location.pathname;
 
   const userPaths = ['/my', '/mycats', '/mydogs'];
+  const loginPaths = ['/login', '/edit/', '/register'];
 
   useEffect(() => {
-    if (pathname === '/login' || pathname.startsWith('/edit/')) {
+    if (loginPaths.includes(pathname)) {
       return setHeaderType('login');
     }
     if (userPaths.includes(pathname)) {
@@ -41,6 +42,8 @@ export default function AppLayout() {
         return 'My dogs';
       case '/login':
         return 'Login';
+      case '/register':
+        return 'Create an account';
       default:
         return '';
     }
