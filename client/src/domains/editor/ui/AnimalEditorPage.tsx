@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimalType } from '../../animal/model/animal.type';
 import { CatEditor } from '../../cat/ui/CatEditor';
 import { DogEditor } from '../../dog/ui/editor/DogEditor';
+import { useSearchParams } from 'react-router';
 
 type EditorPageMode = 'edit' | 'create';
 interface AnimalEditorPageProps {
@@ -9,7 +10,18 @@ interface AnimalEditorPageProps {
 }
 
 function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
-  const [animalType, setAnimalType] = useState<AnimalType>('cat');
+  const [animalType, setAnimalType] = useState<AnimalType>();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (mode === 'edit') {
+      const type = searchParams.get('type');
+      if (type === 'cat' || type === 'dog') {
+        setAnimalType(type);
+      }
+    }
+  }, [mode, searchParams]);
+
   return (
     <div>
       {mode === 'create' && (
