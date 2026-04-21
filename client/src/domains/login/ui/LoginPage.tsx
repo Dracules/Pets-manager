@@ -3,6 +3,7 @@ import { isApiError } from '../../../shared/api/apiClient';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Auth } from '../../../shared/api/authApi';
+import { Link } from 'react-router';
 
 interface IFormInput {
   login: string;
@@ -68,6 +69,9 @@ export default function LoginPage() {
         <input type="submit" />
         <p>{message}</p>
       </form>
+      <div>
+        <Link to="/register">Don’t have an account? Sign up</Link>
+      </div>
     </div>
   );
 }
