@@ -42,6 +42,8 @@ export default function AppLayout() {
         return 'My dogs';
       case '/login':
         return 'Login';
+      case '/register':
+        return 'Create an account';
       default:
         return '';
     }
