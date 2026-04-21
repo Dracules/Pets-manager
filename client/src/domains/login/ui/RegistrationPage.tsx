@@ -11,6 +11,7 @@ interface IFormInput {
 export default function RegistrationPage() {
   const methods = useForm<IFormInput>();
   const [message, setMessage] = useState('');
+  const [isForm, setIsForm] = useState(true);
 
   const errors = methods.formState.errors;
 
@@ -19,12 +20,13 @@ export default function RegistrationPage() {
     try {
       const result = await Auth.signUp(data.login, data.password);
       setMessage(result);
+      setIsForm(false);
     } catch (e) {
       setMessage('Error: ' + e);
     }
   };
 
-  return (
+  return isForm ? (
     <>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div>
@@ -60,6 +62,13 @@ export default function RegistrationPage() {
         <input type="submit" />
         <p>{message}</p>
       </form>
+    </>
+  ) : (
+    <>
+      <h3>{message}</h3>
+      <div>
+        <Link to="/login">Go to login page</Link>
+      </div>
     </>
   );
 }
