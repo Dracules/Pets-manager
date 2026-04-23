@@ -1,6 +1,4 @@
+import { ResponseWithAnimalType } from '../../../shared/model/interfaces/response.with.animal.type.interface';
 import { Animal } from './animal.interface';
-import { AnimalType } from './animal.type';
 
-export interface AnimalResponse extends Animal {
-  type: AnimalType;
-}
+export interface AnimalResponse extends Animal, ResponseWithAnimalType {}
