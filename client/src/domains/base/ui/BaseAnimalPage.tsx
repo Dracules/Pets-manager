@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 type BaseAnimalPageOptions = {
   deleteFn: (id: string, type?: AnimalType) => Promise<string>;
-  animalType?: AnimalType;
 };
 
 function BaseAnimalPage<T extends AnimalResponse>(
