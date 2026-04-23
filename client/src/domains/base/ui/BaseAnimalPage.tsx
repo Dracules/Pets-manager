@@ -16,13 +16,11 @@ function BaseAnimalPage<T extends AnimalResponse>(
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Error: {error}</h1>;
 
-  if (options) {
-    const { deleteFn, animalType } = options;
-
-    async function handleDelete(id: string, type?: AnimalType | undefined) {
+  if (deleteFn) {
+    async function handleDelete(id: string, type: AnimalType) {
       const toastId = toast.loading('Deleting...');
       try {
-        const response = await deleteFn(id, type);
+        const response = await deleteFn!(id, type);
         setData((current) => current!.filter((animal) => animal._id !== id));
         toast(response);
       } catch {
