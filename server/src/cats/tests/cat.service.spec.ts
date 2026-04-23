@@ -20,6 +20,7 @@ describe('CatService', () => {
     findByIdAndDelete: MockFnWithExec;
     where: MockFnWhereEquals;
     toJSON: jest.Mock;
+    modelName: string;
   }
 
   let mockCatModel: MockModel;
@@ -35,6 +36,7 @@ describe('CatService', () => {
     }).compile();
 
     service = module.get<CatService>(CatService);
+    mockCatModel.modelName = 'Cat';
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -73,7 +75,11 @@ describe('CatService', () => {
   describe('findAll', () => {
     it('return all cats', async () => {
       const mockCats = mockCatsList();
-
+      const catType = 'cat';
+      const mockCatsWithType = mockCats.map((obj) => ({
+        ...obj,
+        type: catType,
+      }));
       mockCatModel.find = jest.fn().mockReturnValue({
         exec: jest.fn().mockResolvedValue(
           mockCats.map((cat) => ({
@@ -84,7 +90,7 @@ describe('CatService', () => {
 
       const result = await service.findAll();
       expect(mockCatModel.find().exec).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(mockCats);
+      expect(result).toEqual(mockCatsWithType);
     });
   });
 
@@ -136,7 +142,14 @@ describe('CatService', () => {
       it('must return cats of user', async () => {
         const userId = '694ac1f93b5320db21a572a5';
         const cats: CatResponse[] = mockCatsList(5);
-        cats.forEach((cat) => (cat.owner = userId));
+        const catType = 'cat';
+        const mockCatsWithType = cats.map((obj) => {
+          obj.owner = userId;
+          return {
+            ...obj,
+            type: catType,
+          };
+        });
 
         mockCatModel.where = jest.fn().mockReturnValue({
           equals: jest.fn().mockResolvedValue(
@@ -149,7 +162,7 @@ describe('CatService', () => {
         const result = await service.findByUser(userId);
 
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(cats);
+        expect(result).toEqual(mockCatsWithType);
       });
     });
 
