@@ -37,11 +37,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
     }
 
     async function handleEdit(id: string, type: AnimalType) {
-      if (!!type === !!animalType)
-        throw new Error(
-          'AnimalTypeError: AnimalType value duplication detected - cannot proceed to editor.',
-        );
-      navigate(`/edit/${id}?type=${type || animalType}`);
+      navigate(`/edit/${id}?type=${type}`);
     }
 
     return (
