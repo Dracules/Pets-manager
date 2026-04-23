@@ -1,9 +1,9 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import BaseTable from '../../base/ui/BaseTable';
-import { Cat } from '../model/cat.interface';
 import { BaseTableProps } from '../../base/model/BaseTableProps';
+import { CatResponse } from '../model/cat.response.interface';
 
-const catColumns: ColumnDef<Cat>[] = [
+const catColumns: ColumnDef<CatResponse>[] = [
   { accessorKey: '_id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
@@ -11,7 +11,7 @@ const catColumns: ColumnDef<Cat>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function CatTable({ data, options }: BaseTableProps<Cat>) {
+function CatTable({ data, options }: BaseTableProps<CatResponse>) {
   return <BaseTable data={data} columns={catColumns} options={options} />;
 }
 

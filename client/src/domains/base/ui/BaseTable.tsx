@@ -5,10 +5,10 @@ import {
   ColumnDef,
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
-import { Animal } from '../../animal/model/animal.interface';
+import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { AnimalType } from '../../animal/model/animal.type';
 
-export default function BaseTable<T extends Animal>({
+export default function BaseTable<T extends AnimalResponse>({
   data,
   columns = [],
   options,
