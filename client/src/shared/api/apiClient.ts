@@ -81,7 +81,7 @@ export async function createDog(data: object): Promise<Dog> {
 
 export async function deleteAnimals(
   id: string,
-  type?: AnimalType,
+  type: AnimalType,
 ): Promise<string> {
   switch (type) {
     case 'cat':
