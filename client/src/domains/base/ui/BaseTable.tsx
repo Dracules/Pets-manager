@@ -6,7 +6,6 @@ import {
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
-import { AnimalType } from '../../animal/model/animal.type';
 
 export default function BaseTable<T extends AnimalResponse>({
   data,
@@ -24,21 +23,14 @@ export default function BaseTable<T extends AnimalResponse>({
           <>
             <button
               onClick={() => {
-                'type' in row.original
-                  ? onEdit(row.original._id, row.original.type as AnimalType)
-                  : onEdit(row.original._id);
+                onEdit(row.original._id, row.original.type);
               }}
             >
               Edit
             </button>
             <button
               onClick={async () => {
-                'type' in row.original
-                  ? await onDelete(
-                      row.original._id,
-                      row.original.type as AnimalType,
-                    )
-                  : await onDelete(row.original._id);
+                await onDelete(row.original._id, row.original.type);
               }}
             >
               Delete
