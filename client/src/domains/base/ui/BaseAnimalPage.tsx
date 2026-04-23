@@ -4,14 +4,11 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
-type BaseAnimalPageOptions = {
-  deleteFn: (id: string, type?: AnimalType) => Promise<string>;
-};
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
-  options?: BaseAnimalPageOptions,
+  deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
   const { data, loading, error, setData } = useFetchData(fetchFn);
   const navigate = useNavigate();
