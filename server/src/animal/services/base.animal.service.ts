@@ -4,6 +4,7 @@ import { HydratedDocument, Model, Types, UpdateQuery } from 'mongoose';
 import { AnimalException } from '../exception_filters/exceptions/animal.exception';
 import { Animal } from '../schemas/animal.schema';
 import { AnimalResponse } from '../interfaces/animal.interface';
+import { AnimalType } from '../types/animal.type';
 
 @Injectable()
 export abstract class BaseAnimalService<
@@ -24,7 +25,12 @@ export abstract class BaseAnimalService<
 
   async findAll(): Promise<Response[]> {
     const findedAnimals = await this.model.find().exec();
-    return findedAnimals.map((obj) => obj.toJSON()) as unknown as Response[];
+    const animalType = this.model.modelName.toLowerCase() as AnimalType;
+
+    return findedAnimals.map((obj) => ({
+      ...obj.toJSON(),
+      type: animalType,
+    })) as unknown as Response[];
   }
 
   async findById(animalId: string): Promise<Response> {
@@ -40,7 +46,11 @@ export abstract class BaseAnimalService<
     const findedAnimals = await this.model
       .where('owner')
       .equals(new Types.ObjectId(userId));
-    return findedAnimals.map((obj) => obj.toJSON()) as unknown as Response[];
+    const animalType = this.model.modelName.toLowerCase() as AnimalType;
+    return findedAnimals.map((obj) => ({
+      ...obj.toJSON(),
+      type: animalType,
+    })) as unknown as Response[];
   }
 
   async updateById(

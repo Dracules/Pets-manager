@@ -1,9 +1,9 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { Dog } from '../model/dog.interface';
 import BaseTable from '../../base/ui/BaseTable';
 import { BaseTableProps } from '../../base/model/BaseTableProps';
+import { DogResponse } from '../model/dog.response.interface';
 
-const dogColumns: ColumnDef<Dog>[] = [
+const dogColumns: ColumnDef<DogResponse>[] = [
   { accessorKey: '_id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
@@ -11,7 +11,7 @@ const dogColumns: ColumnDef<Dog>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function DogTable({ data, options }: BaseTableProps<Dog>) {
+function DogTable({ data, options }: BaseTableProps<DogResponse>) {
   return <BaseTable data={data} columns={dogColumns} options={options} />;
 }
 
