@@ -4,6 +4,8 @@ import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
 import { AnimalType } from '../../domains/animal/model/animal.type';
 import { AnimalResponse } from '../../domains/animal/model/animal.response.interface';
+import { DogResponse } from '../../domains/dog/model/dog.response.interface';
+import { CatResponse } from '../../domains/cat/model/cat.response.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -53,12 +55,12 @@ class ApiClient {
 
 const apiClient = new ApiClient();
 
-export async function getDogs(): Promise<Dog[]> {
-  return apiClient.get<Dog[]>('/animals/dogs');
+export async function getDogs(): Promise<DogResponse[]> {
+  return apiClient.get<DogResponse[]>('/animals/dogs');
 }
 
-export async function getCats(): Promise<Cat[]> {
-  return apiClient.get<Cat[]>('/animals/cats');
+export async function getCats(): Promise<CatResponse[]> {
+  return apiClient.get<CatResponse[]>('/animals/cats');
 }
 
 export async function deleteDogs(id: string): Promise<string> {
@@ -79,7 +81,7 @@ export async function createDog(data: object): Promise<Dog> {
 
 export async function deleteAnimals(
   id: string,
-  type?: AnimalType,
+  type: AnimalType,
 ): Promise<string> {
   switch (type) {
     case 'cat':
@@ -91,8 +93,8 @@ export async function deleteAnimals(
   }
 }
 
-export async function getUserCats(): Promise<Cat[]> {
-  return apiClient.get<Cat[]>('/animals/cats/user');
+export async function getUserCats(): Promise<CatResponse[]> {
+  return apiClient.get<CatResponse[]>('/animals/cats/user');
 }
 
 export async function getCatById(id: string): Promise<Cat> {
@@ -111,8 +113,8 @@ export async function updateDog<Dog>(id: string, data: object): Promise<Dog> {
   return apiClient.put(`/animals/dogs/${id}`, data);
 }
 
-export async function getUserDogs(): Promise<Dog[]> {
-  return apiClient.get<Dog[]>('/animals/dogs/user');
+export async function getUserDogs(): Promise<DogResponse[]> {
+  return apiClient.get<DogResponse[]>('/animals/dogs/user');
 }
 
 export async function getAnimals(): Promise<AnimalResponse[]> {
