@@ -5,6 +5,7 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 import { Animal } from '../../animal/model/animal.interface';
+import { useNavigate } from 'react-router';
 
 interface EditorProps<T extends Animal> {
   onSubmit: SubmitHandler<T>;
@@ -17,6 +18,7 @@ export function AnimalEditor<T extends Animal>({
   fields,
   methods,
 }: EditorProps<T>) {
+  const navigate = useNavigate();
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -36,6 +38,9 @@ export function AnimalEditor<T extends Animal>({
         </div>
         {fields}
         <input type="submit" />
+        <button type="button" onClick={() => navigate(-1)}>
+          Cancel
+        </button>
       </form>
     </FormProvider>
   );
