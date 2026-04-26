@@ -19,7 +19,7 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
       if (type === 'cat' || type === 'dog') {
         setAnimalType(type);
       }
-    }
+    } else setAnimalType('cat');
   }, [mode, searchParams]);
 
   return (
