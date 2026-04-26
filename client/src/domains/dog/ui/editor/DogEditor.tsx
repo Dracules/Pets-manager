@@ -8,9 +8,10 @@ import {
   updateDog,
 } from '../../../../shared/api/apiClient';
 import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
+import LoadingComponent from '../../../../shared/ui/LoadingComponent';
 
 export function DogEditor() {
-  const { methods, onSubmit } = useAnimalEditor<Dog>({
+  const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
     loadById: getDogById,
     createItem: async (data: Dog) => {
       const { name, age, trainedCommands } = data;
@@ -19,6 +20,7 @@ export function DogEditor() {
     updateItem: updateDog,
     afterSubmit: `/mydogs`,
   });
+  if (isLoading) return <LoadingComponent />;
   return (
     <AnimalEditor<Dog>
       fields={

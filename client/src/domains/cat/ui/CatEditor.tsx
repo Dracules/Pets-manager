@@ -7,9 +7,10 @@ import { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
 import { AnimalEditor } from '../../editor/ui/AnimalEditor';
 import { useAnimalEditor } from '../../editor/model/useAnimalEditor';
+import LoadingComponent from '../../../shared/ui/LoadingComponent';
 
 export function CatEditor() {
-  const { methods, onSubmit } = useAnimalEditor<Cat>({
+  const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
     loadById: getCatById,
     createItem: async (data: Cat) => {
       const { name, age, litterStatus } = data;
@@ -20,6 +21,7 @@ export function CatEditor() {
     defaultValues: { litterStatus: 'unknown' },
   });
 
+  if (isLoading) return <LoadingComponent />;
   return (
     <AnimalEditor<Cat>
       fields={
