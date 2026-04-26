@@ -10,10 +10,10 @@ export default function AppLayout() {
   const pathname = location.pathname;
 
   const userHeaderPaths = ['/my', '/mycats', '/mydogs'];
-  const noHeaderPaths = ['/login', '/edit/', '/register'];
+  const noHeaderPaths = ['/login', '/edit', '/register'];
 
   useEffect(() => {
-    if (noHeaderPaths.includes(pathname)) {
+    if (noHeaderPaths.some((path) => pathname.startsWith(path))) {
       return setHeaderType('no');
     }
     if (userHeaderPaths.includes(pathname)) {
