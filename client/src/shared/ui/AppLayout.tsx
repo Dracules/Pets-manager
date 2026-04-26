@@ -9,14 +9,14 @@ export default function AppLayout() {
   const location = useLocation();
   const pathname = location.pathname;
 
-  const userPaths = ['/my', '/mycats', '/mydogs'];
-  const loginPaths = ['/login', '/edit/', '/register'];
+  const userHeaderPaths = ['/my', '/mycats', '/mydogs'];
+  const noHeaderPaths = ['/login', '/edit/', '/register'];
 
   useEffect(() => {
-    if (loginPaths.includes(pathname)) {
+    if (noHeaderPaths.includes(pathname)) {
       return setHeaderType('no');
     }
-    if (userPaths.includes(pathname)) {
+    if (userHeaderPaths.includes(pathname)) {
       return setHeaderType('user');
     }
     return setHeaderType('all');
