@@ -14,7 +14,7 @@ export default function AppLayout() {
 
   useEffect(() => {
     if (loginPaths.includes(pathname)) {
-      return setHeaderType('login');
+      return setHeaderType('no');
     }
     if (userPaths.includes(pathname)) {
       return setHeaderType('user');
