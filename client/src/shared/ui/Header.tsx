@@ -25,7 +25,7 @@ export function Header({ type }: { type: HeaderType }) {
             <Link to="/mydogs">Dogs</Link>
           </>
         );
-      case 'login':
+      case 'no':
         return <></>;
     }
   };

@@ -1,1 +1,1 @@
-export type HeaderType = 'all' | 'user' | 'login';
+export type HeaderType = 'all' | 'user' | 'no';
