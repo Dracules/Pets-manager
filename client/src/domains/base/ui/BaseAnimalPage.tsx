@@ -4,6 +4,7 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
+import LoadingComponent from '../../../shared/ui/LoadingComponent';
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
@@ -13,7 +14,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
   const { data, loading, error, setData } = useFetchData(fetchFn);
   const navigate = useNavigate();
 
-  if (loading) return <h1>Loading...</h1>;
+  if (loading) return <LoadingComponent />;
   if (error) return <h1>Error: {error}</h1>;
 
   if (deleteFn) {

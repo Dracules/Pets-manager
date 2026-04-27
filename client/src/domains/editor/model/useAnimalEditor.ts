@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { Animal } from '../../animal/model/animal.interface';
@@ -24,14 +24,17 @@ export function useAnimalEditor<T extends Animal>({
     defaultValues ? { defaultValues: defaultValues } : {},
   );
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(id ? true : false);
 
   useEffect(() => {
     if (!id) return;
 
     const loadAnimal = async () => {
+      setIsLoading(true);
       const item = await loadById(id);
       if (item) {
         methods.reset(item);
+        setIsLoading(false);
       }
     };
 
@@ -70,5 +73,5 @@ export function useAnimalEditor<T extends Animal>({
     }
   };
 
-  return { methods, onSubmit };
+  return { methods, onSubmit, isLoading };
 }
