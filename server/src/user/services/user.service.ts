@@ -12,6 +12,10 @@ export class UserService {
     return this.userModel.findOne({ login: userLogin });
   }
 
+  async findUserById(userId: string) {
+    return this.userModel.findById(userId).lean();
+  }
+
   async createUser(
     userLogin: string,
     userPassword: string,
