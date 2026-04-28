@@ -8,8 +8,8 @@ import { UserRole } from '../../shared/types/userRole.type';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findUser(userLogin: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ login: userLogin });
+  async findUserByLogin(userLogin: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ login: userLogin }).lean();
   }
 
   async findUserById(userId: string) {
