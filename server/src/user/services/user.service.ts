@@ -29,4 +29,11 @@ export class UserService {
     const result = await newUser.save();
     return `User with login ${result.login} is created successfully!`;
   }
-}
+
+  async getUserRefreshToken(userId: string) {
+    const refreshTokenDB = await this.userModel
+      .findById(userId)
+      .select('refresh_token')
+      .then((user) => user?.refresh_token);
+    return refreshTokenDB;
+  }
