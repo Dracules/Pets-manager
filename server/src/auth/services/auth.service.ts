@@ -57,6 +57,35 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+
+  async refresh(refreshToken: string) {
+    const payload = await this.jwtService
+      .verifyAsync<RefreshJwtPayload>(refreshToken)
+      .catch(() => {
+        throw new UnauthorizedException();
+      });
+
+    const userId = payload.sub;
+
+    const refreshTokenDB = await this.userService.getUserRefreshToken(userId);
+
+    const isValid = refreshTokenDB && refreshTokenDB === refreshToken;
+    if (!isValid) {
+      throw new UnauthorizedException();
+    }
+
+    const user = (await this.userService.findUserById(userId)) as User;
+
+    const newJwtToken = await this.getNewJwtToken(
+      userId,
+      user.login,
+      user.roles,
+    );
+    await this.userService.updateRefreshToken(
+      userId,
+      newJwtToken.refresh_token,
+    );
+    return newJwtToken;
   }
 
   async signUp(userlogin: string, userPassword: string): Promise<string> {
