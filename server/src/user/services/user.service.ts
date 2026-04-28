@@ -37,3 +37,14 @@ export class UserService {
       .then((user) => user?.refresh_token);
     return refreshTokenDB;
   }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    return await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { refresh_token: refreshToken },
+        { runValidators: true, returnDocument: 'after' },
+      )
+      .lean();
+  }
+}
