@@ -13,7 +13,10 @@ import type { RequestWithUser } from '../../shared/interfaces/request-with-user'
 import type { JwtPayload } from '../interfaces/jwt.payload.interface';
 import { SignInDTO } from '../dto/sign.in.dto';
 import { Roles } from '../../shared/decorators/roles.decorator';
-import type { FullJwtToken } from '../interfaces/jwt.token.interface';
+import type {
+  FullJwtToken,
+  RefreshJwtToken,
+} from '../interfaces/jwt.token.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -47,5 +50,10 @@ export class AuthController {
   getProfile(@Request() req: RequestWithUser): JwtPayload {
     return req.user;
   }
-  
+
+  @Public()
+  @Post('refresh')
+  async refresh(@Body() body: RefreshJwtToken): Promise<FullJwtToken> {
+    return await this.authService.refresh(body.refresh_token);
+  }
 }
