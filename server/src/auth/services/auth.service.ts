@@ -8,6 +8,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { FullJwtToken } from '../interfaces/jwt.token.interface';
+import { User } from 'src/user/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -39,24 +40,27 @@ export class AuthService {
     return { access_token: access_token, refresh_token: refresh_token };
   }
 
-  
-  
-
- async signIn(login: string, userPassword: string): Promise<JwtToken> {
-    const user = await this.userService.findUser(login);
+  async signIn(login: string, userPassword: string): Promise<FullJwtToken> {
+    const user = await this.userService.findUserByLogin(login);
 
     if (!user || !(await bcrypt.compare(userPassword, user.password))) {
       throw new UnauthorizedException();
     }
 
-    const payload: JwtPayload = {
-      sub: user.id,
-      username: user.login,
-      roles: user.roles,
-    };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const userId = user._id.toString();
+
+    const newJwtToken = await this.getNewJwtToken(
+      userId,
+      user.login,
+      user.roles,
+    );
+
+    await this.userService.updateRefreshToken(
+      userId,
+      newJwtToken.refresh_token,
+    );
+    return newJwtToken;
+  }
 
   async refresh(refreshToken: string) {
     const payload = await this.jwtService
