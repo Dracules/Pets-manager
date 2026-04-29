@@ -20,8 +20,8 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       const result = await Auth.signIn(data.login, data.password);
-      if (result.access_token) {
-        login(result.access_token);
+      if (result.access_token && result.refresh_token) {
+        login(result);
       } else setMessage('Something wrong!');
     } catch (e) {
       if (isApiError(e) && e.response?.status === 401) {
@@ -31,7 +31,7 @@ export default function LoginPage() {
       }
     }
   };
-  return token ? (
+  return token.access_token ? (
     <h3>You have already been athorized!</h3>
   ) : (
     <div>
