@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { JwtToken } from '../../domains/login/model/jwtToken.interface';
+import { FullJwtToken } from '../../domains/login/model/jwtToken.interface';
 
 export class Auth {
-  static async signIn(login: string, password: string): Promise<JwtToken> {
+  static async signIn(login: string, password: string): Promise<FullJwtToken> {
     return axios
-      .post<JwtToken>('/auth/login', { login: login, password: password })
+      .post<FullJwtToken>('/auth/login', { login: login, password: password })
       .then((response) => response.data)
       .catch((error) => {
         console.log(error);
