@@ -40,13 +40,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
   };
 
   const logout = () => {
-    localStorage.removeItem('jwtToken');
-    setToken(null);
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    setToken({ access_token: null, refresh_token: null });
+
     navigate('/login');
   };
 
   useEffect(() => {
-    const onStorageChange = () => setToken(localStorage.getItem('jwtToken'));
+    const onStorageChange = () =>
+      setToken({
+        access_token: localStorage.getItem('access_token'),
+        refresh_token: localStorage.getItem('refresh_token'),
+      });
     window.addEventListener('storage', onStorageChange);
     return () => window.removeEventListener('storage', onStorageChange);
   }, []);
