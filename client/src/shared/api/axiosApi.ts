@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { Auth } from './authApi';
 import {
   AuthState,
@@ -22,9 +22,9 @@ api.interceptors.request.use((config) => {
 });
 
 let isRefreshing = false;
-let failedQueue: Array<(error: any, token: any) => void> = [];
+let failedQueue: Array<(error: any, token?: AuthState) => void> = [];
 
-const processQueue = (error: any, token = null as AuthState | null) => {
+const processQueue = (error: unknown, token?: AuthState) => {
   failedQueue.forEach((prom) => prom(error, token));
   failedQueue = [];
 };
@@ -32,12 +32,12 @@ const processQueue = (error: any, token = null as AuthState | null) => {
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as any;
+    const originalRequest = error.config as AxiosRequestConfig;
 
     if (error.response?.status === 401 && getToken().access_token) {
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
-          failedQueue.push((err, newToken) => {
+          failedQueue.push((err: Error, newToken) => {
             if (err) {
               reject(err);
             } else {
@@ -46,7 +46,7 @@ api.interceptors.response.use(
                   ...originalRequest,
                   headers: {
                     ...originalRequest.headers,
-                    Authorization: `Bearer ${newToken.access_token}`,
+                    Authorization: `Bearer ${newToken!.access_token}`,
                   },
                 }),
               );
@@ -66,10 +66,10 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (e) {
-        processQueue(e, null);
+        processQueue(e);
         isRefreshing = false;
         handleLogout();
-        return Promise.reject(e);
+        return Promise.reject(e as Error);
       }
     } else if (error.response?.status === 401) {
       handleLogout();
