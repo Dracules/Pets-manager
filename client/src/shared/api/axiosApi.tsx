@@ -1,9 +1,16 @@
 import axios, { AxiosError } from 'axios';
+import {
+  AuthState,
+  FullJwtToken,
+} from '../../domains/login/model/jwtToken.interface';
 
 const api = axios.create();
 
-let getToken: () => string | null = () => null;
+let getToken: () => AuthState = () => {
+  return { access_token: null, refresh_token: null };
+};
 let handleLogout: () => void = () => {};
+let updateToken: (newToken: FullJwtToken) => void = () => {};
 
 api.interceptors.request.use((config) => {
   const token = getToken();
@@ -24,11 +31,13 @@ api.interceptors.response.use(
 );
 
 export const setApiAuth = (
-  getTokenFn: () => string | null,
+  getTokenFn: () => AuthState,
   handleLogoutFn: () => void,
+  updateTokenFn: (newToken: FullJwtToken) => void,
 ) => {
   getToken = getTokenFn;
   handleLogout = handleLogoutFn;
+  updateToken = updateTokenFn;
 };
 
 export default api;
