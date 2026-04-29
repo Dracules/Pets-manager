@@ -9,9 +9,16 @@ import { useNavigate } from 'react-router';
 import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 
 const AuthContext = createContext({
-  token: null as string | null,
-  login: (newToken: string) => {},
+  token: { access_token: null, refresh_token: null } as AuthState,
+  login: (newToken: FullJwtToken) => {},
+  updateToken: (newToken: FullJwtToken) => {},
   logout: () => {},
+  getTokenStorage: () => {
+    return {
+      access_token: null,
+      refresh_token: null,
+    } as AuthState;
+  },
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
@@ -58,7 +65,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider
+      value={{ token, login, logout, updateToken, getTokenStorage }}
+    >
       {children}
     </AuthContext.Provider>
   );
