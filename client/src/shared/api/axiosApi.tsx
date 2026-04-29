@@ -15,8 +15,8 @@ let updateToken: (newToken: FullJwtToken) => void = () => {};
 
 api.interceptors.request.use((config) => {
   const token = getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (token.access_token) {
+    config.headers.Authorization = `Bearer ${token.access_token}`;
   }
   return config;
 });
