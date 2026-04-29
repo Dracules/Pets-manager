@@ -21,10 +21,57 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+let isRefreshing = false;
+let failedQueue: Array<(error: any, token: any) => void> = [];
+
+const processQueue = (error: any, token = null as AuthState | null) => {
+  failedQueue.forEach((prom) => prom(error, token));
+  failedQueue = [];
+};
+
 api.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
+  async (error: AxiosError) => {
+    const originalRequest = error.config as any;
+
+    if (error.response?.status === 401 && getToken().access_token) {
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push((err, newToken) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(
+                api({
+                  ...originalRequest,
+                  headers: {
+                    ...originalRequest.headers,
+                    Authorization: `Bearer ${newToken.access_token}`,
+                  },
+                }),
+              );
+            }
+          });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        await refresh();
+        const newToken = getToken();
+
+        processQueue(null, newToken);
+        isRefreshing = false;
+
+        return api(originalRequest);
+      } catch (e) {
+        processQueue(e, null);
+        isRefreshing = false;
+        handleLogout();
+        return Promise.reject(e);
+      }
+    } else if (error.response?.status === 401) {
       handleLogout();
     }
     return Promise.reject(error);
