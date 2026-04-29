@@ -10,7 +10,6 @@ import { AppModule } from '../../app.module';
 import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
 import { CatResponse } from '../interfaces/cat.interface';
 import { App } from 'supertest/types';
-import { CatDocument } from '../schemas/cat.schema';
 import { initMongoDB } from './mocks/init-mongo-for-tests';
 
 describe('CatController', () => {
@@ -58,7 +57,7 @@ describe('CatController', () => {
       _id: id,
     });
 
-    return JSON.parse(JSON.stringify(doc));
+    return JSON.parse(JSON.stringify(doc)) as CatResponse;
   }
 
   async function findAllCatsDB() {
@@ -246,7 +245,7 @@ describe('CatController', () => {
           .send()
           .expect(200);
 
-        const findedCat = (await findCatDB(catId)) as CatResponse;
+        const findedCat = await findCatDB(catId);
 
         expect(response.body).not.toBeNull();
         console.table(response.body);
@@ -421,9 +420,7 @@ describe('CatController', () => {
 
       const createdCat = response.body as CatResponse;
 
-      const findedCat = (await findCatDB(
-        new ObjectId(createdCat._id),
-      )) as unknown as CatResponse;
+      const findedCat = await findCatDB(new ObjectId(createdCat._id));
       expect(findedCat).not.toBeNull();
       expect(findedCat).toMatchObject(correctCatDTO);
     });
@@ -573,9 +570,7 @@ describe('CatController', () => {
         .send(updateCatDTO)
         .expect(200);
 
-      const findedCat = (await findCatDB(
-        new ObjectId(createdCat._id),
-      )) as unknown as CatResponse;
+      const findedCat = await findCatDB(new ObjectId(createdCat._id));
       expect(findedCat.name).toEqual(newName);
       expect(findedCat.name).not.toEqual(createdCat.name);
     });
