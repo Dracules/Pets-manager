@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { Model } from 'mongoose';
 import { UserRole } from '../../shared/types/userRole.type';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -39,10 +40,13 @@ export class UserService {
   }
 
   async updateRefreshToken(userId: string, refreshToken: string) {
+    const salt = await bcrypt.genSalt(12);
+    const refresTokenHash = await bcrypt.hash(refreshToken, salt);
+
     return await this.userModel
       .findByIdAndUpdate(
         userId,
-        { refresh_token: refreshToken },
+        { refresh_token: refresTokenHash },
         { runValidators: true, returnDocument: 'after' },
       )
       .lean();
