@@ -32,9 +32,9 @@ class ApiClient {
       });
   }
 
-  async post(Url: string, data: object): Promise<Cat> {
+  async post<T>(Url: string, data: object): Promise<T> {
     return api
-      .post<Cat>(Url, data)
+      .post<T>(Url, data)
       .then((response) => response.data)
       .catch((error) => {
         console.log(error);
