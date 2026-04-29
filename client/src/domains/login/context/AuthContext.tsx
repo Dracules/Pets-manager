@@ -14,13 +14,21 @@ const AuthContext = createContext({
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [token, setToken] = useState(localStorage.getItem('jwtToken'));
+  const [token, setToken] = useState<AuthState>({
+    access_token: localStorage.getItem('access_token'),
+    refresh_token: localStorage.getItem('refresh_token'),
+  });
   const navigate = useNavigate();
 
-  const login = (newToken: string) => {
-    localStorage.setItem('jwtToken', newToken);
-    setToken(newToken);
+  const login = (newToken: FullJwtToken) => {
+    updateToken(newToken);
     navigate('/my');
+  };
+
+  const updateToken = (newToken: FullJwtToken) => {
+    localStorage.setItem('access_token', newToken.access_token);
+    localStorage.setItem('refresh_token', newToken.refresh_token);
+    setToken(newToken);
   };
 
   const logout = () => {
