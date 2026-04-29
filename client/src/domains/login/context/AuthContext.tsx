@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
 } from 'react';
 import { useNavigate } from 'react-router';
+import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 
 const AuthContext = createContext({
   token: null as string | null,
@@ -29,6 +30,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
     localStorage.setItem('access_token', newToken.access_token);
     localStorage.setItem('refresh_token', newToken.refresh_token);
     setToken(newToken);
+  };
+
+  const getTokenStorage = () => {
+    return {
+      access_token: localStorage.getItem('access_token'),
+      refresh_token: localStorage.getItem('refresh_token'),
+    } as AuthState;
   };
 
   const logout = () => {
