@@ -21,4 +21,16 @@ export class Auth {
         throw error;
       });
   }
+
+  static async refresh(refresh_token: string): Promise<FullJwtToken> {
+    return axios
+      .post<FullJwtToken>('/auth/refresh', {
+        refresh_token: refresh_token,
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
 }
