@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { Auth } from './authApi';
 import {
   AuthState,
   FullJwtToken,
@@ -29,6 +30,17 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+const refresh = async () => {
+  const tokens = getToken();
+  if (!tokens.refresh_token) {
+    throw new Error('Error: No refresh token');
+  }
+
+  const response = await Auth.refresh(tokens.refresh_token);
+
+  updateToken(response);
+};
 
 export const setApiAuth = (
   getTokenFn: () => AuthState,
