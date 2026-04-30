@@ -73,7 +73,8 @@ export class AuthService {
 
     const refreshTokenDB = await this.userService.getUserRefreshToken(userId);
 
-    const isValid = refreshTokenDB && refreshTokenDB === refreshToken;
+    const isValid =
+      refreshTokenDB && (await bcrypt.compare(refreshToken, refreshTokenDB));
     if (!isValid) {
       throw new UnauthorizedException();
     }
