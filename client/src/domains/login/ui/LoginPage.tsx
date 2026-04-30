@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
+import { yupResolver } from '@hookform/resolvers/yup';
+import loginSchema from '../model/validation/LoginSchema';
 
 interface IFormInput {
   login: string;
@@ -11,7 +13,13 @@ interface IFormInput {
 }
 
 export default function LoginPage() {
-  const methods = useForm<IFormInput>();
+  const methods = useForm<IFormInput>({
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      login: '',
+      password: '',
+    },
+  });
   const [message, setMessage] = useState('');
   const { token, login } = useAuth();
 
@@ -43,11 +51,8 @@ export default function LoginPage() {
             placeholder="Login"
           />
           <div>
-            {errors.login?.type === 'required' && (
-              <span>Login field is required!</span>
-            )}
-            {errors.login?.type === 'minLength' && (
-              <span>Minimal login length is 2!</span>
+            {errors.login && (
+              <span style={{ color: 'red' }}>{errors.login.message}</span>
             )}
           </div>
         </div>
@@ -58,11 +63,8 @@ export default function LoginPage() {
             placeholder="Password"
           />
           <div>
-            {errors.password?.type === 'required' && (
-              <span>Password field is required!</span>
-            )}
-            {errors.password?.type === 'minLength' && (
-              <span>Minimal password length is 2!</span>
+            {errors.password && (
+              <span style={{ color: 'red' }}>{errors.password.message}</span>
             )}
           </div>
         </div>
