@@ -4,6 +4,7 @@ import { AnimalEditor } from '../../editor/ui/AnimalEditor';
 import { useAnimalEditor } from '../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
 import { CatsApi } from '../api/catsApi';
+import catEditorSchema from '../model/validation/catEditorSchema';
 
 export function CatEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
@@ -14,6 +15,7 @@ export function CatEditor() {
     },
     updateItem: CatsApi.updateCat,
     afterSubmit: `/mycats`,
+    validationSchema: catEditorSchema,
     defaultValues: { litterStatus: 'unknown' },
   });
 
@@ -32,6 +34,13 @@ export function CatEditor() {
               </option>
             ))}
           </select>
+          <div>
+            {methods.formState.errors.litterStatus && (
+              <span style={{ color: 'red' }}>
+                {methods.formState.errors.litterStatus.message}
+              </span>
+            )}
+          </div>
         </div>
       }
       onSubmit={onSubmit}

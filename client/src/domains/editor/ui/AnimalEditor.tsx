@@ -13,6 +13,11 @@ interface EditorProps<T extends Animal> {
   methods: UseFormReturn<T, any, T>;
 }
 
+const renderError = (message?: unknown) =>
+  typeof message === 'string' ? (
+    <span style={{ color: 'red' }}>{message}</span>
+  ) : null;
+
 export function AnimalEditor<T extends Animal>({
   onSubmit,
   fields,
@@ -26,6 +31,7 @@ export function AnimalEditor<T extends Animal>({
           <label style={{ margin: 20 }}>Name</label>
           <input {...methods.register('name' as Path<T>)} placeholder="Name" />
         </div>
+        <div>{renderError(methods.formState.errors.name?.message)}</div>
         <div>
           <label style={{ margin: 20 }}>Age</label>
           <input
@@ -36,6 +42,7 @@ export function AnimalEditor<T extends Animal>({
             placeholder="Age"
           />
         </div>
+        <div>{renderError(methods.formState.errors.age?.message)}</div>
         {fields}
         <input type="submit" />
         <button type="button" onClick={() => navigate(-1)}>

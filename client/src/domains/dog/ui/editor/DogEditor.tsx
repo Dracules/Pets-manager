@@ -5,6 +5,7 @@ import { MultiTagsSelect } from './MultiTagsSelect';
 import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../../shared/ui/LoadingComponent';
 import { DogsApi } from '../../api/dogsApi';
+import dogEditorSchema from '../../model/validation/dogEditorSchema';
 
 export function DogEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
@@ -14,6 +15,7 @@ export function DogEditor() {
       await DogsApi.createDog({ name, age, trainedCommands });
     },
     updateItem: DogsApi.updateDog,
+    validationSchema: dogEditorSchema,
     afterSubmit: `/mydogs`,
   });
   if (isLoading) return <LoadingComponent />;
