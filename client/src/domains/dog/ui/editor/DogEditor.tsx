@@ -9,6 +9,7 @@ import {
 } from '../../../../shared/api/apiClient';
 import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../../shared/ui/LoadingComponent';
+import dogEditorSchema from '../../model/validation/dogEditorSchema';
 
 export function DogEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
@@ -18,6 +19,7 @@ export function DogEditor() {
       await createDog({ name, age, trainedCommands });
     },
     updateItem: updateDog,
+    validationSchema: dogEditorSchema,
     afterSubmit: `/mydogs`,
   });
   if (isLoading) return <LoadingComponent />;
