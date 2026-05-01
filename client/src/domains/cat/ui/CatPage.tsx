@@ -1,15 +1,11 @@
-import {
-  deleteCats,
-  getCats,
-  getUserCats,
-} from '../../../shared/api/apiClient';
 import BaseAnimalPage from '../../base/ui/BaseAnimalPage';
+import { CatsApi } from '../api/catsApi';
 import CatTable from './CatTable';
 
 export const CatsPage = () => {
-  return BaseAnimalPage(CatTable, getCats);
+  return BaseAnimalPage(CatTable, CatsApi.getCats);
 };
 
 export const UserCatsPage = () => {
-  return BaseAnimalPage(CatTable, getUserCats, deleteCats);
+  return BaseAnimalPage(CatTable, CatsApi.getUserCats, CatsApi.deleteCats);
 };

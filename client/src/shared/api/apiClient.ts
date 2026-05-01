@@ -1,11 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { Cat } from '../../domains/cat/model/cat.interface';
-import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
-import { AnimalType } from '../../domains/animal/model/animal.type';
-import { AnimalResponse } from '../../domains/animal/model/animal.response.interface';
-import { DogResponse } from '../../domains/dog/model/dog.response.interface';
-import { CatResponse } from '../../domains/cat/model/cat.response.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -55,72 +49,4 @@ class ApiClient {
 
 const apiClient = new ApiClient();
 
-export async function getDogs(): Promise<DogResponse[]> {
-  return apiClient.get<DogResponse[]>('/animals/dogs');
-}
-
-export async function getCats(): Promise<CatResponse[]> {
-  return apiClient.get<CatResponse[]>('/animals/cats');
-}
-
-export async function deleteDogs(id: string): Promise<string> {
-  return apiClient.delete(`/animals/dogs/${id}`);
-}
-
-export async function deleteCats(id: string): Promise<string> {
-  return apiClient.delete(`/animals/cats/${id}`);
-}
-
-export async function createCat(data: object): Promise<Cat> {
-  return apiClient.post(`/animals/cats`, data);
-}
-
-export async function createDog(data: object): Promise<Dog> {
-  return apiClient.post(`/animals/dogs`, data);
-}
-
-export async function deleteAnimals(
-  id: string,
-  type: AnimalType,
-): Promise<string> {
-  switch (type) {
-    case 'cat':
-      return deleteCats(id);
-    case 'dog':
-      return deleteDogs(id);
-    default:
-      throw Error('Undefined animal type!');
-  }
-}
-
-export async function getUserCats(): Promise<CatResponse[]> {
-  return apiClient.get<CatResponse[]>('/animals/cats/user');
-}
-
-export async function getCatById(id: string): Promise<Cat> {
-  return apiClient.get<Cat>(`/animals/cats/${id}`);
-}
-
-export async function getDogById(id: string): Promise<Dog> {
-  return apiClient.get<Dog>(`/animals/dogs/${id}`);
-}
-
-export async function updateCat<Cat>(id: string, data: object): Promise<Cat> {
-  return apiClient.put(`/animals/cats/${id}`, data);
-}
-
-export async function updateDog<Dog>(id: string, data: object): Promise<Dog> {
-  return apiClient.put(`/animals/dogs/${id}`, data);
-}
-
-export async function getUserDogs(): Promise<DogResponse[]> {
-  return apiClient.get<DogResponse[]>('/animals/dogs/user');
-}
-
-export async function getAnimals(): Promise<AnimalResponse[]> {
-  return apiClient.get<AnimalResponse[]>('/animals');
-}
-
-export async function getUserAnimals(): Promise<AnimalResponse[]> {
-  return apiClient.get<AnimalResponse[]>('/animals/user');
-}
+export default apiClient;
