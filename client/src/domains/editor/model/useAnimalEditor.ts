@@ -3,12 +3,15 @@ import { DefaultValues, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { Animal } from '../../animal/model/animal.interface';
 import { toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 type UseAnimalEditorOptions<T> = {
   loadById: (id: string) => Promise<T>;
   createItem: (data: T) => Promise<void>;
   updateItem: (id: string, data: Partial<T>) => Promise<void>;
   afterSubmit: string;
+  validationSchema: yup.AnyObjectSchema;
   defaultValues?: DefaultValues<T>;
 };
 
@@ -17,12 +20,14 @@ export function useAnimalEditor<T extends Animal>({
   createItem,
   updateItem,
   afterSubmit,
+  validationSchema,
   defaultValues,
 }: UseAnimalEditorOptions<T>) {
   const { id } = useParams();
-  const methods = useForm<T>(
-    defaultValues ? { defaultValues: defaultValues } : {},
-  );
+  const methods = useForm<T>({
+    resolver: yupResolver(validationSchema),
+    ...(defaultValues ? { defaultValues } : {}),
+  });
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(id ? true : false);
 
