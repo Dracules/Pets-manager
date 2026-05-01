@@ -55,18 +55,6 @@ class ApiClient {
 
 const apiClient = new ApiClient();
 
-export async function getDogs(): Promise<DogResponse[]> {
-  return apiClient.get<DogResponse[]>('/animals/dogs');
-}
-
-export async function deleteDogs(id: string): Promise<string> {
-  return apiClient.delete(`/animals/dogs/${id}`);
-}
-
-export async function createDog(data: object): Promise<Dog> {
-  return apiClient.post(`/animals/dogs`, data);
-}
-
 export async function deleteAnimals(
   id: string,
   type: AnimalType,
@@ -81,24 +69,38 @@ export async function deleteAnimals(
   }
 }
 
-export async function getDogById(id: string): Promise<Dog> {
-  return apiClient.get<Dog>(`/animals/dogs/${id}`);
-}
-
-export async function updateDog<Dog>(id: string, data: object): Promise<Dog> {
-  return apiClient.put(`/animals/dogs/${id}`, data);
-}
-
-export async function getUserDogs(): Promise<DogResponse[]> {
-  return apiClient.get<DogResponse[]>('/animals/dogs/user');
-}
-
 export async function getAnimals(): Promise<AnimalResponse[]> {
   return apiClient.get<AnimalResponse[]>('/animals');
 }
 
 export async function getUserAnimals(): Promise<AnimalResponse[]> {
   return apiClient.get<AnimalResponse[]>('/animals/user');
+}
+
+export class DogsApi {
+  static async getDogs(): Promise<DogResponse[]> {
+    return apiClient.get<DogResponse[]>('/animals/dogs');
+  }
+
+  static async getUserDogs(): Promise<DogResponse[]> {
+    return apiClient.get<DogResponse[]>('/animals/dogs/user');
+  }
+
+  static async getDogById(id: string): Promise<Dog> {
+    return apiClient.get<Dog>(`/animals/dogs/${id}`);
+  }
+
+  static async createDog(data: object): Promise<Dog> {
+    return apiClient.post(`/animals/dogs`, data);
+  }
+
+  static async updateDog<Dog>(id: string, data: object): Promise<Dog> {
+    return apiClient.put(`/animals/dogs/${id}`, data);
+  }
+
+  static async deleteDogs(id: string): Promise<string> {
+    return apiClient.delete(`/animals/dogs/${id}`);
+  }
 }
 
 export class CatsApi {
