@@ -4,8 +4,8 @@ import { setApiAuth } from '../api/axiosApi';
 import { HeaderType } from '../model/types/header.type';
 
 export function Header({ type }: { type: HeaderType }) {
-  const { token, logout } = useAuth();
-  setApiAuth(() => token, logout);
+  const { getTokenStorage, logout, updateToken } = useAuth();
+  setApiAuth(getTokenStorage, logout, updateToken);
 
   const getHeaderLinks = () => {
     switch (type) {

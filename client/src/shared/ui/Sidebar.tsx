@@ -38,7 +38,7 @@ export function AppSidebar() {
           >
             All animals
           </MenuItem>
-          {token && (
+          {token.access_token && (
             <>
               <MenuItem
                 icon={<TbCircleLetterM size={35} />}
@@ -56,7 +56,7 @@ export function AppSidebar() {
           )}
         </Menu>
         <Menu>
-          {token ? (
+          {token.access_token ? (
             <MenuItem icon={<RxExit size={35} />} onClick={logout}>
               Logout
             </MenuItem>
