@@ -1,22 +1,18 @@
-import {
-  createCat,
-  getCatById,
-  updateCat,
-} from '../../../shared/api/apiClient';
 import { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
 import { AnimalEditor } from '../../editor/ui/AnimalEditor';
 import { useAnimalEditor } from '../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
+import { CatsApi } from '../api/catsApi';
 
 export function CatEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
-    loadById: getCatById,
+    loadById: CatsApi.getCatById,
     createItem: async (data: Cat) => {
       const { name, age, litterStatus } = data;
-      await createCat({ name, age, litterStatus });
+      await CatsApi.createCat({ name, age, litterStatus });
     },
-    updateItem: updateCat,
+    updateItem: CatsApi.updateCat,
     afterSubmit: `/mycats`,
     defaultValues: { litterStatus: 'unknown' },
   });
