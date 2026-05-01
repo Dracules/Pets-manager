@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 export const animalAgeSchema = yup
   .number()
-  .transform((value, originalValue) =>
+  .transform((value: unknown, originalValue: unknown) =>
     originalValue === '' || Number.isNaN(value) ? undefined : value,
   )
   .required('Please enter an age')
