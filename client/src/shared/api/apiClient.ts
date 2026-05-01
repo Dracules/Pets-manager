@@ -1,11 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { Cat } from '../../domains/cat/model/cat.interface';
-import { Dog } from '../../domains/dog/model/dog.interface';
 import api from './axiosApi';
-import { AnimalType } from '../../domains/animal/model/animal.type';
-import { AnimalResponse } from '../../domains/animal/model/animal.response.interface';
-import { DogResponse } from '../../domains/dog/model/dog.response.interface';
-import { CatResponse } from '../../domains/cat/model/cat.response.interface';
 
 export function isApiError(e: unknown): e is AxiosError {
   return axios.isAxiosError(e);
@@ -55,75 +49,4 @@ class ApiClient {
 
 const apiClient = new ApiClient();
 
-export class AnimalsApi {
-  static async getAnimals(): Promise<AnimalResponse[]> {
-    return apiClient.get<AnimalResponse[]>('/animals');
-  }
-
-  static async getUserAnimals(): Promise<AnimalResponse[]> {
-    return apiClient.get<AnimalResponse[]>('/animals/user');
-  }
-
-  static async deleteAnimals(id: string, type: AnimalType): Promise<string> {
-    switch (type) {
-      case 'cat':
-        return CatsApi.deleteCats(id);
-      case 'dog':
-        return DogsApi.deleteDogs(id);
-      default:
-        throw Error('Undefined animal type!');
-    }
-  }
-}
-
-export class DogsApi {
-  static async getDogs(): Promise<DogResponse[]> {
-    return apiClient.get<DogResponse[]>('/animals/dogs');
-  }
-
-  static async getUserDogs(): Promise<DogResponse[]> {
-    return apiClient.get<DogResponse[]>('/animals/dogs/user');
-  }
-
-  static async getDogById(id: string): Promise<Dog> {
-    return apiClient.get<Dog>(`/animals/dogs/${id}`);
-  }
-
-  static async createDog(data: object): Promise<Dog> {
-    return apiClient.post(`/animals/dogs`, data);
-  }
-
-  static async updateDog<Dog>(id: string, data: object): Promise<Dog> {
-    return apiClient.put(`/animals/dogs/${id}`, data);
-  }
-
-  static async deleteDogs(id: string): Promise<string> {
-    return apiClient.delete(`/animals/dogs/${id}`);
-  }
-}
-
-export class CatsApi {
-  static async getCats(): Promise<CatResponse[]> {
-    return apiClient.get<CatResponse[]>('/animals/cats');
-  }
-
-  static async getUserCats(): Promise<CatResponse[]> {
-    return apiClient.get<CatResponse[]>('/animals/cats/user');
-  }
-
-  static async getCatById(id: string): Promise<Cat> {
-    return apiClient.get<Cat>(`/animals/cats/${id}`);
-  }
-
-  static async createCat(data: object): Promise<Cat> {
-    return apiClient.post(`/animals/cats`, data);
-  }
-
-  static async updateCat<Cat>(id: string, data: object): Promise<Cat> {
-    return apiClient.put(`/animals/cats/${id}`, data);
-  }
-
-  static async deleteCats(id: string): Promise<string> {
-    return apiClient.delete(`/animals/cats/${id}`);
-  }
-}
+export default apiClient;
