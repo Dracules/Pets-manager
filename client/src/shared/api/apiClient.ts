@@ -55,26 +55,25 @@ class ApiClient {
 
 const apiClient = new ApiClient();
 
-export async function deleteAnimals(
-  id: string,
-  type: AnimalType,
-): Promise<string> {
-  switch (type) {
-    case 'cat':
-      return deleteCats(id);
-    case 'dog':
-      return deleteDogs(id);
-    default:
-      throw Error('Undefined animal type!');
+export class AnimalsApi {
+  static async getAnimals(): Promise<AnimalResponse[]> {
+    return apiClient.get<AnimalResponse[]>('/animals');
   }
-}
 
-export async function getAnimals(): Promise<AnimalResponse[]> {
-  return apiClient.get<AnimalResponse[]>('/animals');
-}
+  static async getUserAnimals(): Promise<AnimalResponse[]> {
+    return apiClient.get<AnimalResponse[]>('/animals/user');
+  }
 
-export async function getUserAnimals(): Promise<AnimalResponse[]> {
-  return apiClient.get<AnimalResponse[]>('/animals/user');
+  static async deleteAnimals(id: string, type: AnimalType): Promise<string> {
+    switch (type) {
+      case 'cat':
+        return CatsApi.deleteCats(id);
+      case 'dog':
+        return DogsApi.deleteDogs(id);
+      default:
+        throw Error('Undefined animal type!');
+    }
+  }
 }
 
 export class DogsApi {
