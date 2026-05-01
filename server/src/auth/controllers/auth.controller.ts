@@ -11,7 +11,8 @@ import { Public } from '../../shared/decorators/public.decorator';
 import { AuthService } from '../services/auth.service';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import type { JwtPayload } from '../interfaces/jwt.payload.interface';
-import { SignInDTO } from '../dto/sign.in.dto';
+import { JwtToken } from '../interfaces/jwt.token.interface';
+import { SignInDTO, SignUpDTO } from '../dto/sign.in.dto';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import type {
   FullJwtToken,
@@ -32,17 +33,17 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('register')
-  async signUp(@Body() signInDto: SignInDTO): Promise<string> {
-    return await this.authService.signUp(signInDto.login, signInDto.password);
+  async signUp(@Body() signUpDTO: SignUpDTO): Promise<string> {
+    return await this.authService.signUp(signUpDTO.login, signUpDTO.password);
   }
 
   @Roles(['admin'])
   @HttpCode(HttpStatus.OK)
   @Post('register/admin')
-  async signUpAdmin(@Body() signInDto: SignInDTO): Promise<string> {
+  async signUpAdmin(@Body() signUpDTO: SignUpDTO): Promise<string> {
     return await this.authService.signUpAdmin(
-      signInDto.login,
-      signInDto.password,
+      signUpDTO.login,
+      signUpDTO.password,
     );
   }
 
