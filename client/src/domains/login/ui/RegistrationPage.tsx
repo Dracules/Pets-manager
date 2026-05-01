@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import registrationSchema from '../model/validation/RegistrationSchema';
+import registrationSchema from '../model/validation/registrationSchema';
 
 interface IFormInput {
   login: string;

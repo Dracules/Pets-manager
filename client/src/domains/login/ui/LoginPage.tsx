@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import loginSchema from '../model/validation/LoginSchema';
+import loginSchema from '../model/validation/loginSchema';
 
 interface IFormInput {
   login: string;
