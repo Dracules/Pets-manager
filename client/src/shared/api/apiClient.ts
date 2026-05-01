@@ -59,20 +59,8 @@ export async function getDogs(): Promise<DogResponse[]> {
   return apiClient.get<DogResponse[]>('/animals/dogs');
 }
 
-export async function getCats(): Promise<CatResponse[]> {
-  return apiClient.get<CatResponse[]>('/animals/cats');
-}
-
 export async function deleteDogs(id: string): Promise<string> {
   return apiClient.delete(`/animals/dogs/${id}`);
-}
-
-export async function deleteCats(id: string): Promise<string> {
-  return apiClient.delete(`/animals/cats/${id}`);
-}
-
-export async function createCat(data: object): Promise<Cat> {
-  return apiClient.post(`/animals/cats`, data);
 }
 
 export async function createDog(data: object): Promise<Dog> {
@@ -93,20 +81,8 @@ export async function deleteAnimals(
   }
 }
 
-export async function getUserCats(): Promise<CatResponse[]> {
-  return apiClient.get<CatResponse[]>('/animals/cats/user');
-}
-
-export async function getCatById(id: string): Promise<Cat> {
-  return apiClient.get<Cat>(`/animals/cats/${id}`);
-}
-
 export async function getDogById(id: string): Promise<Dog> {
   return apiClient.get<Dog>(`/animals/dogs/${id}`);
-}
-
-export async function updateCat<Cat>(id: string, data: object): Promise<Cat> {
-  return apiClient.put(`/animals/cats/${id}`, data);
 }
 
 export async function updateDog<Dog>(id: string, data: object): Promise<Dog> {
@@ -123,4 +99,30 @@ export async function getAnimals(): Promise<AnimalResponse[]> {
 
 export async function getUserAnimals(): Promise<AnimalResponse[]> {
   return apiClient.get<AnimalResponse[]>('/animals/user');
+}
+
+export class CatsApi {
+  static async getCats(): Promise<CatResponse[]> {
+    return apiClient.get<CatResponse[]>('/animals/cats');
+  }
+
+  static async getUserCats(): Promise<CatResponse[]> {
+    return apiClient.get<CatResponse[]>('/animals/cats/user');
+  }
+
+  static async getCatById(id: string): Promise<Cat> {
+    return apiClient.get<Cat>(`/animals/cats/${id}`);
+  }
+
+  static async createCat(data: object): Promise<Cat> {
+    return apiClient.post(`/animals/cats`, data);
+  }
+
+  static async updateCat<Cat>(id: string, data: object): Promise<Cat> {
+    return apiClient.put(`/animals/cats/${id}`, data);
+  }
+
+  static async deleteCats(id: string): Promise<string> {
+    return apiClient.delete(`/animals/cats/${id}`);
+  }
 }
