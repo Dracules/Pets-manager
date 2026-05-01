@@ -14,6 +14,10 @@ import type { JwtPayload } from '../interfaces/jwt.payload.interface';
 import { JwtToken } from '../interfaces/jwt.token.interface';
 import { SignInDTO, SignUpDTO } from '../dto/sign.in.dto';
 import { Roles } from '../../shared/decorators/roles.decorator';
+import type {
+  FullJwtToken,
+  RefreshJwtToken,
+} from '../interfaces/jwt.token.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +26,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInDto: SignInDTO): Promise<JwtToken> {
+  async signIn(@Body() signInDto: SignInDTO): Promise<FullJwtToken> {
     return await this.authService.signIn(signInDto.login, signInDto.password);
   }
 
@@ -46,5 +50,11 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req: RequestWithUser): JwtPayload {
     return req.user;
+  }
+
+  @Public()
+  @Post('refresh')
+  async refresh(@Body() body: RefreshJwtToken): Promise<FullJwtToken> {
+    return await this.authService.refresh(body.refresh_token);
   }
 }
