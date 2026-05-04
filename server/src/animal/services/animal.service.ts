@@ -51,23 +51,50 @@ export class AnimalService {
     };
   }
 
-  async findAnimalsByUser(userId: string): Promise<AnimalResponse[]> {
+  async findAnimalsByUser(
+    userId: string,
+    limit: number,
+    skip: number,
+  ): Promise<PaginationResult<AnimalResponse[]>> {
     const userObjectId = new Types.ObjectId(userId);
-    const animals = await this.catModel
-      .aggregate([
-        { $match: { owner: userObjectId } },
-        { $addFields: { type: 'cat' } },
-        {
-          $unionWith: {
-            coll: 'dogs',
-            pipeline: [
-              { $match: { owner: userObjectId } },
-              { $addFields: { type: 'dog' } },
-            ],
+    const [animals, totalResult] = await Promise.all([
+      this.catModel
+        .aggregate([
+          { $match: { owner: userObjectId } },
+          { $addFields: { type: 'cat' } },
+          {
+            $unionWith: {
+              coll: 'dogs',
+              pipeline: [
+                { $match: { owner: userObjectId } },
+                { $addFields: { type: 'dog' } },
+              ],
+            },
           },
-        },
-      ])
-      .exec();
-    return animals as AnimalResponse[];
+          { $sort: { _id: 1 } },
+          { $skip: skip },
+          { $limit: limit },
+        ])
+        .exec(),
+
+      this.catModel
+        .aggregate([
+          { $match: { owner: userObjectId } },
+          {
+            $unionWith: {
+              coll: 'dogs',
+              pipeline: [{ $match: { owner: userObjectId } }],
+            },
+          },
+          { $count: 'total' },
+        ])
+        .exec(),
+    ]);
+
+    const total: number = totalResult[0]?.total || 0;
+    return {
+      animals: animals as AnimalResponse[],
+      totalPages: Math.floor(total / limit) + 1,
+    };
   }
 }
