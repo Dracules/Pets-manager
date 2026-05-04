@@ -10,6 +10,7 @@ import {
   Put,
   Delete,
   Req,
+  Query,
 } from '@nestjs/common';
 import { DogService } from '../services/dog.service';
 import { type Response } from 'express';
@@ -22,6 +23,8 @@ import type { RequestWithUser } from '../../shared/interfaces/request-with-user'
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
 import { DogResponse } from '../interfaces/dog.interface';
 import { AnimalCacheService } from '../../animal/services/animal.cache.service';
+import { PaginationResult } from 'src/animal/interfaces/pagination.result';
+import { PaginationDTO } from 'src/shared/dto/pagination.dto';
 
 @Controller('animals/dogs')
 export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
@@ -31,13 +34,22 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
 
   @Public()
   @Get('/')
-  async getDogs(): Promise<DogResponse[]> {
-    return await super.getAnimals();
+  async getDogs(
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<DogResponse[]>> {
+    return await super.getAnimals(paginationDto.limit, paginationDto.skip);
   }
 
   @Get('/user')
-  async getDogByUser(@Req() request: RequestWithUser): Promise<DogResponse[]> {
-    return await super.getAnimalByUser(request);
+  async getDogByUser(
+    @Req() request: RequestWithUser,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<DogResponse[]>> {
+    return await super.getAnimalByUser(
+      request,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
   }
 
   @Get('/:id')

@@ -4,6 +4,7 @@ import { BaseAnimalService } from '../services/base.animal.service';
 import { AnimalDTO } from '../dto/animal.dto';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { AnimalCacheService } from '../services/animal.cache.service';
+import { PaginationResult } from '../interfaces/pagination.result';
 
 export abstract class BaseAnimalController<
   DTO extends AnimalDTO,
@@ -14,13 +15,20 @@ export abstract class BaseAnimalController<
     private readonly сacheService: AnimalCacheService,
   ) {}
 
-  protected async getAnimals(): Promise<Resp[]> {
-    return this.animalService.findAll();
+  protected async getAnimals(
+    limit: number,
+    skip: number,
+  ): Promise<PaginationResult<Resp[]>> {
+    return this.animalService.findAll(limit, skip);
   }
 
-  protected async getAnimalByUser(request: RequestWithUser): Promise<Resp[]> {
+  protected async getAnimalByUser(
+    request: RequestWithUser,
+    limit: number,
+    skip: number,
+  ): Promise<PaginationResult<Resp[]>> {
     const userId = request.user.sub;
-    return this.animalService.findByUser(userId);
+    return this.animalService.findByUser(userId, limit, skip);
   }
 
   protected async getAnimalById(id: string): Promise<Resp> {
