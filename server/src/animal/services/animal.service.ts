@@ -43,7 +43,7 @@ export class AnimalService {
         .exec(),
     ]);
 
-    const total: number = totalResult[0]?.total || 0;
+    const total = (totalResult as [{ total: number }])[0].total || 0;
 
     return {
       animals: animals as AnimalResponse[],
@@ -91,7 +91,7 @@ export class AnimalService {
         .exec(),
     ]);
 
-    const total: number = totalResult[0]?.total || 0;
+    const total = (totalResult as [{ total: number }])[0].total || 0;
     return {
       animals: animals as AnimalResponse[],
       totalPages: Math.floor(total / limit) + 1,
