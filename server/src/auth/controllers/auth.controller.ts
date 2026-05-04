@@ -1,17 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Request,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { Public } from '../../shared/decorators/public.decorator';
 import { AuthService } from '../services/auth.service';
-import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
-import type { JwtPayload } from '../interfaces/jwt.payload.interface';
-import { JwtToken } from '../interfaces/jwt.token.interface';
 import { SignInDTO, SignUpDTO } from '../dto/sign.in.dto';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import type {
@@ -45,11 +34,6 @@ export class AuthController {
       signUpDTO.login,
       signUpDTO.password,
     );
-  }
-
-  @Get('profile')
-  getProfile(@Request() req: RequestWithUser): JwtPayload {
-    return req.user;
   }
 
   @Public()
