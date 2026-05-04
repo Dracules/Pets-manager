@@ -3,7 +3,7 @@ import { AnimalService } from '../services/animal.service';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
-import { PaginationDTO } from 'src/shared/dto/pagination.dto';
+import { PaginationDTO } from '../../shared/dto/pagination.dto';
 import { PaginationResult } from '../interfaces/pagination.result';
 
 @Controller('animals')
