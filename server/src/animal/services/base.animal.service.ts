@@ -53,15 +53,29 @@ export abstract class BaseAnimalService<
     return animal.toJSON() as unknown as Response;
   }
 
-  async findByUser(userId: string): Promise<Response[]> {
-    const findedAnimals = await this.model
-      .where('owner')
-      .equals(new Types.ObjectId(userId));
+  async findByUser(
+    userId: string,
+    limit: number,
+    skip: number,
+  ): Promise<PaginationResult<Response[]>> {
+    const [findedAnimals, total] = await Promise.all([
+      this.model
+        .where('owner')
+        .equals(new Types.ObjectId(userId))
+        .sort({ _id: 1 })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.model.countDocuments().exec(),
+    ]);
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
-    return findedAnimals.map((obj) => ({
-      ...obj.toJSON(),
-      type: animalType,
-    })) as unknown as Response[];
+    return {
+      animals: findedAnimals.map((obj) => ({
+        ...obj.toJSON(),
+        type: animalType,
+      })) as unknown as Response[],
+      totalPages: Math.floor(total / limit) + 1,
+    };
   }
 
   async updateById(
