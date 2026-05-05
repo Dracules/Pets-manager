@@ -40,7 +40,7 @@ export abstract class BaseAnimalService<
         ...obj.toJSON(),
         type: animalType,
       })) as unknown as Response[],
-      totalPages: Math.floor(total / limit) + 1,
+      totalCount: total,
     };
   }
 
@@ -74,7 +74,7 @@ export abstract class BaseAnimalService<
         ...obj.toJSON(),
         type: animalType,
       })) as unknown as Response[],
-      totalPages: Math.floor(total / limit) + 1,
+      totalCount: total,
     };
   }
 
