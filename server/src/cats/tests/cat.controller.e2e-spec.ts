@@ -350,9 +350,9 @@ describe('CatController', () => {
       const adminResp = adminResponse.body as PaginationResult<CatResponse[]>;
 
       expect(userResp.animals.length).toBe(1);
-      expect(userResp.totalPages).toBe(1);
+      expect(userResp.totalCount).toBe(1);
       expect(adminResp.animals.length).toBe(0);
-      expect(adminResp.totalPages).toBe(1);
+      expect(adminResp.totalCount).toBe(0);
     });
   });
 
