@@ -1,4 +1,4 @@
 export interface PaginationResult<T> {
   animals: T;
-  totalPages: number;
+  totalCount: number;
 }
