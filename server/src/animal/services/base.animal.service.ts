@@ -5,6 +5,7 @@ import { AnimalException } from '../exception_filters/exceptions/animal.exceptio
 import { Animal } from '../schemas/animal.schema';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { AnimalType } from '../types/animal.type';
+import { PaginationResult } from '../interfaces/pagination.result';
 
 @Injectable()
 export abstract class BaseAnimalService<
@@ -23,14 +24,24 @@ export abstract class BaseAnimalService<
     return savedAnimal.toJSON() as unknown as Response;
   }
 
-  async findAll(): Promise<Response[]> {
-    const findedAnimals = await this.model.find().exec();
+  async findAll(
+    limit: number,
+    skip: number,
+  ): Promise<PaginationResult<Response[]>> {
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
 
-    return findedAnimals.map((obj) => ({
-      ...obj.toJSON(),
-      type: animalType,
-    })) as unknown as Response[];
+    const [findedAnimals, total] = await Promise.all([
+      this.model.find().sort({ _id: 1 }).skip(skip).limit(limit).exec(),
+      this.model.countDocuments().exec(),
+    ]);
+
+    return {
+      animals: findedAnimals.map((obj) => ({
+        ...obj.toJSON(),
+        type: animalType,
+      })) as unknown as Response[],
+      totalPages: Math.floor(total / limit) + 1,
+    };
   }
 
   async findById(animalId: string): Promise<Response> {
@@ -42,15 +53,29 @@ export abstract class BaseAnimalService<
     return animal.toJSON() as unknown as Response;
   }
 
-  async findByUser(userId: string): Promise<Response[]> {
-    const findedAnimals = await this.model
-      .where('owner')
-      .equals(new Types.ObjectId(userId));
+  async findByUser(
+    userId: string,
+    limit: number,
+    skip: number,
+  ): Promise<PaginationResult<Response[]>> {
+    const [findedAnimals, total] = await Promise.all([
+      this.model
+        .where('owner')
+        .equals(new Types.ObjectId(userId))
+        .sort({ _id: 1 })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.model.countDocuments().exec(),
+    ]);
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
-    return findedAnimals.map((obj) => ({
-      ...obj.toJSON(),
-      type: animalType,
-    })) as unknown as Response[];
+    return {
+      animals: findedAnimals.map((obj) => ({
+        ...obj.toJSON(),
+        type: animalType,
+      })) as unknown as Response[],
+      totalPages: Math.floor(total / limit) + 1,
+    };
   }
 
   async updateById(

@@ -10,6 +10,7 @@ import {
   Put,
   Delete,
   Req,
+  Query,
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
 import { type Response } from 'express';
@@ -22,6 +23,8 @@ import type { RequestWithUser } from '../../shared/interfaces/request-with-user'
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
 import { CatResponse } from '../interfaces/cat.interface';
 import { AnimalCacheService } from '../../animal/services/animal.cache.service';
+import { PaginationResult } from '../../animal/interfaces/pagination.result';
+import { PaginationDTO } from '../../shared/dto/pagination.dto';
 
 @Controller('animals/cats')
 export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
@@ -31,13 +34,22 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
 
   @Public()
   @Get('/')
-  async getCats(): Promise<CatResponse[]> {
-    return await super.getAnimals();
+  async getCats(
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<CatResponse[]>> {
+    return await super.getAnimals(paginationDto.limit, paginationDto.skip);
   }
 
   @Get('/user')
-  async getCatByUser(@Req() request: RequestWithUser): Promise<CatResponse[]> {
-    return await super.getAnimalByUser(request);
+  async getCatByUser(
+    @Req() request: RequestWithUser,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<CatResponse[]>> {
+    return await super.getAnimalByUser(
+      request,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
   }
 
   @Get('/:id')

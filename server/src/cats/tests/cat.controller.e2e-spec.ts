@@ -11,6 +11,7 @@ import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
 import { CatResponse } from '../interfaces/cat.interface';
 import { App } from 'supertest/types';
 import { initMongoDB } from './mocks/init-mongo-for-tests';
+import { PaginationResult } from 'src/animal/interfaces/pagination.result';
 
 describe('CatController', () => {
   let app: INestApplication;
@@ -345,8 +346,13 @@ describe('CatController', () => {
         .send()
         .expect(200);
 
-      expect((userResponse.body as CatResponse[]).length).toBe(1);
-      expect((adminResponse.body as CatResponse[]).length).toBe(0);
+      const userResp = userResponse.body as PaginationResult<CatResponse[]>;
+      const adminResp = adminResponse.body as PaginationResult<CatResponse[]>;
+
+      expect(userResp.animals.length).toBe(1);
+      expect(userResp.totalPages).toBe(1);
+      expect(adminResp.animals.length).toBe(0);
+      expect(adminResp.totalPages).toBe(1);
     });
   });
 
