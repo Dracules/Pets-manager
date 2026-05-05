@@ -66,7 +66,11 @@ export abstract class BaseAnimalService<
         .skip(skip)
         .limit(limit)
         .exec(),
-      this.model.countDocuments().exec(),
+      this.model
+        .countDocuments()
+        .where('owner')
+        .equals(new Types.ObjectId(userId))
+        .exec(),
     ]);
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
     return {
