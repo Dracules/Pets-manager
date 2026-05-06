@@ -7,6 +7,7 @@ function useFetchData<T>(
   pageLimit: number,
 ) {
   const [data, setData] = useState<T | null>(null);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -19,6 +20,7 @@ function useFetchData<T>(
     try {
       const result = await fetchFn(`?page=${page + 1}&limit=${pageLimit}`);
       setData(result.animals);
+      setTotalCount(result.totalCount);
       setError('');
     } catch (err) {
       if (err instanceof Error) setError(err.stack!);
@@ -29,7 +31,7 @@ function useFetchData<T>(
     }
   };
 
-  return { data, loading, error, setData };
+  return { data, totalCount, loading, error, setData };
 }
 
 export default useFetchData;
