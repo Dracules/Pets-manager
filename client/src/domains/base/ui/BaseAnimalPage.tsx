@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
-  fetchFn: () => Promise<T[]>,
+  fetchFn: (options: string) => Promise<PaginationResult<T[]>>,
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
   const [page, setPage] = useState(0);
