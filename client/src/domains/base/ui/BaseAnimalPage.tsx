@@ -5,13 +5,21 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
+import { useState } from 'react';
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
   fetchFn: () => Promise<T[]>,
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
-  const { data, loading, error, setData } = useFetchData(fetchFn);
+  const [page, setPage] = useState(0);
+  const [pageLimit, setPageLimit] = useState(10);
+
+  const { data, totalCount, loading, error, setData } = useFetchData(
+    fetchFn,
+    page,
+    pageLimit,
+  );
   const navigate = useNavigate();
 
   if (loading) return <LoadingComponent />;
