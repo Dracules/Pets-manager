@@ -11,6 +11,7 @@ export default function BaseTable<T extends AnimalResponse>({
   data,
   columns = [],
   options,
+  footerPaginationComponent,
 }: BaseTableProps<T>) {
   function getFinalColumns() {
     if (options) {
@@ -79,6 +80,7 @@ export default function BaseTable<T extends AnimalResponse>({
             </tr>
           ))}
         </tbody>
+        <tfoot>{footerPaginationComponent}</tfoot>
       </table>
     </div>
   );

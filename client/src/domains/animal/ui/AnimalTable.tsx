@@ -10,8 +10,19 @@ const animalColumns: ColumnDef<AnimalResponse>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function AnimalTable({ data, options }: BaseTableProps<AnimalResponse>) {
-  return <BaseTable data={data} columns={animalColumns} options={options} />;
+function AnimalTable({
+  data,
+  options,
+  footerPaginationComponent,
+}: BaseTableProps<AnimalResponse>) {
+  return (
+    <BaseTable
+      data={data}
+      columns={animalColumns}
+      options={options}
+      footerPaginationComponent={footerPaginationComponent}
+    />
+  );
 }
 
 export default AnimalTable;

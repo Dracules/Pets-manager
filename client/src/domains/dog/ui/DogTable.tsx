@@ -11,8 +11,19 @@ const dogColumns: ColumnDef<DogResponse>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function DogTable({ data, options }: BaseTableProps<DogResponse>) {
-  return <BaseTable data={data} columns={dogColumns} options={options} />;
+function DogTable({
+  data,
+  options,
+  footerPaginationComponent,
+}: BaseTableProps<DogResponse>) {
+  return (
+    <BaseTable
+      data={data}
+      columns={dogColumns}
+      options={options}
+      footerPaginationComponent={footerPaginationComponent}
+    />
+  );
 }
 
 export default DogTable;
