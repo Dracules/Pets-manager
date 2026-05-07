@@ -1,14 +1,23 @@
 import apiClient from '../../../shared/api/apiClient';
+import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import { Dog } from '../model/dog.interface';
 import { DogResponse } from '../model/dog.response.interface';
 
 export class DogsApi {
-  static async getDogs(): Promise<DogResponse[]> {
-    return apiClient.get<DogResponse[]>('/animals/dogs');
+  static async getDogs(
+    options: string,
+  ): Promise<PaginationResult<DogResponse[]>> {
+    return apiClient.get<PaginationResult<DogResponse[]>>(
+      '/animals/dogs' + options,
+    );
   }
 
-  static async getUserDogs(): Promise<DogResponse[]> {
-    return apiClient.get<DogResponse[]>('/animals/dogs/user');
+  static async getUserDogs(
+    options: string,
+  ): Promise<PaginationResult<DogResponse[]>> {
+    return apiClient.get<PaginationResult<DogResponse[]>>(
+      '/animals/dogs/user' + options,
+    );
   }
 
   static async getDogById(id: string): Promise<Dog> {

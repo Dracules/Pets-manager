@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsInt,
-  Min,
-  MinLength,
-  IsDefined,
-  MaxLength,
-} from 'class-validator';
+import { IsString, MinLength, IsDefined, MaxLength } from 'class-validator';
 
 export class AnimalDTO {
   @IsDefined()

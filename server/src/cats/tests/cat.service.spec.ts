@@ -10,16 +10,24 @@ describe('CatService', () => {
   let service: CatService;
 
   type MockFnWithExec = jest.Mock<{ exec: jest.Mock }>;
-  type MockFnWithPopulate = jest.Mock<{ populate: MockFnWithExec }>;
   type MockFnWhereEquals = jest.Mock<{ equals: jest.Mock }>;
+  type MockQueryBuilder<T = any> = {
+    where: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
+    equals: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
+    sort: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
+    skip: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
+    limit: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
+    exec: jest.MockedFunction<jest.Mock>;
+  };
 
   interface MockModel extends jest.Mock {
-    find: MockFnWithExec;
-    findById: MockFnWithExec | MockFnWithPopulate;
+    find: jest.MockedFunction<() => MockQueryBuilder>;
+    findById: MockFnWithExec;
     findByIdAndUpdate: MockFnWithExec;
     findByIdAndDelete: MockFnWithExec;
-    where: MockFnWhereEquals;
+    where: MockFnWhereEquals | jest.MockedFunction<() => MockQueryBuilder>;
     toJSON: jest.Mock;
+    countDocuments: MockFnWithExec;
     modelName: string;
   }
 
@@ -71,7 +79,7 @@ describe('CatService', () => {
       expect(saveMock).toHaveBeenCalledTimes(1);
     });
   });
-
+  /*
   describe('findAll', () => {
     it('return all cats', async () => {
       const mockCats = mockCatsList();
@@ -91,6 +99,49 @@ describe('CatService', () => {
       const result = await service.findAll();
       expect(mockCatModel.find().exec).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockCatsWithType);
+    });
+  });*/
+
+  describe('findAll', () => {
+    it('returns first page of cats with pagination', async () => {
+      const mockCats = mockCatsList();
+      const catType = 'cat';
+      const limit = 2;
+      const skip = 1;
+
+      const mockCatsPage = mockCats.slice(skip, limit + skip);
+      const mockCatsWithType = mockCatsPage.map((obj) => ({
+        ...obj,
+        type: catType,
+      }));
+
+      const mockQuery = {
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(
+          mockCatsPage.map((cat) => ({
+            toJSON: () => cat,
+          })),
+        ),
+      } as any;
+
+      mockCatModel.find = jest.fn().mockReturnValue(mockQuery);
+      mockCatModel.countDocuments = jest.fn().mockReturnValue({
+        exec: jest.fn().mockResolvedValue(mockCats.length),
+      });
+
+      mockCatModel.modelName = 'cat';
+
+      const result = await service.findAll(limit, skip);
+
+      expect(result).toEqual({
+        animals: mockCatsWithType,
+        totalCount: mockCats.length,
+      });
+
+      expect(mockCatModel.find).toHaveBeenCalled();
+      expect(mockCatModel.countDocuments).toHaveBeenCalled();
     });
   });
 
@@ -143,7 +194,13 @@ describe('CatService', () => {
         const userId = '694ac1f93b5320db21a572a5';
         const cats: CatResponse[] = mockCatsList(5);
         const catType = 'cat';
-        const mockCatsWithType = cats.map((obj) => {
+
+        const limit = 2;
+        const skip = 0;
+
+        const mockCatsPage = cats.slice(skip, limit);
+
+        const mockCatsWithType = mockCatsPage.map((obj) => {
           obj.owner = userId;
           return {
             ...obj,
@@ -151,18 +208,36 @@ describe('CatService', () => {
           };
         });
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockResolvedValue(
-            cats.map((cat) => ({
+        const mockQuery = {
+          equals: jest.fn().mockReturnThis(),
+          sort: jest.fn().mockReturnThis(),
+          skip: jest.fn().mockReturnThis(),
+          limit: jest.fn().mockReturnThis(),
+          exec: jest.fn().mockResolvedValue(
+            mockCatsPage.map((cat) => ({
               toJSON: () => cat,
             })),
           ),
-        }) as MockFnWhereEquals;
+        } as any;
 
-        const result = await service.findByUser(userId);
+        const mockQuery2 = {
+          where: jest.fn().mockReturnThis(),
+          equals: jest.fn().mockReturnThis(),
+          exec: jest.fn().mockResolvedValue(cats.length),
+        } as any;
+
+        mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
+        mockCatModel.countDocuments = jest.fn().mockReturnValue(mockQuery2);
+
+        const result = await service.findByUser(userId, limit, skip);
+
+        expect(result).toEqual({
+          animals: mockCatsWithType,
+          totalCount: cats.length,
+        });
 
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(mockCatsWithType);
+        expect(mockCatModel.countDocuments).toHaveBeenCalled();
       });
     });
 
@@ -170,15 +245,33 @@ describe('CatService', () => {
       it('must return empty array', async () => {
         const nonExistentId = '999999999999999999999999';
         const cats: CatResponse[] = [];
+        const limit = 2;
+        const skip = 0;
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockResolvedValue(cats),
-        }) as MockFnWhereEquals;
+        const mockQuery = {
+          equals: jest.fn().mockReturnThis(),
+          sort: jest.fn().mockReturnThis(),
+          skip: jest.fn().mockReturnThis(),
+          limit: jest.fn().mockReturnThis(),
+          exec: jest.fn().mockResolvedValue(cats),
+        } as any;
 
-        const result = await service.findByUser(nonExistentId);
+        const mockQuery2 = {
+          where: jest.fn().mockReturnThis(),
+          equals: jest.fn().mockReturnThis(),
+          exec: jest.fn().mockResolvedValue(cats.length),
+        } as any;
+
+        mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
+        mockCatModel.countDocuments = jest.fn().mockReturnValue(mockQuery2);
+
+        const result = await service.findByUser(nonExistentId, limit, skip);
 
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(cats);
+        expect(result).toEqual({
+          animals: cats,
+          totalCount: 0,
+        });
       });
     });
   });

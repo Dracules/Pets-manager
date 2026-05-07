@@ -1,16 +1,25 @@
 import apiClient from '../../../shared/api/apiClient';
+import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import { CatsApi } from '../../cat/api/catsApi';
 import { DogsApi } from '../../dog/api/dogsApi';
 import { AnimalResponse } from '../model/animal.response.interface';
 import { AnimalType } from '../model/animal.type';
 
 export class AnimalsApi {
-  static async getAnimals(): Promise<AnimalResponse[]> {
-    return apiClient.get<AnimalResponse[]>('/animals');
+  static async getAnimals(
+    options: string,
+  ): Promise<PaginationResult<AnimalResponse[]>> {
+    return apiClient.get<PaginationResult<AnimalResponse[]>>(
+      '/animals' + options,
+    );
   }
 
-  static async getUserAnimals(): Promise<AnimalResponse[]> {
-    return apiClient.get<AnimalResponse[]>('/animals/user');
+  static async getUserAnimals(
+    options: string,
+  ): Promise<PaginationResult<AnimalResponse[]>> {
+    return apiClient.get<PaginationResult<AnimalResponse[]>>(
+      '/animals/user' + options,
+    );
   }
 
   static async deleteAnimals(id: string, type: AnimalType): Promise<string> {
