@@ -137,7 +137,7 @@ describe('CatService', () => {
 
       expect(result).toEqual({
         animals: mockCatsWithType,
-        totalPages: Math.ceil(mockCats.length / limit),
+        totalCount: mockCats.length,
       });
 
       expect(mockCatModel.find).toHaveBeenCalled();
@@ -220,16 +220,20 @@ describe('CatService', () => {
           ),
         } as any;
 
-        mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
-        mockCatModel.countDocuments = jest.fn().mockReturnValue({
+        const mockQuery2 = {
+          where: jest.fn().mockReturnThis(),
+          equals: jest.fn().mockReturnThis(),
           exec: jest.fn().mockResolvedValue(cats.length),
-        });
+        } as any;
+
+        mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
+        mockCatModel.countDocuments = jest.fn().mockReturnValue(mockQuery2);
 
         const result = await service.findByUser(userId, limit, skip);
 
         expect(result).toEqual({
           animals: mockCatsWithType,
-          totalPages: Math.ceil(cats.length / limit),
+          totalCount: cats.length,
         });
 
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
@@ -252,17 +256,21 @@ describe('CatService', () => {
           exec: jest.fn().mockResolvedValue(cats),
         } as any;
 
-        mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
-        mockCatModel.countDocuments = jest.fn().mockReturnValue({
+        const mockQuery2 = {
+          where: jest.fn().mockReturnThis(),
+          equals: jest.fn().mockReturnThis(),
           exec: jest.fn().mockResolvedValue(cats.length),
-        });
+        } as any;
+
+        mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
+        mockCatModel.countDocuments = jest.fn().mockReturnValue(mockQuery2);
 
         const result = await service.findByUser(nonExistentId, limit, skip);
 
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
         expect(result).toEqual({
           animals: cats,
-          totalPages: 1,
+          totalCount: 0,
         });
       });
     });

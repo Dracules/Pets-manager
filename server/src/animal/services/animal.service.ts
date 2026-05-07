@@ -47,7 +47,7 @@ export class AnimalService {
 
     return {
       animals: animals as AnimalResponse[],
-      totalPages: Math.floor(total / limit) + 1,
+      totalCount: total,
     };
   }
 
@@ -94,7 +94,7 @@ export class AnimalService {
     const total = (totalResult as [{ total: number }])[0].total || 0;
     return {
       animals: animals as AnimalResponse[],
-      totalPages: Math.floor(total / limit) + 1,
+      totalCount: total,
     };
   }
 }

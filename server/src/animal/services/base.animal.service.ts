@@ -40,7 +40,7 @@ export abstract class BaseAnimalService<
         ...obj.toJSON(),
         type: animalType,
       })) as unknown as Response[],
-      totalPages: Math.floor(total / limit) + 1,
+      totalCount: total,
     };
   }
 
@@ -66,7 +66,11 @@ export abstract class BaseAnimalService<
         .skip(skip)
         .limit(limit)
         .exec(),
-      this.model.countDocuments().exec(),
+      this.model
+        .countDocuments()
+        .where('owner')
+        .equals(new Types.ObjectId(userId))
+        .exec(),
     ]);
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
     return {
@@ -74,7 +78,7 @@ export abstract class BaseAnimalService<
         ...obj.toJSON(),
         type: animalType,
       })) as unknown as Response[],
-      totalPages: Math.floor(total / limit) + 1,
+      totalCount: total,
     };
   }
 
