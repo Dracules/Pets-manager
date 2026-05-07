@@ -11,19 +11,8 @@ const catColumns: ColumnDef<CatResponse>[] = [
   { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
-function CatTable({
-  data,
-  options,
-  footerPaginationComponent,
-}: BaseTableProps<CatResponse>) {
-  return (
-    <BaseTable
-      data={data}
-      columns={catColumns}
-      options={options}
-      footerPaginationComponent={footerPaginationComponent}
-    />
-  );
+function CatTable({ data, options }: BaseTableProps<CatResponse>) {
+  return <BaseTable data={data} columns={catColumns} options={options} />;
 }
 
 export default CatTable;
