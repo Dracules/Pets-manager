@@ -44,32 +44,40 @@ export default function LoginPage() {
   ) : (
     <div>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div>
-          <label style={{ margin: 20 }}>Login</label>
-          <input
-            {...methods.register('login', { required: true, minLength: 2 })}
-            placeholder="Login"
-          />
+        <fieldset
+          disabled={methods.formState.isSubmitting}
+          style={{ border: 'none', padding: 0, margin: 0 }}
+        >
           <div>
-            {errors.login && (
-              <span style={{ color: 'red' }}>{errors.login.message}</span>
-            )}
+            <label style={{ margin: 20 }}>Login</label>
+            <input
+              {...methods.register('login', { required: true, minLength: 2 })}
+              placeholder="Login"
+            />
+            <div>
+              {errors.login && (
+                <span style={{ color: 'red' }}>{errors.login.message}</span>
+              )}
+            </div>
           </div>
-        </div>
-        <div>
-          <label style={{ margin: 20 }}>Password</label>
-          <input
-            {...methods.register('password', { required: true, minLength: 2 })}
-            placeholder="Password"
-          />
           <div>
-            {errors.password && (
-              <span style={{ color: 'red' }}>{errors.password.message}</span>
-            )}
+            <label style={{ margin: 20 }}>Password</label>
+            <input
+              {...methods.register('password', {
+                required: true,
+                minLength: 2,
+              })}
+              placeholder="Password"
+            />
+            <div>
+              {errors.password && (
+                <span style={{ color: 'red' }}>{errors.password.message}</span>
+              )}
+            </div>
           </div>
-        </div>
-        <input type="submit" />
-        <p>{message}</p>
+          <input type="submit" />
+          <p>{message}</p>
+        </fieldset>
       </form>
       <div>
         <Link to="/register">Don’t have an account? Sign up</Link>
