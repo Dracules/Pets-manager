@@ -4,18 +4,15 @@ import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import registrationSchema from '../model/validation/registrationSchema';
-
-interface IFormInput {
-  login: string;
-  password: string;
-}
+import { RegistrationFormInput } from '../model/form-input.interface';
 
 export default function RegistrationPage() {
-  const methods = useForm<IFormInput>({
+  const methods = useForm<RegistrationFormInput>({
     resolver: yupResolver(registrationSchema),
     defaultValues: {
       login: '',
       password: '',
+      confirmPassword: '',
     },
   });
   const [message, setMessage] = useState('');
@@ -23,7 +20,7 @@ export default function RegistrationPage() {
 
   const errors = methods.formState.errors;
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<RegistrationFormInput> = async (data) => {
     setMessage('');
     try {
       const result = await Auth.signUp(data.login, data.password);
