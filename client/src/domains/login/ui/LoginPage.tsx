@@ -62,7 +62,7 @@ export default function LoginPage() {
               )}
             </div>
           </div>
-          <input type="submit" />
+          <input type="submit" value="Login" />
           <p>{message}</p>
         </fieldset>
       </form>

@@ -70,7 +70,7 @@ export default function RegistrationPage() {
               )}
             </div>
           </div>
-          <input type="submit" />
+          <input type="submit" value="Register" />
           <p>{message}</p>
         </fieldset>
       </form>
