@@ -49,7 +49,11 @@ export default function RegistrationPage() {
           </div>
           <div>
             <label style={{ margin: 20 }}>Password</label>
-            <input {...methods.register('password')} placeholder="Password" />
+            <input
+              {...methods.register('password')}
+              type="password"
+              placeholder="Password"
+            />
             <div>
               {errors.password && (
                 <span style={{ color: 'red' }}>{errors.password.message}</span>
@@ -60,6 +64,7 @@ export default function RegistrationPage() {
             <label style={{ margin: 20 }}>Confirm password</label>
             <input
               {...methods.register('confirmPassword')}
+              type="password"
               placeholder="Confirm password"
             />
             <div>
