@@ -65,6 +65,20 @@ export default function RegistrationPage() {
               )}
             </div>
           </div>
+          <div>
+            <label style={{ margin: 20 }}>Confirm password</label>
+            <input
+              {...methods.register('confirmPassword')}
+              placeholder="Confirm password"
+            />
+            <div>
+              {errors.confirmPassword && (
+                <span style={{ color: 'red' }}>
+                  {errors.confirmPassword.message}
+                </span>
+              )}
+            </div>
+          </div>
           <input type="submit" />
           <p>{message}</p>
         </fieldset>
