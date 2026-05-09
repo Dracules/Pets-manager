@@ -31,7 +31,7 @@ export default function LoginPage() {
       if (isApiError(e) && e.response?.status === 401) {
         setMessage('Wrong login or password!');
       } else {
-        setMessage('Error: ' + e);
+        setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
       }
     }
   };

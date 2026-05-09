@@ -27,7 +27,7 @@ export default function RegistrationPage() {
       setMessage(result);
       setIsForm(false);
     } catch (e) {
-      setMessage('Error: ' + e);
+      setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
     }
   };
 
