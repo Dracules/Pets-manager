@@ -46,10 +46,7 @@ export default function LoginPage() {
         >
           <div>
             <label style={{ margin: 20 }}>Login</label>
-            <input
-              {...methods.register('login', { required: true, minLength: 2 })}
-              placeholder="Login"
-            />
+            <input {...methods.register('login')} placeholder="Login" />
             <div>
               {errors.login && (
                 <span style={{ color: 'red' }}>{errors.login.message}</span>
@@ -58,13 +55,7 @@ export default function LoginPage() {
           </div>
           <div>
             <label style={{ margin: 20 }}>Password</label>
-            <input
-              {...methods.register('password', {
-                required: true,
-                minLength: 2,
-              })}
-              placeholder="Password"
-            />
+            <input {...methods.register('password')} placeholder="Password" />
             <div>
               {errors.password && (
                 <span style={{ color: 'red' }}>{errors.password.message}</span>
