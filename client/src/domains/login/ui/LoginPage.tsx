@@ -6,14 +6,10 @@ import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from '../model/validation/loginSchema';
-
-interface IFormInput {
-  login: string;
-  password: string;
-}
+import { LoginFormInput } from '../model/form-input.interface';
 
 export default function LoginPage() {
-  const methods = useForm<IFormInput>({
+  const methods = useForm<LoginFormInput>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
       login: '',
@@ -25,7 +21,7 @@ export default function LoginPage() {
 
   const errors = methods.formState.errors;
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     try {
       const result = await Auth.signIn(data.login, data.password);
       if (result.access_token && result.refresh_token) {

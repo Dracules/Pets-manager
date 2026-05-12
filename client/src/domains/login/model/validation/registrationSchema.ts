@@ -18,6 +18,10 @@ const registrationSchema = yup.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/,
       'The password must contain a lowercase letter, an uppercase letter and a number',
     ),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password')], 'Passwords must match'),
 });
 
 export default registrationSchema;
