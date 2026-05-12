@@ -10,17 +10,15 @@ interface AnimalEditorPageProps {
 }
 
 function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
-  const [animalType, setAnimalType] = useState<AnimalType>();
+  const [animalType, setAnimalType] = useState<AnimalType>('cat');
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    if (mode === 'edit') {
-      const type = searchParams.get('type');
-      if (type === 'cat' || type === 'dog') {
-        setAnimalType(type);
-      }
-    } else setAnimalType('cat');
-  }, [mode, searchParams]);
+  const currentType: AnimalType =
+    mode === 'edit'
+      ? searchParams.get('type') === 'dog'
+        ? 'dog'
+        : 'cat'
+      : animalType;
 
   return (
     <div>
@@ -30,7 +28,7 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
             <input
               type="radio"
               name="animalType"
-              checked={animalType === 'cat'}
+              checked={currentType === 'cat'}
               onChange={() => setAnimalType('cat')}
             />
             Cat
@@ -39,7 +37,7 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
             <input
               type="radio"
               name="animalType"
-              checked={animalType === 'dog'}
+              checked={currentType === 'dog'}
               onChange={() => setAnimalType('dog')}
             />
             Dog
@@ -47,8 +45,8 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
         </div>
       )}
       <div style={{ marginBottom: 20 }}>
-        {animalType === 'cat' && <CatEditor />}
-        {animalType === 'dog' && <DogEditor />}
+        {currentType === 'cat' && <CatEditor />}
+        {currentType === 'dog' && <DogEditor />}
       </div>
     </div>
   );

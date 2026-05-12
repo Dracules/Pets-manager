@@ -5,7 +5,7 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 import { Animal } from '../../animal/model/animal.interface';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 interface EditorProps<T extends Animal> {
   onSubmit: SubmitHandler<T>;
@@ -24,6 +24,7 @@ export function AnimalEditor<T extends Animal>({
   methods,
 }: EditorProps<T>) {
   const navigate = useNavigate();
+  const { id } = useParams();
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -51,7 +52,7 @@ export function AnimalEditor<T extends Animal>({
           </div>
           <div>{renderError(methods.formState.errors.age?.message)}</div>
           {fields}
-          <input type="submit" />
+          <input type="submit" value={id ? 'Update' : 'Create'} />
           <button type="button" onClick={() => navigate(-1)}>
             Cancel
           </button>
