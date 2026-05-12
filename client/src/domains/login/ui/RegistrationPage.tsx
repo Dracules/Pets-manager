@@ -78,6 +78,7 @@ export default function RegistrationPage() {
           <input type="submit" value="Register" />
           <p>{message}</p>
         </fieldset>
+        <Link to="/login">Already have an account? Sign in</Link>
       </form>
     </>
   ) : (
