@@ -27,7 +27,7 @@ export default function RegistrationPage() {
       setMessage(result);
       setIsForm(false);
     } catch (e) {
-      setMessage('Error: ' + e);
+      setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
     }
   };
 
@@ -40,10 +40,7 @@ export default function RegistrationPage() {
         >
           <div>
             <label style={{ margin: 20 }}>Login</label>
-            <input
-              {...methods.register('login', { required: true, minLength: 2 })}
-              placeholder="Login"
-            />
+            <input {...methods.register('login')} placeholder="Login" />
             <div>
               {errors.login && (
                 <span style={{ color: 'red' }}>{errors.login.message}</span>
@@ -53,10 +50,8 @@ export default function RegistrationPage() {
           <div>
             <label style={{ margin: 20 }}>Password</label>
             <input
-              {...methods.register('password', {
-                required: true,
-                minLength: 2,
-              })}
+              {...methods.register('password')}
+              type="password"
               placeholder="Password"
             />
             <div>
@@ -69,6 +64,7 @@ export default function RegistrationPage() {
             <label style={{ margin: 20 }}>Confirm password</label>
             <input
               {...methods.register('confirmPassword')}
+              type="password"
               placeholder="Confirm password"
             />
             <div>
@@ -79,7 +75,7 @@ export default function RegistrationPage() {
               )}
             </div>
           </div>
-          <input type="submit" />
+          <input type="submit" value="Register" />
           <p>{message}</p>
         </fieldset>
         <Link to="/login">Already have an account? Sign in</Link>

@@ -31,7 +31,7 @@ export default function LoginPage() {
       if (isApiError(e) && e.response?.status === 401) {
         setMessage('Wrong login or password!');
       } else {
-        setMessage('Error: ' + e);
+        setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
       }
     }
   };
@@ -46,10 +46,7 @@ export default function LoginPage() {
         >
           <div>
             <label style={{ margin: 20 }}>Login</label>
-            <input
-              {...methods.register('login', { required: true, minLength: 2 })}
-              placeholder="Login"
-            />
+            <input {...methods.register('login')} placeholder="Login" />
             <div>
               {errors.login && (
                 <span style={{ color: 'red' }}>{errors.login.message}</span>
@@ -59,10 +56,8 @@ export default function LoginPage() {
           <div>
             <label style={{ margin: 20 }}>Password</label>
             <input
-              {...methods.register('password', {
-                required: true,
-                minLength: 2,
-              })}
+              {...methods.register('password')}
+              type="password"
               placeholder="Password"
             />
             <div>
@@ -71,7 +66,7 @@ export default function LoginPage() {
               )}
             </div>
           </div>
-          <input type="submit" />
+          <input type="submit" value="Login" />
           <p>{message}</p>
         </fieldset>
       </form>
