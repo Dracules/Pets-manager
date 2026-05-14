@@ -4,18 +4,15 @@ import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import registrationSchema from '../model/validation/registrationSchema';
-
-interface IFormInput {
-  login: string;
-  password: string;
-}
+import { RegistrationFormInput } from '../model/form-input.interface';
 
 export default function RegistrationPage() {
-  const methods = useForm<IFormInput>({
+  const methods = useForm<RegistrationFormInput>({
     resolver: yupResolver(registrationSchema),
     defaultValues: {
       login: '',
       password: '',
+      confirmPassword: '',
     },
   });
   const [message, setMessage] = useState('');
@@ -23,14 +20,14 @@ export default function RegistrationPage() {
 
   const errors = methods.formState.errors;
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<RegistrationFormInput> = async (data) => {
     setMessage('');
     try {
       const result = await Auth.signUp(data.login, data.password);
       setMessage(result);
       setIsForm(false);
     } catch (e) {
-      setMessage('Error: ' + e);
+      setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
     }
   };
 
@@ -43,10 +40,7 @@ export default function RegistrationPage() {
         >
           <div>
             <label style={{ margin: 20 }}>Login</label>
-            <input
-              {...methods.register('login', { required: true, minLength: 2 })}
-              placeholder="Login"
-            />
+            <input {...methods.register('login')} placeholder="Login" />
             <div>
               {errors.login && (
                 <span style={{ color: 'red' }}>{errors.login.message}</span>
@@ -56,10 +50,8 @@ export default function RegistrationPage() {
           <div>
             <label style={{ margin: 20 }}>Password</label>
             <input
-              {...methods.register('password', {
-                required: true,
-                minLength: 2,
-              })}
+              {...methods.register('password')}
+              type="password"
               placeholder="Password"
             />
             <div>
@@ -68,9 +60,25 @@ export default function RegistrationPage() {
               )}
             </div>
           </div>
-          <input type="submit" />
+          <div>
+            <label style={{ margin: 20 }}>Confirm password</label>
+            <input
+              {...methods.register('confirmPassword')}
+              type="password"
+              placeholder="Confirm password"
+            />
+            <div>
+              {errors.confirmPassword && (
+                <span style={{ color: 'red' }}>
+                  {errors.confirmPassword.message}
+                </span>
+              )}
+            </div>
+          </div>
+          <input type="submit" value="Register" />
           <p>{message}</p>
         </fieldset>
+        <Link to="/login">Already have an account? Sign in</Link>
       </form>
     </>
   ) : (

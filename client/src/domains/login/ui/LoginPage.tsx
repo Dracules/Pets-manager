@@ -6,14 +6,10 @@ import { Auth } from '../../../shared/api/authApi';
 import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from '../model/validation/loginSchema';
-
-interface IFormInput {
-  login: string;
-  password: string;
-}
+import { LoginFormInput } from '../model/form-input.interface';
 
 export default function LoginPage() {
-  const methods = useForm<IFormInput>({
+  const methods = useForm<LoginFormInput>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
       login: '',
@@ -25,7 +21,7 @@ export default function LoginPage() {
 
   const errors = methods.formState.errors;
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     try {
       const result = await Auth.signIn(data.login, data.password);
       if (result.access_token && result.refresh_token) {
@@ -35,7 +31,7 @@ export default function LoginPage() {
       if (isApiError(e) && e.response?.status === 401) {
         setMessage('Wrong login or password!');
       } else {
-        setMessage('Error: ' + e);
+        setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
       }
     }
   };
@@ -50,10 +46,7 @@ export default function LoginPage() {
         >
           <div>
             <label style={{ margin: 20 }}>Login</label>
-            <input
-              {...methods.register('login', { required: true, minLength: 2 })}
-              placeholder="Login"
-            />
+            <input {...methods.register('login')} placeholder="Login" />
             <div>
               {errors.login && (
                 <span style={{ color: 'red' }}>{errors.login.message}</span>
@@ -63,10 +56,8 @@ export default function LoginPage() {
           <div>
             <label style={{ margin: 20 }}>Password</label>
             <input
-              {...methods.register('password', {
-                required: true,
-                minLength: 2,
-              })}
+              {...methods.register('password')}
+              type="password"
               placeholder="Password"
             />
             <div>
@@ -75,7 +66,7 @@ export default function LoginPage() {
               )}
             </div>
           </div>
-          <input type="submit" />
+          <input type="submit" value="Login" />
           <p>{message}</p>
         </fieldset>
       </form>
