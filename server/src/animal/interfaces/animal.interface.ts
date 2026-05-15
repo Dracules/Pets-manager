@@ -1,6 +1,6 @@
 export interface AnimalResponse {
   _id: string;
   name: string;
-  age: number;
+  birthDate: Date;
   owner: string;
 }
