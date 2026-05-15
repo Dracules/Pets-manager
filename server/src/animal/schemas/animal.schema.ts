@@ -7,7 +7,7 @@ export class Animal {
   name: string;
 
   @Prop({ required: true })
-  age: number;
+  birthDate: Date;
 
   @Prop({
     type: Types.ObjectId,
