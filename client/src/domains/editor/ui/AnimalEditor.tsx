@@ -1,4 +1,5 @@
 import {
+  Controller,
   FormProvider,
   Path,
   SubmitHandler,
@@ -6,6 +7,7 @@ import {
 } from 'react-hook-form';
 import { Animal } from '../../animal/model/animal.interface';
 import { useNavigate, useParams } from 'react-router';
+import { MonthYearPicker } from './MonthYearPicker';
 
 interface EditorProps<T extends Animal> {
   onSubmit: SubmitHandler<T>;
@@ -41,16 +43,22 @@ export function AnimalEditor<T extends Animal>({
           </div>
           <div>{renderError(methods.formState.errors.name?.message)}</div>
           <div>
-            <label style={{ margin: 20 }}>Age</label>
-            <input
-              type="number"
-              {...methods.register('age' as Path<T>, {
-                valueAsNumber: true,
-              })}
-              placeholder="Age"
+            <label style={{ margin: 20 }}>Birth month</label>
+            <Controller
+              name={'birthDate' as Path<T>}
+              control={methods.control}
+              render={({ field }) => (
+                <MonthYearPicker
+                  selected={field.value ? new Date(field.value) : null}
+                  onChange={(date) => {
+                    console.log(date);
+                    field.onChange(date);
+                  }}
+                />
+              )}
             />
           </div>
-          <div>{renderError(methods.formState.errors.age?.message)}</div>
+          <div>{renderError(methods.formState.errors.birthDate?.message)}</div>
           {fields}
           <input type="submit" value={id ? 'Update' : 'Create'} />
           <button type="button" onClick={() => navigate(-1)}>
