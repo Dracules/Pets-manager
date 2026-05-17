@@ -3,7 +3,7 @@ import { CatResponse } from '../../interfaces/cat.interface';
 
 export const mockCatDTO = (overrides: Partial<CatDTO> = {}): CatDTO => ({
   name: 'Bars',
-  age: 3,
+  birthDate: new Date(),
   litterStatus: 'unknown',
   ...overrides,
 });
@@ -16,7 +16,8 @@ export const mockCatDTOList = (count = 5): CatDTO[] =>
 export const mockCat = (overrides: Partial<CatResponse> = {}): CatResponse => ({
   _id: '1',
   name: 'Bars',
-  age: 3,
+  birthDate: new Date(),
+  age: '0 years 0 months',
   litterStatus: 'unknown',
   owner: '111',
   ...overrides,
