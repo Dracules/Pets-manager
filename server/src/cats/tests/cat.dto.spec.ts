@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CatDTO } from '../dto/cat.dto';
 import { mockCatDTO } from './mocks/cat.mock';
-import { addMonths, subMonths, addYears, subYears } from 'date-fns';
+import { addMonths, subMonths, addYears, subYears, addDays } from 'date-fns';
 
 describe('CatDto', () => {
   it('valid catDTO', async () => {
@@ -126,7 +126,7 @@ describe('CatDto', () => {
   });
 
   it('catDTO with min date (40 years ago)', async () => {
-    const minBound = subYears(new Date(), 40);
+    const minBound = addDays(subYears(new Date(), 40), 1);
     const catDTOWithMinDate: CatDTO = plainToInstance(
       CatDTO,
       mockCatDTO({ birthDate: minBound }),
