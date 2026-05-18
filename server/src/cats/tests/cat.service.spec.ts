@@ -121,6 +121,7 @@ describe('CatService', () => {
         limit: jest.fn().mockReturnThis(),
         exec: jest.fn().mockResolvedValue(
           mockCatsPage.map((cat) => ({
+            ...cat,
             toJSON: () => cat,
           })),
         ),
@@ -215,6 +216,7 @@ describe('CatService', () => {
           limit: jest.fn().mockReturnThis(),
           exec: jest.fn().mockResolvedValue(
             mockCatsPage.map((cat) => ({
+              ...cat,
               toJSON: () => cat,
             })),
           ),
@@ -284,7 +286,7 @@ describe('CatService', () => {
 
         const newData: Partial<CatResponse> = {
           name: 'Bart',
-          age: 13,
+          birthDate: new Date(),
         };
 
         const updatedCat = mockCat(newData);

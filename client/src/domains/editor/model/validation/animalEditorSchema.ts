@@ -1,13 +1,9 @@
 import * as yup from 'yup';
 
-export const animalAgeSchema = yup
-  .number()
-  .transform((value: unknown, originalValue: unknown) =>
-    originalValue === '' || Number.isNaN(value) ? undefined : value,
-  )
-  .required('Please enter an age')
-  .integer('Age must be a whole number')
-  .min(0, 'Age must be 0 or greater');
+export const animalBirthDateSchema = yup
+  .date()
+  .required('Please enter a birth month')
+  .max(new Date(), "Date can't be in the future");
 
 const animalEditorSchema = yup.object({
   name: yup
@@ -16,7 +12,7 @@ const animalEditorSchema = yup.object({
     .min(2, 'Name must contain at least 2 characters')
     .max(50, 'Name is too long'),
 
-  age: animalAgeSchema,
+  birthDate: animalBirthDateSchema,
 });
 
 export default animalEditorSchema;

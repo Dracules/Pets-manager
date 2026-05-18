@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Cat, CatDocument } from '../../cats/schemas/cat.schema';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { PaginationResult } from '../interfaces/pagination.result';
+import { calculateAge } from '../../shared/utils/utils';
 
 @Injectable()
 export class AnimalService {
@@ -46,7 +47,10 @@ export class AnimalService {
     const total = (totalResult as [{ total: number }])[0].total || 0;
 
     return {
-      animals: animals as AnimalResponse[],
+      animals: animals.map((obj) => ({
+        ...obj,
+        age: calculateAge(obj.birthDate),
+      })) as AnimalResponse[],
       totalCount: total,
     };
   }
@@ -93,7 +97,10 @@ export class AnimalService {
 
     const total = (totalResult as [{ total: number }])[0].total || 0;
     return {
-      animals: animals as AnimalResponse[],
+      animals: animals.map((obj) => ({
+        ...obj,
+        age: calculateAge(obj.birthDate),
+      })) as AnimalResponse[],
       totalCount: total,
     };
   }

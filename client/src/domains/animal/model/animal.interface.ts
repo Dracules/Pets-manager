@@ -1,6 +1,7 @@
 export interface Animal {
   _id: string;
   name: string;
-  age: number;
+  readonly age: string;
+  birthDate: Date;
   owner: string;
 }

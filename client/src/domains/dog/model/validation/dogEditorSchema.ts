@@ -1,9 +1,13 @@
+import { subYears } from 'date-fns';
 import animalEditorSchema, {
-  animalAgeSchema,
+  animalBirthDateSchema,
 } from '../../../editor/model/validation/animalEditorSchema';
 
 const dogEditorSchema = animalEditorSchema.shape({
-  age: animalAgeSchema.max(30, 'Unfortunately, unrealistic age'),
+  birthDate: animalBirthDateSchema.min(
+    subYears(new Date(), 30),
+    'Unfortunately, unrealistic age',
+  ),
 });
 
 export default dogEditorSchema;

@@ -1,11 +1,15 @@
 import * as yup from 'yup';
 import animalEditorSchema, {
-  animalAgeSchema,
+  animalBirthDateSchema,
 } from '../../../editor/model/validation/animalEditorSchema';
 import { LITTER_STATUS } from '../litterStatus.type';
+import { subYears } from 'date-fns';
 
 const catEditorSchema = animalEditorSchema.shape({
-  age: animalAgeSchema.max(40, 'Unfortunately, unrealistic age'),
+  birthDate: animalBirthDateSchema.min(
+    subYears(new Date(), 40),
+    'Unfortunately, unrealistic age',
+  ),
 
   litterStatus: yup
     .string()
