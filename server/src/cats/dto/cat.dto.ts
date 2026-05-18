@@ -1,21 +1,16 @@
-import {
-  IsDefined,
-  IsEnum,
-  IsInt,
-  IsOptional,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsDate, IsDefined, IsEnum, IsOptional } from 'class-validator';
 import { AnimalDTO } from '../../animal/dto/animal.dto';
 import { LITTER_STATUS, type LitterStatus } from '../types/litterStatus.type';
 import { PartialType } from '@nestjs/mapped-types';
+import { Transform } from 'class-transformer';
+import { IsBirthDateRealistic } from '../../shared/validators/isBirthDateRealisticvalidator';
 
 export class CatDTO extends AnimalDTO {
+  @Transform(({ value }) => new Date(value))
   @IsDefined()
-  @IsInt()
-  @Min(0)
-  @Max(40)
-  age: number;
+  @IsDate()
+  @IsBirthDateRealistic(40)
+  birthDate: Date;
 
   @IsOptional()
   @IsEnum(LITTER_STATUS)

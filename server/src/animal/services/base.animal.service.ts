@@ -6,6 +6,7 @@ import { Animal } from '../schemas/animal.schema';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { AnimalType } from '../types/animal.type';
 import { PaginationResult } from '../interfaces/pagination.result';
+import { calculateAge } from '../../shared/utils/utils';
 
 @Injectable()
 export abstract class BaseAnimalService<
@@ -39,6 +40,7 @@ export abstract class BaseAnimalService<
       animals: findedAnimals.map((obj) => ({
         ...obj.toJSON(),
         type: animalType,
+        age: calculateAge(obj.birthDate),
       })) as unknown as Response[],
       totalCount: total,
     };
@@ -76,6 +78,7 @@ export abstract class BaseAnimalService<
     return {
       animals: findedAnimals.map((obj) => ({
         ...obj.toJSON(),
+        age: calculateAge(obj.birthDate),
         type: animalType,
       })) as unknown as Response[],
       totalCount: total,

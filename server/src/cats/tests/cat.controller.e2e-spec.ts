@@ -11,7 +11,7 @@ import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
 import { CatResponse } from '../interfaces/cat.interface';
 import { App } from 'supertest/types';
 import { initMongoDB } from './mocks/init-mongo-for-tests';
-import { PaginationResult } from 'src/animal/interfaces/pagination.result';
+import { PaginationResult } from '../../animal/interfaces/pagination.result';
 
 describe('CatController', () => {
   let app: INestApplication;
@@ -164,7 +164,8 @@ describe('CatController', () => {
     });
     it('gets all from DB', async () => {
       const cats = mockCatDTOList(5);
-      const catsDeepCopy = JSON.parse(JSON.stringify(cats)) as CatDTO[];
+      const catsDeepCopy = structuredClone(cats) as CatDTO[];
+      structuredClone;
       await populateCatsDB(cats);
       await request(app.getHttpServer() as App)
         .get('/animals/cats/')
@@ -389,7 +390,7 @@ describe('CatController', () => {
     it('201 - catDTO without LitterStatus', async () => {
       const catDTOWithoutLitterStatus: Partial<CatDTO> = {
         name: 'Bars',
-        age: 3,
+        birthDate: new Date(),
       };
 
       const response = await request(app.getHttpServer() as App)
@@ -405,7 +406,7 @@ describe('CatController', () => {
     it('400 - invalid catDTO', async () => {
       const catDTOWithIncorrectLitterStatus = mockCatDTO({
         name: 'B',
-        age: -3,
+        birthDate: new Date(),
       });
 
       await request(app.getHttpServer() as App)
@@ -428,7 +429,9 @@ describe('CatController', () => {
 
       const findedCat = await findCatDB(new ObjectId(createdCat._id));
       expect(findedCat).not.toBeNull();
-      expect(findedCat).toMatchObject(correctCatDTO);
+      expect(findedCat).toMatchObject(
+        JSON.parse(JSON.stringify(correctCatDTO)),
+      );
     });
   });
 
@@ -492,7 +495,7 @@ describe('CatController', () => {
 
       const catDTOWithIncorrectLitterStatus = mockCatDTO({
         name: 'B',
-        age: -3,
+        birthDate: new Date(),
       });
 
       await request(app.getHttpServer() as App)
