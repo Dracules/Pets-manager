@@ -2,6 +2,7 @@ import { NavLink } from 'react-router';
 import { useAuth } from '../../domains/login/context/AuthContext';
 import { setApiAuth } from '../api/axiosApi';
 import { HeaderType } from '../model/types/header.type';
+import styles from './css/Header.module.css';
 
 export function Header({ type }: { type: HeaderType }) {
   const { getTokenStorage, logout, updateToken } = useAuth();
@@ -23,9 +24,15 @@ export function Header({ type }: { type: HeaderType }) {
         ];
 
   return (
-    <nav>
+    <nav className={styles.nav}>
       {links.map(({ to, label }) => (
-        <NavLink key={to} to={to}>
+        <NavLink
+          key={to}
+          to={to}
+          className={({ isActive }) =>
+            `${styles.link} ${isActive ? styles.linkActive : ''}`
+          }
+        >
           {label}
         </NavLink>
       ))}
