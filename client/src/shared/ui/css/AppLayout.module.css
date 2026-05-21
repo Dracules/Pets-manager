@@ -1,0 +1,55 @@
+.layout {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+
+  position: relative;
+  display: flex;
+  height: 100dvh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.sidebarWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+.sidebarOverlay {
+  z-index: 50;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 40;
+}
+
+.backdropActive {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.contentArea {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-primary);
+  padding-left: 80px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
