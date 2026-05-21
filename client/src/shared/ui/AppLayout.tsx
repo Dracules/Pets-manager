@@ -67,11 +67,11 @@ export default function AppLayout() {
         />
       </div>
       <div className={styles.contentArea}>
-        <div>
+        <div className={styles.header}>
           <Header type={headerType} />
         </div>
-        <h1>{pageTitle}</h1>
-        <main>
+        <h1 className={styles.pageTitle}>{pageTitle}</h1>
+        <main className={styles.mainContent}>
           <Outlet />
         </main>
       </div>
