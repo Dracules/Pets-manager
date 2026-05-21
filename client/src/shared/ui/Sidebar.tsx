@@ -9,6 +9,7 @@ import {
 } from 'react-icons/tb';
 import { RxExit } from 'react-icons/rx';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import styles from './css/AppSidebar.module.css';
 
 interface AppSidebarProps {
   collapsed: boolean;
@@ -25,12 +26,13 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       backgroundColor="#f6f6f6"
       rootStyles={{ height: '100%', width: collapsed ? '80px' : '260px' }}
     >
-      <div>
-        <div>
+      <div className={styles.layout}>
+        <div className={styles.top}>
           <Menu>
             <MenuItem
+              className={styles.menuItem}
               icon={
-                <div>
+                <div className={styles.iconBox}>
                   {collapsed ? (
                     <FiChevronsRight size={iconSize} />
                   ) : (
@@ -43,15 +45,16 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </Menu>
         </div>
 
-        <div>
+        <div className={styles.middle}>
           <Menu>
             <MenuItem
+              className={styles.menuItem}
               icon={
-                <div>
+                <div className={styles.iconBox}>
                   <TbCircleLetterA size={iconSize} />
                 </div>
               }
-              component={<Link to="/" />}
+              component={<Link to="/" className={styles.navLink} />}
             >
               All animals
             </MenuItem>
@@ -59,22 +62,24 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
             {token.access_token && (
               <>
                 <MenuItem
+                  className={styles.menuItem}
                   icon={
-                    <div>
+                    <div className={styles.iconBox}>
                       <TbCircleLetterM size={iconSize} />
                     </div>
                   }
-                  component={<Link to="/my" />}
+                  component={<Link to="/my" className={styles.navLink} />}
                 >
                   My animals
                 </MenuItem>
                 <MenuItem
+                  className={styles.menuItem}
                   icon={
-                    <div>
+                    <div className={styles.iconBox}>
                       <IoMdAddCircleOutline size={iconSize} />
                     </div>
                   }
-                  component={<Link to="/edit" />}
+                  component={<Link to="/edit" className={styles.navLink} />}
                 >
                   Add animal
                 </MenuItem>
@@ -83,12 +88,13 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </Menu>
         </div>
 
-        <div>
+        <div className={styles.bottom}>
           <Menu>
             {token.access_token ? (
               <MenuItem
+                className={styles.menuItem}
                 icon={
-                  <div>
+                  <div className={styles.iconBox}>
                     <RxExit size={iconSize} />
                   </div>
                 }
@@ -98,12 +104,13 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
               </MenuItem>
             ) : (
               <MenuItem
+                className={styles.menuItem}
                 icon={
-                  <div>
+                  <div className={styles.iconBox}>
                     <TbCircleLetterL size={iconSize} />
                   </div>
                 }
-                component={<Link to="/login" />}
+                component={<Link to="/login" className={styles.navLink} />}
               >
                 Login
               </MenuItem>
