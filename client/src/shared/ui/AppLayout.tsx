@@ -24,7 +24,7 @@ export default function AppLayout() {
     return setHeaderType('all');
   }, [pathname]);
 
-  const getPageTitle = (): string => {
+  const getPageTitle = (): string | null => {
     if (pathname.startsWith('/edit')) {
       if (pathname === '/edit') return 'Create animal';
       else return 'Update animal';
@@ -42,12 +42,8 @@ export default function AppLayout() {
         return 'My cats';
       case '/mydogs':
         return 'My dogs';
-      case '/login':
-        return 'Login';
-      case '/register':
-        return 'Create an account';
       default:
-        return '';
+        return null;
     }
   };
 
@@ -72,7 +68,9 @@ export default function AppLayout() {
             <Header type={headerType} />
           </div>
         ) : undefined}
-        <h1 className={styles.pageTitle}>{pageTitle}</h1>
+        {pageTitle ? (
+          <h1 className={styles.pageTitle}>{pageTitle}</h1>
+        ) : undefined}
         <main className={styles.mainContent}>
           <Outlet />
         </main>
