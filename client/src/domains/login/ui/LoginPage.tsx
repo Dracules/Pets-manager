@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from '../model/validation/loginSchema';
 import { LoginFormInput } from '../model/form-input.interface';
+import styles from './css/AuthPages.module.css';
 
 export default function LoginPage() {
   const methods = useForm<LoginFormInput>({
@@ -19,6 +20,11 @@ export default function LoginPage() {
   const [message, setMessage] = useState('');
   const { token, login } = useAuth();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
   const errors = methods.formState.errors;
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
@@ -35,43 +41,70 @@ export default function LoginPage() {
       }
     }
   };
-  return token.access_token ? (
-    <h3>You have already been athorized!</h3>
-  ) : (
-    <div>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <fieldset
-          disabled={methods.formState.isSubmitting}
-          style={{ border: 'none', padding: 0, margin: 0 }}
-        >
-          <div>
-            <label style={{ margin: 20 }}>Login</label>
-            <input {...methods.register('login')} placeholder="Login" />
-            <div>
+  if (token.access_token) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h3 className={styles.title}>You have already been authorized!</h3>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h2 className={styles.title}>Login</h2>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <fieldset disabled={isSubmitting} className={styles.fieldset}>
+            <div className={styles.field}>
+              <label className={styles.label}>Login</label>
+              <input
+                {...register('login')}
+                className={`${styles.input} ${errors.login ? styles.inputError : ''}`}
+                placeholder="Enter login"
+              />
               {errors.login && (
-                <span style={{ color: 'red' }}>{errors.login.message}</span>
+                <span className={styles.errorMessage}>
+                  {errors.login.message}
+                </span>
               )}
             </div>
-          </div>
-          <div>
-            <label style={{ margin: 20 }}>Password</label>
-            <input
-              {...methods.register('password')}
-              type="password"
-              placeholder="Password"
-            />
-            <div>
+
+            <div className={styles.field}>
+              <label className={styles.label}>Password</label>
+              <input
+                {...register('password')}
+                type="password"
+                className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
+                placeholder="Enter password"
+              />
               {errors.password && (
-                <span style={{ color: 'red' }}>{errors.password.message}</span>
+                <span className={styles.errorMessage}>
+                  {errors.password.message}
+                </span>
               )}
             </div>
-          </div>
-          <input type="submit" value="Login" />
-          <p>{message}</p>
-        </fieldset>
-      </form>
-      <div>
-        <Link to="/register">Don’t have an account? Sign up</Link>
+
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={isSubmitting}
+              value="Login"
+            >
+              Login
+            </button>
+
+            {message && <p className={styles.message}>{message}</p>}
+          </fieldset>
+        </form>
+
+        <div className={styles.footer}>
+          <Link to="/register" className={styles.footerLink}>
+            Don't have an account? Sign up
+          </Link>
+        </div>
       </div>
     </div>
   );
