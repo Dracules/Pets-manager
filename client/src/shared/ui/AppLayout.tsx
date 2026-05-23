@@ -67,9 +67,11 @@ export default function AppLayout() {
         />
       </div>
       <div className={styles.contentArea}>
-        <div className={styles.header}>
-          <Header type={headerType} />
-        </div>
+        {headerType !== 'no' ? (
+          <div className={styles.header}>
+            <Header type={headerType} />
+          </div>
+        ) : undefined}
         <h1 className={styles.pageTitle}>{pageTitle}</h1>
         <main className={styles.mainContent}>
           <Outlet />
