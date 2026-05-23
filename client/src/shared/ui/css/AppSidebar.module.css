@@ -1,0 +1,30 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.top {
+  flex-shrink: 0;
+}
+.middle {
+  flex: 1;
+}
+.bottom {
+  margin-top: auto;
+}
+
+.iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.menuItem:hover {
+  color: #2563eb;
+}

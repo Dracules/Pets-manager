@@ -3,10 +3,12 @@ import { Header } from './Header';
 import { AppSidebar } from './Sidebar';
 import { useEffect, useState } from 'react';
 import { HeaderType } from '../model/types/header.type';
+import styles from './css/AppLayout.module.css';
 
 export default function AppLayout() {
   const [headerType, setHeaderType] = useState<HeaderType>('all');
   const location = useLocation();
+  const [collapsed, setCollapsed] = useState(true);
   const pathname = location.pathname;
 
   const userHeaderPaths = ['/my', '/mycats', '/mydogs'];
@@ -51,32 +53,25 @@ export default function AppLayout() {
 
   const pageTitle = getPageTitle();
   return (
-    <div
-      style={{
-        display: 'flex',
-        height: '100dvh',
-        margin: 0,
-        padding: 0,
-      }}
-    >
-      <AppSidebar />
+    <div className={styles.layout}>
       <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          marginLeft: '10px',
-        }}
+        className={`${styles.backdrop} ${!collapsed ? styles.backdropActive : ''}`}
+        onClick={() => setCollapsed(true)}
+      />
+      <div
+        className={`${styles.sidebarWrapper} ${!collapsed ? styles.sidebarOverlay : ''}`}
       >
-        <Header type={headerType} />
-        <h1>{pageTitle}</h1>
-        <main
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-          }}
-        >
+        <AppSidebar
+          collapsed={collapsed}
+          onToggle={() => setCollapsed(!collapsed)}
+        />
+      </div>
+      <div className={styles.contentArea}>
+        <div className={styles.header}>
+          <Header type={headerType} />
+        </div>
+        <h1 className={styles.pageTitle}>{pageTitle}</h1>
+        <main className={styles.mainContent}>
           <Outlet />
         </main>
       </div>
