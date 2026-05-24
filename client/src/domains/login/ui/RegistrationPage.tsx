@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import registrationSchema from '../model/validation/registrationSchema';
 import { RegistrationFormInput } from '../model/form-input.interface';
+import styles from './css/AuthPages.module.css';
 
 export default function RegistrationPage() {
   const methods = useForm<RegistrationFormInput>({
@@ -18,6 +19,11 @@ export default function RegistrationPage() {
   const [message, setMessage] = useState('');
   const [isForm, setIsForm] = useState(true);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
   const errors = methods.formState.errors;
 
   const onSubmit: SubmitHandler<RegistrationFormInput> = async (data) => {
@@ -31,62 +37,90 @@ export default function RegistrationPage() {
     }
   };
 
-  return isForm ? (
-    <>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <fieldset
-          disabled={methods.formState.isSubmitting}
-          style={{ border: 'none', padding: 0, margin: 0 }}
-        >
-          <div>
-            <label style={{ margin: 20 }}>Login</label>
-            <input {...methods.register('login')} placeholder="Login" />
-            <div>
-              {errors.login && (
-                <span style={{ color: 'red' }}>{errors.login.message}</span>
-              )}
-            </div>
+  if (isForm)
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h2 className={styles.title}>Create Account</h2>
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <fieldset disabled={isSubmitting} className={styles.fieldset}>
+              <div className={styles.field}>
+                <label className={styles.label}>Login</label>
+                <input
+                  {...register('login')}
+                  className={`${styles.input} ${errors.login ? styles.inputError : ''}`}
+                  placeholder="Enter login"
+                />
+                {errors.login && (
+                  <span className={styles.errorMessage}>
+                    {errors.login.message}
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Password</label>
+                <input
+                  {...register('password')}
+                  type="password"
+                  className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
+                  placeholder="Enter password"
+                />
+                {errors.password && (
+                  <span className={styles.errorMessage}>
+                    {errors.password.message}
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Confirm Password</label>
+                <input
+                  {...register('confirmPassword')}
+                  type="password"
+                  className={`${styles.input} ${errors.confirmPassword ? styles.inputError : ''}`}
+                  placeholder="Repeat password"
+                />
+                {errors.confirmPassword && (
+                  <span className={styles.errorMessage}>
+                    {errors.confirmPassword.message}
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={isSubmitting}
+              >
+                Register
+              </button>
+
+              {message && <p className={styles.message}>{message}</p>}
+            </fieldset>
+          </form>
+
+          <div className={styles.footer}>
+            <Link to="/login" className={styles.footerLink}>
+              Already have an account? Sign in
+            </Link>
           </div>
-          <div>
-            <label style={{ margin: 20 }}>Password</label>
-            <input
-              {...methods.register('password')}
-              type="password"
-              placeholder="Password"
-            />
-            <div>
-              {errors.password && (
-                <span style={{ color: 'red' }}>{errors.password.message}</span>
-              )}
-            </div>
-          </div>
-          <div>
-            <label style={{ margin: 20 }}>Confirm password</label>
-            <input
-              {...methods.register('confirmPassword')}
-              type="password"
-              placeholder="Confirm password"
-            />
-            <div>
-              {errors.confirmPassword && (
-                <span style={{ color: 'red' }}>
-                  {errors.confirmPassword.message}
-                </span>
-              )}
-            </div>
-          </div>
-          <input type="submit" value="Register" />
-          <p>{message}</p>
-        </fieldset>
-        <Link to="/login">Already have an account? Sign in</Link>
-      </form>
-    </>
-  ) : (
-    <>
-      <h3>{message}</h3>
-      <div>
-        <Link to="/login">Go to login page</Link>
+        </div>
       </div>
-    </>
+    );
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h2 className={styles.title}>Registration Successful</h2>
+        <p className={styles.message}>{message}</p>
+        <div className={styles.footer}>
+          <Link to="/login" className={styles.footerLink}>
+            Go to login page
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
