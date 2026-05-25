@@ -77,24 +77,36 @@ export default function BaseTable<T extends AnimalResponse>({
           ))}
         </thead>
         <tbody className={styles.tbody}>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td className={styles.td} key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+          {table.getRowModel().rows.length > 0 ? (
+            table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td className={styles.td} key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan={finalColumns.length}
+                className={`${styles.td} ${styles.noData}`}
+              >
+                No data available
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
-
-        <tfoot className={styles.tfoot}>
-          <tr>
-            <td colSpan={finalColumns.length} className={styles.td}>
-              {footerPaginationComponent}
-            </td>
-          </tr>
-        </tfoot>
+        {!!table.getRowModel().rows.length && (
+          <tfoot className={styles.tfoot}>
+            <tr>
+              <td colSpan={finalColumns.length} className={styles.td}>
+                {footerPaginationComponent}
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );
