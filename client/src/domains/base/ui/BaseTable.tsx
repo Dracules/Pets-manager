@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
+import styles from './css/BaseTable.module.css';
 
 export default function BaseTable<T extends AnimalResponse>({
   data,
@@ -13,7 +14,7 @@ export default function BaseTable<T extends AnimalResponse>({
   options,
   footerPaginationComponent,
 }: BaseTableProps<T>) {
-  function getFinalColumns() {
+  const finalColumns = (function getFinalColumns() {
     if (options) {
       const { onDelete, onEdit } = options;
 
@@ -21,8 +22,9 @@ export default function BaseTable<T extends AnimalResponse>({
         id: 'actions',
         header: 'Actions',
         cell: ({ row }) => (
-          <>
+          <div className={styles.actions}>
             <button
+              className={`${styles.actionBtn} ${styles.actionBtnEdit}`}
               onClick={() => {
                 onEdit(row.original._id, row.original.type);
               }}
@@ -30,34 +32,39 @@ export default function BaseTable<T extends AnimalResponse>({
               Edit
             </button>
             <button
+              className={`${styles.actionBtn} ${styles.actionBtnDelete}`}
               onClick={async () => {
                 await onDelete(row.original._id, row.original.type);
               }}
             >
               Delete
             </button>
-          </>
+          </div>
         ),
       };
       return [...columns, actionColumn];
     }
     return columns;
-  }
+  })();
 
   const table = useReactTable({
     data,
-    columns: getFinalColumns(),
+    columns: finalColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    <div>
-      <table>
-        <thead>
+    <div className={styles.tableContainer}>
+      <table className={styles.table}>
+        <thead className={styles.thead}>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th colSpan={header.colSpan} key={header.id}>
+                <th
+                  className={styles.th}
+                  colSpan={header.colSpan}
+                  key={header.id}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -69,18 +76,25 @@ export default function BaseTable<T extends AnimalResponse>({
             </tr>
           ))}
         </thead>
-        <tbody>
+        <tbody className={styles.tbody}>
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <td className={styles.td} key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
-        <tfoot>{footerPaginationComponent}</tfoot>
+
+        <tfoot className={styles.tfoot}>
+          <tr>
+            <td colSpan={finalColumns.length} className={styles.td}>
+              {footerPaginationComponent}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
