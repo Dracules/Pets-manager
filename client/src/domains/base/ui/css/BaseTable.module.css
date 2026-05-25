@@ -1,0 +1,97 @@
+.tableContainer {
+  --bg-thead: #8baefc24;
+
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+
+.thead tr {
+  background: var(--bg-thead);
+}
+
+.th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.td {
+  padding: 14px 16px;
+  color: var(--text-primary);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.noData {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.actionBtn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  cursor: pointer;
+}
+
+.actionBtnEdit {
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.actionBtnEdit:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: #2563eb;
+}
+
+.actionBtnDelete {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.actionBtnDelete:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
+}
+
+.tfoot {
+  background: var(--bg-thead);
+}
+
+.tfoot .td {
+  border-top: 1px solid var(--border-color);
+  padding: 16px;
+}

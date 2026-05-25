@@ -1,4 +1,5 @@
 import Pagination from '@mui/material/Pagination';
+import styles from './css/PaginationComponent.module.css';
 
 interface PaginationProps {
   setPageLimit: (rowsPerPage: number) => void;
@@ -18,14 +19,11 @@ export default function PaginationComponent({
   const totalPages = Math.ceil(totalCount / pageLimit);
 
   return (
-    <div
-      style={{
-        marginTop: '10px',
-      }}
-    >
-      <div style={{ marginBottom: '10px' }}>
-        <span>Rows per page</span>
+    <div className={styles.container}>
+      <div className={styles.pageSizeControl}>
+        <span className={styles.pageSizeLabel}>Rows per page:</span>
         <select
+          className={styles.pageSizeSelect}
           value={pageLimit}
           onChange={(e) => {
             setPageLimit(parseInt(e.target.value, 10));
@@ -39,15 +37,19 @@ export default function PaginationComponent({
           ))}
         </select>
       </div>
-      <Pagination
-        count={totalPages}
-        page={page + 1}
-        onChange={(_, value) => setPage(value - 1)}
-        showFirstButton
-        showLastButton
-        siblingCount={1}
-        boundaryCount={0}
-      />
+      <div className={styles.paginationWrapper}>
+        <Pagination
+          count={totalPages}
+          page={page + 1}
+          onChange={(_, value) => setPage(value - 1)}
+          showFirstButton
+          showLastButton
+          siblingCount={1}
+          boundaryCount={0}
+          color="primary"
+          shape="rounded"
+        />
+      </div>
     </div>
   );
 }
