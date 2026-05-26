@@ -13,6 +13,7 @@ export default function BaseTable<T extends AnimalResponse>({
   columns = [],
   options,
   footerPaginationComponent,
+  loading,
 }: BaseTableProps<T>) {
   const finalColumns = (function getFinalColumns() {
     if (options) {

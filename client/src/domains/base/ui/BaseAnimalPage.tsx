@@ -61,6 +61,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
           data={data ?? []}
           options={{ onDelete: handleDelete, onEdit: handleEdit }}
           footerPaginationComponent={paginationComponent}
+          loading={loading}
         />
       </div>
     );
@@ -70,6 +71,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
         <AnimalTable
           data={data ?? []}
           footerPaginationComponent={paginationComponent}
+          loading={loading}
         />
       </div>
     );

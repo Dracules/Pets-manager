@@ -15,6 +15,7 @@ function DogTable({
   data,
   options,
   footerPaginationComponent,
+  loading,
 }: BaseTableProps<DogResponse>) {
   return (
     <BaseTable
@@ -22,6 +23,7 @@ function DogTable({
       columns={dogColumns}
       options={options}
       footerPaginationComponent={footerPaginationComponent}
+      loading={loading}
     />
   );
 }
