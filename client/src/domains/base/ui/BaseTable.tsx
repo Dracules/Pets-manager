@@ -7,12 +7,14 @@ import {
 import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import styles from './css/BaseTable.module.css';
+import LoadingComponent from '../../../shared/ui/LoadingComponent';
 
 export default function BaseTable<T extends AnimalResponse>({
   data,
   columns = [],
   options,
   footerPaginationComponent,
+  loading,
 }: BaseTableProps<T>) {
   const finalColumns = (function getFinalColumns() {
     if (options) {
@@ -108,6 +110,11 @@ export default function BaseTable<T extends AnimalResponse>({
           </tfoot>
         )}
       </table>
+      {loading && (
+        <div className={styles.tableLoaderOverlay}>
+          <LoadingComponent />
+        </div>
+      )}
     </div>
   );
 }

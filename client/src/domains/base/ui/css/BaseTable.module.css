@@ -47,6 +47,7 @@
 .noData {
   text-align: center;
   color: var(--text-secondary);
+  height: 40vh;
 }
 
 .actions {
@@ -94,4 +95,20 @@
 .tfoot .td {
   border-top: 1px solid var(--border-color);
   padding: 16px;
+}
+
+.tableLoaderOverlay {
+  position: absolute;
+  top: 46px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(248, 250, 252, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  border-radius: 0 0 12px 12px;
+  pointer-events: none;
 }
