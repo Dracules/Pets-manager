@@ -47,6 +47,7 @@
 .noData {
   text-align: center;
   color: var(--text-secondary);
+  height: 40vh;
 }
 
 .actions {
