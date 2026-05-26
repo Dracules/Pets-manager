@@ -4,7 +4,6 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
-import LoadingComponent from '../../../shared/ui/LoadingComponent';
 import { useState } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
@@ -24,7 +23,6 @@ function BaseAnimalPage<T extends AnimalResponse>(
   );
   const navigate = useNavigate();
 
-  if (loading) return <LoadingComponent />;
   if (error) return <h1>Error: {error}</h1>;
 
   const paginationComponent = (
