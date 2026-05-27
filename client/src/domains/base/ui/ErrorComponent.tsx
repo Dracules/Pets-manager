@@ -24,7 +24,11 @@ export function ErrorComponent({ error, load, loading }: ErrorComponentProps) {
           }}
           disabled={loading}
         >
-          {loading ? 'Loading' : 'Repeat request'}
+          {loading ? (
+            <span className={styles.loadingText}>Loading</span>
+          ) : (
+            'Repeat request'
+          )}
         </button>
       </div>
     </div>

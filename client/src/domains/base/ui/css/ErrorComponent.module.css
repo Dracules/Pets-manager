@@ -71,3 +71,31 @@
   opacity: 0.8;
   pointer-events: none;
 }
+
+.loadingText {
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: wait;
+}
+
+.loadingText::after {
+  content: '';
+  display: inline-block;
+  min-width: 1em;
+  animation: loadingDots 1.5s steps(1, end) infinite;
+}
+
+@keyframes loadingDots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+}
