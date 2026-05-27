@@ -31,7 +31,7 @@ function useFetchData<T>(
     }
   };
 
-  return { data, totalCount, loading, error, setData };
+  return { data, totalCount, loading, error, setData, load };
 }
 
 export default useFetchData;
