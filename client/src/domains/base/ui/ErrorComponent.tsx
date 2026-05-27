@@ -4,9 +4,10 @@ import styles from './css/ErrorComponent.module.css';
 interface ErrorComponentProps {
   error: string;
   load: () => void;
+  loading: boolean;
 }
 
-export function ErrorComponent({ error, load }: ErrorComponentProps) {
+export function ErrorComponent({ error, load, loading }: ErrorComponentProps) {
   return (
     <div className={styles.container}>
       <div className={styles.errorContainer}>
@@ -21,8 +22,9 @@ export function ErrorComponent({ error, load }: ErrorComponentProps) {
             console.log('Click');
             load();
           }}
+          disabled={loading}
         >
-          'Repeat request'
+          {loading ? 'Loading' : 'Repeat request'}
         </button>
       </div>
     </div>

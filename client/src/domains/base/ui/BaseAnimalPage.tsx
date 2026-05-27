@@ -24,7 +24,8 @@ function BaseAnimalPage<T extends AnimalResponse>(
   );
   const navigate = useNavigate();
 
-  if (error) return <ErrorComponent error={error} load={load} />;
+  if (error)
+    return <ErrorComponent error={error} load={load} loading={loading} />;
 
   const paginationComponent = (
     <PaginationComponent
