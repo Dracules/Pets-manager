@@ -23,15 +23,15 @@ function useFetchData<T>(
       setTotalCount(result.totalCount);
       setError('');
     } catch (err) {
-      if (err instanceof Error) setError(err.stack!);
-      else setError('Undefined error!');
+      if (err instanceof Error) setError(err.message);
+      else setError('Undefined error! Failed to load data.');
       console.error('API Error:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  return { data, totalCount, loading, error, setData };
+  return { data, totalCount, loading, error, setData, load };
 }
 
 export default useFetchData;
