@@ -1,4 +1,5 @@
 import CreatableSelect from 'react-select/creatable';
+import './сss/MultiTagsSelect.module.css';
 
 type Option = {
   readonly value: string;
@@ -25,6 +26,7 @@ export function MultiTagsSelect({
 
   return (
     <CreatableSelect<Option, true>
+      classNamePrefix="multi-tags"
       value={selectValue}
       onChange={(newValue) => {
         const stringValues = newValue?.length
