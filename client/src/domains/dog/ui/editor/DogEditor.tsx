@@ -6,6 +6,7 @@ import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../../shared/ui/LoadingComponent';
 import { DogsApi } from '../../api/dogsApi';
 import dogEditorSchema from '../../model/validation/dogEditorSchema';
+import commonStyles from '../../../editor/ui/css/AnimalEditor.module.css';
 
 export function DogEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
@@ -22,8 +23,8 @@ export function DogEditor() {
   return (
     <AnimalEditor<Dog>
       fields={
-        <div style={{ marginLeft: 20, width: '30%' }}>
-          <label>Trained commands</label>
+        <div className={commonStyles.field}>
+          <label className={commonStyles.label}>Trained commands</label>
           <Controller
             name="trainedCommands"
             control={methods.control}
