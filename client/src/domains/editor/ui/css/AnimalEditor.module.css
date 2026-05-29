@@ -1,10 +1,16 @@
+.formContainer {
+  position: relative;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 .formCard {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 32px;
-  max-width: 600px;
-  margin: 40px auto;
 }
 
 .fieldset {
@@ -65,7 +71,7 @@
 }
 
 .datePicker {
-  position: 'static';
+  position: static;
 }
 
 .button {
@@ -103,4 +109,16 @@
   background: #c5c9cf;
   color: var(--text-primary);
   border-color: #94a3b8;
+}
+
+.formLoaderOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(248, 250, 252, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  pointer-events: none;
 }

@@ -19,23 +19,32 @@ export function DogEditor() {
     validationSchema: dogEditorSchema,
     afterSubmit: `/mydogs`,
   });
-  if (isLoading) return <LoadingComponent />;
   return (
-    <AnimalEditor<Dog>
-      fields={
-        <div className={commonStyles.field}>
-          <label className={commonStyles.label}>Trained commands</label>
-          <Controller
-            name="trainedCommands"
-            control={methods.control}
-            render={({ field }) => (
-              <MultiTagsSelect value={field.value} onChange={field.onChange} />
-            )}
-          />
+    <div className={commonStyles.formContainer}>
+      <AnimalEditor<Dog>
+        fields={
+          <div className={commonStyles.field}>
+            <label className={commonStyles.label}>Trained commands</label>
+            <Controller
+              name="trainedCommands"
+              control={methods.control}
+              render={({ field }) => (
+                <MultiTagsSelect
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
+        }
+        onSubmit={onSubmit}
+        methods={methods}
+      />
+      {isLoading && (
+        <div className={commonStyles.formLoaderOverlay}>
+          <LoadingComponent />
         </div>
-      }
-      onSubmit={onSubmit}
-      methods={methods}
-    />
+      )}
+    </div>
   );
 }
