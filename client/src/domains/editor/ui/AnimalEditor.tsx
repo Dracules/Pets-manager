@@ -8,6 +8,7 @@ import {
 import { Animal } from '../../animal/model/animal.interface';
 import { useNavigate, useParams } from 'react-router';
 import { MonthYearPicker } from './MonthYearPicker';
+import styles from './css/AnimalEditor.module.css';
 
 interface EditorProps<T extends Animal> {
   onSubmit: SubmitHandler<T>;
@@ -17,7 +18,7 @@ interface EditorProps<T extends Animal> {
 
 const renderError = (message?: unknown) =>
   typeof message === 'string' ? (
-    <span style={{ color: 'red' }}>{message}</span>
+    <span className={styles.errorMessage}>{message}</span>
   ) : null;
 
 export function AnimalEditor<T extends Animal>({
@@ -27,45 +28,59 @@ export function AnimalEditor<T extends Animal>({
 }: EditorProps<T>) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const isSubmitting = methods.formState.isSubmitting;
+  const errors = methods.formState.errors;
+
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <fieldset
-          disabled={methods.formState.isSubmitting}
-          style={{ border: 'none', padding: 0, margin: 0 }}
-        >
-          <div>
-            <label style={{ margin: 20 }}>Name</label>
-            <input
-              {...methods.register('name' as Path<T>)}
-              placeholder="Name"
-            />
-          </div>
-          <div>{renderError(methods.formState.errors.name?.message)}</div>
-          <div>
-            <label style={{ margin: 20 }}>Birth month</label>
-            <Controller
-              name={'birthDate' as Path<T>}
-              control={methods.control}
-              render={({ field }) => (
-                <MonthYearPicker
-                  selected={field.value ? new Date(field.value) : null}
-                  onChange={(date) => {
-                    console.log(date);
-                    field.onChange(date);
-                  }}
+    <div className={styles.formCard}>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <fieldset disabled={isSubmitting} className={styles.fieldset}>
+            <div className={styles.field}>
+              <label className={styles.label}>Name</label>
+              <input
+                {...methods.register('name' as Path<T>)}
+                placeholder="Enter name"
+                className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+              />
+              <div>{renderError(errors.name?.message)}</div>
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label}>Birth month</label>
+              <div>
+                <Controller
+                  name={'birthDate' as Path<T>}
+                  control={methods.control}
+                  render={({ field }) => (
+                    <MonthYearPicker
+                      selected={field.value ? new Date(field.value) : null}
+                      onChange={(date) => field.onChange(date)}
+                    />
+                  )}
                 />
-              )}
-            />
-          </div>
-          <div>{renderError(methods.formState.errors.birthDate?.message)}</div>
-          {fields}
-          <input type="submit" value={id ? 'Update' : 'Create'} />
-          <button type="button" onClick={() => navigate(-1)}>
-            Cancel
-          </button>
-        </fieldset>
-      </form>
-    </FormProvider>
+              </div>
+              <div>{renderError(errors.birthDate?.message)}</div>
+            </div>
+            {fields}
+            <div className={styles.actions}>
+              <input
+                type="submit"
+                className={`${styles.button} ${styles.submitButton}`}
+                value={isSubmitting ? 'Saving...' : id ? 'Update' : 'Create'}
+              />
+
+              <button
+                type="button"
+                className={`${styles.button} ${styles.cancelButton}`}
+                onClick={() => navigate(-1)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
+            </div>
+          </fieldset>
+        </form>
+      </FormProvider>
+    </div>
   );
 }

@@ -1,0 +1,22 @@
+.customSelect {
+  cursor: pointer;
+  appearance: none;
+}
+
+.customSelect option {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.arrowIcon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-primary);
+  pointer-events: none;
+}
