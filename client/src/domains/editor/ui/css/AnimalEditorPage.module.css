@@ -35,7 +35,7 @@
 }
 
 .radioInput {
-  accent-color: #2563eb;
+  accent-color: var(--blue-active);
   width: 18px;
   height: 18px;
   cursor: pointer;
@@ -43,5 +43,5 @@
 }
 
 .radioLabel:has(.radioInput:checked) {
-  color: #2563eb;
+  color: var(--blue-active);
 }

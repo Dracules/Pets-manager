@@ -49,16 +49,16 @@
 }
 
 .input:focus {
-  border-color: #2563eb;
+  border-color: var(--blue-active);
 }
 
 .inputError {
-  border-color: #ef4444;
+  border-color: var(--red-error);
 }
 
 .errorMessage {
   font-size: 0.9rem;
-  color: #ef4444;
+  color: var(--red-error);
   margin: 4px;
   font-weight: 500;
   min-height: 1.2em;
@@ -84,8 +84,8 @@
 
 .submitButton {
   flex: 2;
-  color: #ffffff;
-  background: #2563eb;
+  color: var(--bg-surface);
+  background: var(--blue-active);
   border: none;
 }
 

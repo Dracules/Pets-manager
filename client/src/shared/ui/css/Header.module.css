@@ -25,7 +25,7 @@
 }
 
 .linkActive {
-  color: #2563eb;
+  color: var(--blue-active);
   background-color: rgba(37, 99, 235, 0.1);
   font-weight: 700;
 }

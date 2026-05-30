@@ -4,6 +4,8 @@
   --border-color: #e2e8f0;
   --text-primary: #0f172a;
   --text-secondary: #475569;
+  --blue-active: #2563eb;
+  --red-error: #ef4444;
 
   position: relative;
   display: flex;

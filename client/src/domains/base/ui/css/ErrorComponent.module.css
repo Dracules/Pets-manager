@@ -30,7 +30,7 @@
   max-width: 100px;
   background: rgba(239, 68, 68, 0.1);
   border-radius: 50%;
-  color: #ef4444;
+  color: var(--red-error);
   font-size: 5rem;
 }
 
@@ -55,7 +55,7 @@
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
-  color: #ef4444;
+  color: var(--red-error);
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 6px;
@@ -64,7 +64,7 @@
 
 .retryButton:hover {
   background: rgba(239, 68, 68, 0.15);
-  border-color: #ef4444;
+  border-color: var(--red-error);
 }
 
 .retryButton:disabled {
