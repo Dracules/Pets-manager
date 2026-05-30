@@ -37,7 +37,9 @@ export function AnimalEditor<T extends Animal>({
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <fieldset disabled={isSubmitting} className={styles.fieldset}>
             <div className={styles.field}>
-              <label className={styles.label}>Name</label>
+              <label className={`${styles.label} ${styles.labelRequired}`}>
+                Name
+              </label>
               <input
                 {...methods.register('name' as Path<T>)}
                 placeholder="Enter name"
@@ -46,7 +48,9 @@ export function AnimalEditor<T extends Animal>({
               <div>{renderError(errors.name?.message)}</div>
             </div>
             <div className={styles.field}>
-              <label className={styles.label}>Birth month</label>
+              <label className={`${styles.label} ${styles.labelRequired}`}>
+                Birth month
+              </label>
               <div>
                 <Controller
                   name={'birthDate' as Path<T>}
