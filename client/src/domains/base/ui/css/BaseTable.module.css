@@ -69,23 +69,23 @@
 }
 
 .actionBtnEdit {
-  color: #2563eb;
+  color: var(--blue-active);
   border-color: rgba(37, 99, 235, 0.3);
 }
 
 .actionBtnEdit:hover {
   background: rgba(37, 99, 235, 0.08);
-  border-color: #2563eb;
+  border-color: var(--blue-active);
 }
 
 .actionBtnDelete {
-  color: #ef4444;
+  color: var(--red-error);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
 .actionBtnDelete:hover {
   background: rgba(239, 68, 68, 0.08);
-  border-color: #ef4444;
+  border-color: var(--red-error);
 }
 
 .tfoot {

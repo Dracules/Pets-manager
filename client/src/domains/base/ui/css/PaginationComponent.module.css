@@ -35,7 +35,7 @@
 }
 
 .pageSizeSelect:focus {
-  border-color: #2563eb;
+  border-color: var(--blue-active);
 }
 
 .paginationWrapper :global(.MuiPaginationItem-root) {
@@ -49,8 +49,8 @@
 }
 
 .paginationWrapper :global(.Mui-selected) {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
+  background-color: var(--blue-active) !important;
+  color: var(--bg-surface) !important;
 }
 
 .paginationWrapper :global(.Mui-selected:hover) {

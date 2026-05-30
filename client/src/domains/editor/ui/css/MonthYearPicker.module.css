@@ -10,7 +10,7 @@
 }
 
 .input:focus {
-  border-color: #2563eb !important;
+  border-color: var(--blue-active) !important;
 }
 
 .datePickerWrapper {
