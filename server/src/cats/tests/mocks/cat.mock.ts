@@ -19,7 +19,7 @@ export const mockCat = (overrides: Partial<CatResponse> = {}): CatResponse => ({
   birthDate: new Date(),
   age: '0 years 0 months',
   litterStatus: 'unknown',
-  owner: '111',
+  owner: { _id: '111', login: 'user' },
   ...overrides,
 });
 

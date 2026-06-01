@@ -24,9 +24,28 @@ export class AnimalService {
               pipeline: [{ $addFields: { type: 'dog' } }],
             },
           },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'owner',
+              foreignField: '_id',
+              as: 'owner',
+            },
+          },
+          { $unwind: '$owner' },
           { $sort: { _id: 1 } },
           { $skip: skip },
           { $limit: limit },
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+              age: 1,
+              birthDate: 1,
+              type: 1,
+              owner: { _id: '$owner._id', login: '$owner.login' },
+            },
+          },
         ])
         .exec(),
 
@@ -75,9 +94,28 @@ export class AnimalService {
               ],
             },
           },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'owner',
+              foreignField: '_id',
+              as: 'owner',
+            },
+          },
+          { $unwind: '$owner' },
           { $sort: { _id: 1 } },
           { $skip: skip },
           { $limit: limit },
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+              age: 1,
+              birthDate: 1,
+              type: 1,
+              owner: { _id: '$owner._id', login: '$owner.login' },
+            },
+          },
         ])
         .exec(),
 

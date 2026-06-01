@@ -32,16 +32,23 @@ export abstract class BaseAnimalService<
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
 
     const [findedAnimals, total] = await Promise.all([
-      this.model.find().sort({ _id: 1 }).skip(skip).limit(limit).exec(),
+      this.model
+        .find()
+        .sort({ _id: 1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('owner', 'login')
+        .lean()
+        .exec(),
       this.model.countDocuments().exec(),
     ]);
 
     return {
       animals: findedAnimals.map((obj) => ({
-        ...obj.toJSON(),
+        ...obj,
         type: animalType,
         age: calculateAge(obj.birthDate),
-      })) as unknown as Response[],
+      })) as Response[],
       totalCount: total,
     };
   }
@@ -50,9 +57,10 @@ export abstract class BaseAnimalService<
     const animal = await this.model
       .findById(animalId)
       .populate('owner', 'login')
+      .lean()
       .exec();
     if (!animal) throw new AnimalException();
-    return animal.toJSON() as unknown as Response;
+    return animal as Response;
   }
 
   async findByUser(
@@ -67,6 +75,8 @@ export abstract class BaseAnimalService<
         .sort({ _id: 1 })
         .skip(skip)
         .limit(limit)
+        .populate('owner', 'login')
+        .lean()
         .exec(),
       this.model
         .countDocuments()
@@ -77,10 +87,10 @@ export abstract class BaseAnimalService<
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
     return {
       animals: findedAnimals.map((obj) => ({
-        ...obj.toJSON(),
+        ...obj,
         age: calculateAge(obj.birthDate),
         type: animalType,
-      })) as unknown as Response[],
+      })) as Response[],
       totalCount: total,
     };
   }
