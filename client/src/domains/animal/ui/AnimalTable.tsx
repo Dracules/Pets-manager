@@ -6,7 +6,7 @@ import { AnimalResponse } from '../model/animal.response.interface';
 const animalColumns: ColumnDef<AnimalResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
-  { accessorKey: 'owner', header: 'Owner ID' },
+  { accessorKey: 'owner.login', header: 'Owner' },
 ];
 
 function AnimalTable({

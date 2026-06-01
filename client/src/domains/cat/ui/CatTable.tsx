@@ -7,7 +7,7 @@ const catColumns: ColumnDef<CatResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'litterStatus', header: 'Litter Status' },
-  { accessorKey: 'owner', header: 'Owner ID' },
+  { accessorKey: 'owner.login', header: 'Owner' },
 ];
 
 function CatTable({

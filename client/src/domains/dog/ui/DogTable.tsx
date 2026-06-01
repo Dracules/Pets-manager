@@ -7,7 +7,7 @@ const dogColumns: ColumnDef<DogResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'trainedCommands', header: 'Commands' },
-  { accessorKey: 'owner', header: 'Owner ID' },
+  { accessorKey: 'owner.login', header: 'Owner' },
 ];
 
 function DogTable({
