@@ -3,5 +3,5 @@ export interface Animal {
   name: string;
   readonly age: string;
   birthDate: Date;
-  owner: string;
+  owner: { _id: string; login: string };
 }
