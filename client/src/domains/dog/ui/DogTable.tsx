@@ -4,7 +4,6 @@ import { BaseTableProps } from '../../base/model/BaseTableProps';
 import { DogResponse } from '../model/dog.response.interface';
 
 const dogColumns: ColumnDef<DogResponse>[] = [
-  { accessorKey: '_id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'trainedCommands', header: 'Commands' },

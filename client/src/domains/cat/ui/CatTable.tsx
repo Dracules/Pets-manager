@@ -4,7 +4,6 @@ import { BaseTableProps } from '../../base/model/BaseTableProps';
 import { CatResponse } from '../model/cat.response.interface';
 
 const catColumns: ColumnDef<CatResponse>[] = [
-  { accessorKey: '_id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'litterStatus', header: 'Litter Status' },

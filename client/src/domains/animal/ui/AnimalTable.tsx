@@ -4,7 +4,6 @@ import { BaseTableProps } from '../../base/model/BaseTableProps';
 import { AnimalResponse } from '../model/animal.response.interface';
 
 const animalColumns: ColumnDef<AnimalResponse>[] = [
-  { accessorKey: '_id', header: 'ID' },
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'owner', header: 'Owner ID' },
