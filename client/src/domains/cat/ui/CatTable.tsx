@@ -2,13 +2,12 @@ import { type ColumnDef } from '@tanstack/react-table';
 import BaseTable from '../../base/ui/BaseTable';
 import { BaseTableProps } from '../../base/model/BaseTableProps';
 import { CatResponse } from '../model/cat.response.interface';
+import { useMemo } from 'react';
 
-const catColumns: ColumnDef<CatResponse>[] = [
-  { accessorKey: '_id', header: 'ID' },
+const baseColumns: ColumnDef<CatResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'litterStatus', header: 'Litter Status' },
-  { accessorKey: 'owner', header: 'Owner ID' },
 ];
 
 function CatTable({
@@ -17,6 +16,13 @@ function CatTable({
   footerPaginationComponent,
   loading,
 }: BaseTableProps<CatResponse>) {
+  const catColumns = useMemo<ColumnDef<CatResponse>[]>(() => {
+    const cols = [...baseColumns];
+    if (!options) {
+      cols.push({ accessorKey: 'owner.login', header: 'Owner' });
+    }
+    return cols;
+  }, [options]);
   return (
     <BaseTable
       data={data}
