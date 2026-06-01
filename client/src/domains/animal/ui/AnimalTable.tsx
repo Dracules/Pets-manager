@@ -2,11 +2,11 @@ import { type ColumnDef } from '@tanstack/react-table';
 import BaseTable from '../../base/ui/BaseTable';
 import { BaseTableProps } from '../../base/model/BaseTableProps';
 import { AnimalResponse } from '../model/animal.response.interface';
+import { useMemo } from 'react';
 
-const animalColumns: ColumnDef<AnimalResponse>[] = [
+const baseColumns: ColumnDef<AnimalResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
-  { accessorKey: 'owner.login', header: 'Owner' },
 ];
 
 function AnimalTable({
@@ -15,6 +15,14 @@ function AnimalTable({
   footerPaginationComponent,
   loading,
 }: BaseTableProps<AnimalResponse>) {
+  const animalColumns = useMemo<ColumnDef<AnimalResponse>[]>(() => {
+    const cols = [...baseColumns];
+    if (!options) {
+      cols.push({ accessorKey: 'owner.login', header: 'Owner' });
+    }
+    return cols;
+  }, [options]);
+
   return (
     <BaseTable
       data={data}
