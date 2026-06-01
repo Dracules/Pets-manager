@@ -32,7 +32,13 @@ export abstract class BaseAnimalService<
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
 
     const [findedAnimals, total] = await Promise.all([
-      this.model.find().sort({ _id: 1 }).skip(skip).limit(limit).exec(),
+      this.model
+        .find()
+        .sort({ _id: 1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('owner', 'login')
+        .exec(),
       this.model.countDocuments().exec(),
     ]);
 
@@ -67,6 +73,7 @@ export abstract class BaseAnimalService<
         .sort({ _id: 1 })
         .skip(skip)
         .limit(limit)
+        .populate('owner', 'login')
         .exec(),
       this.model
         .countDocuments()
