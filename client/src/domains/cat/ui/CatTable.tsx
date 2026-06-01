@@ -15,6 +15,7 @@ function CatTable({
   data,
   options,
   footerPaginationComponent,
+  loading,
 }: BaseTableProps<CatResponse>) {
   return (
     <BaseTable
@@ -22,6 +23,7 @@ function CatTable({
       columns={catColumns}
       options={options}
       footerPaginationComponent={footerPaginationComponent}
+      loading={loading}
     />
   );
 }

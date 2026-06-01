@@ -4,10 +4,10 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
-import LoadingComponent from '../../../shared/ui/LoadingComponent';
 import { useState } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
+import { ErrorComponent } from './ErrorComponent';
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<BaseTableProps<T>>,
@@ -17,15 +17,15 @@ function BaseAnimalPage<T extends AnimalResponse>(
   const [page, setPage] = useState(0);
   const [pageLimit, setPageLimit] = useState(10);
 
-  const { data, totalCount, loading, error, setData } = useFetchData(
+  const { data, totalCount, loading, error, setData, load } = useFetchData(
     fetchFn,
     page,
     pageLimit,
   );
   const navigate = useNavigate();
 
-  if (loading) return <LoadingComponent />;
-  if (error) return <h1>Error: {error}</h1>;
+  if (error)
+    return <ErrorComponent error={error} load={load} loading={loading} />;
 
   const paginationComponent = (
     <PaginationComponent
@@ -61,6 +61,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
           data={data ?? []}
           options={{ onDelete: handleDelete, onEdit: handleEdit }}
           footerPaginationComponent={paginationComponent}
+          loading={loading}
         />
       </div>
     );
@@ -70,6 +71,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
         <AnimalTable
           data={data ?? []}
           footerPaginationComponent={paginationComponent}
+          loading={loading}
         />
       </div>
     );

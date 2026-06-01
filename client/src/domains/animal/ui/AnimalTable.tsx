@@ -14,6 +14,7 @@ function AnimalTable({
   data,
   options,
   footerPaginationComponent,
+  loading,
 }: BaseTableProps<AnimalResponse>) {
   return (
     <BaseTable
@@ -21,6 +22,7 @@ function AnimalTable({
       columns={animalColumns}
       options={options}
       footerPaginationComponent={footerPaginationComponent}
+      loading={loading}
     />
   );
 }

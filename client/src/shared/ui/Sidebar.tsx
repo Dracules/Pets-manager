@@ -1,7 +1,6 @@
 import { Menu, MenuItem, Sidebar } from 'react-pro-sidebar';
 import { Link } from 'react-router';
 import { useAuth } from '../../domains/login/context/AuthContext';
-import { useState } from 'react';
 import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
 import {
   TbCircleLetterA,
@@ -10,65 +9,114 @@ import {
 } from 'react-icons/tb';
 import { RxExit } from 'react-icons/rx';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import styles from './css/AppSidebar.module.css';
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
+}
+
+export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const { token, logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
+  const iconSize = 30;
 
   return (
-    <Sidebar collapsed={collapsed} style={{ backgroundColor: '#f6f6f6ff' }}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          overflow: 'hidden',
-        }}
-      >
-        <Menu>
-          <MenuItem
-            icon={collapsed ? <FiChevronsRight /> : <FiChevronsLeft />}
-            onClick={() => setCollapsed(!collapsed)}
-          ></MenuItem>
-        </Menu>
-        <Menu style={{ flex: 1, overflowY: 'auto', margin: 0 }}>
-          <MenuItem
-            icon={<TbCircleLetterA size={35} />}
-            component={<Link to="/" />}
-          >
-            All animals
-          </MenuItem>
-          {token.access_token && (
-            <>
-              <MenuItem
-                icon={<TbCircleLetterM size={35} />}
-                component={<Link to="/my" />}
-              >
-                My animals
-              </MenuItem>
-              <MenuItem
-                icon={<IoMdAddCircleOutline size={35} />}
-                component={<Link to="/edit" />}
-              >
-                Add animal
-              </MenuItem>
-            </>
-          )}
-        </Menu>
-        <Menu>
-          {token.access_token ? (
-            <MenuItem icon={<RxExit size={35} />} onClick={logout}>
-              Logout
-            </MenuItem>
-          ) : (
+    <Sidebar
+      collapsed={collapsed}
+      backgroundColor="#f6f6f6"
+      rootStyles={{ height: '100%', width: collapsed ? '80px' : '260px' }}
+    >
+      <div className={styles.layout}>
+        <div className={styles.top}>
+          <Menu>
             <MenuItem
-              icon={<TbCircleLetterL size={35} />}
-              component={<Link to="/login" />}
+              className={styles.menuItem}
+              icon={
+                <div className={styles.iconBox}>
+                  {collapsed ? (
+                    <FiChevronsRight size={iconSize} />
+                  ) : (
+                    <FiChevronsLeft size={iconSize} />
+                  )}
+                </div>
+              }
+              onClick={() => onToggle()}
+            />
+          </Menu>
+        </div>
+
+        <div className={styles.middle}>
+          <Menu>
+            <MenuItem
+              className={styles.menuItem}
+              icon={
+                <div className={styles.iconBox}>
+                  <TbCircleLetterA size={iconSize} />
+                </div>
+              }
+              component={<Link to="/" className={styles.navLink} />}
             >
-              Login
+              All animals
             </MenuItem>
-          )}
-        </Menu>
+
+            {token.access_token && (
+              <>
+                <MenuItem
+                  className={styles.menuItem}
+                  icon={
+                    <div className={styles.iconBox}>
+                      <TbCircleLetterM size={iconSize} />
+                    </div>
+                  }
+                  component={<Link to="/my" className={styles.navLink} />}
+                >
+                  My animals
+                </MenuItem>
+                <MenuItem
+                  className={styles.menuItem}
+                  icon={
+                    <div className={styles.iconBox}>
+                      <IoMdAddCircleOutline size={iconSize} />
+                    </div>
+                  }
+                  component={<Link to="/edit" className={styles.navLink} />}
+                >
+                  Add animal
+                </MenuItem>
+              </>
+            )}
+          </Menu>
+        </div>
+
+        <div className={styles.bottom}>
+          <Menu>
+            {token.access_token ? (
+              <MenuItem
+                className={styles.menuItem}
+                icon={
+                  <div className={styles.iconBox}>
+                    <RxExit size={iconSize} />
+                  </div>
+                }
+                onClick={logout}
+              >
+                Logout
+              </MenuItem>
+            ) : (
+              <MenuItem
+                className={styles.menuItem}
+                icon={
+                  <div className={styles.iconBox}>
+                    <TbCircleLetterL size={iconSize} />
+                  </div>
+                }
+                component={<Link to="/login" className={styles.navLink} />}
+              >
+                Login
+              </MenuItem>
+            )}
+          </Menu>
+        </div>
       </div>
     </Sidebar>
   );

@@ -1,38 +1,38 @@
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 import { useAuth } from '../../domains/login/context/AuthContext';
 import { setApiAuth } from '../api/axiosApi';
 import { HeaderType } from '../model/types/header.type';
+import styles from './css/Header.module.css';
+import { PiCat, PiDog, PiPawPrint } from 'react-icons/pi';
 
 export function Header({ type }: { type: HeaderType }) {
   const { getTokenStorage, logout, updateToken } = useAuth();
   setApiAuth(getTokenStorage, logout, updateToken);
 
-  const getHeaderLinks = () => {
-    switch (type) {
-      case 'all':
-        return (
-          <>
-            <Link to="/">All</Link>
-            <Link to="/cats">Cats</Link>
-            <Link to="/dogs">Dogs</Link>
-          </>
-        );
-      case 'user':
-        return (
-          <>
-            <Link to="/my">All</Link>
-            <Link to="/mycats">Cats</Link>
-            <Link to="/mydogs">Dogs</Link>
-          </>
-        );
-      case 'no':
-        return <></>;
-    }
-  };
+  if (type === 'no') return null;
+
+  const prefix = type === 'all' ? '' : 'my';
+
+  const links = [
+    { to: `/${prefix}`, label: 'All', icon: <PiPawPrint /> },
+    { to: `/${prefix}cats`, label: 'Cats', icon: <PiCat /> },
+    { to: `/${prefix}dogs`, label: 'Dogs', icon: <PiDog /> },
+  ];
 
   return (
-    <nav>
-      <div style={{ display: 'flex', gap: '12px' }}>{getHeaderLinks()}</div>
+    <nav className={styles.nav}>
+      {links.map(({ to, label, icon }) => (
+        <NavLink
+          key={to}
+          to={to}
+          className={({ isActive }) =>
+            `${styles.link} ${isActive ? styles.linkActive : ''}`
+          }
+        >
+          {icon}
+          {label}
+        </NavLink>
+      ))}
     </nav>
   );
 }

@@ -1,0 +1,43 @@
+.nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text-secondary, #475569);
+  background: transparent;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+.link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.link:hover {
+  color: var(--text-primary, #0f172a);
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.linkActive {
+  color: var(--blue-active);
+  background-color: rgba(37, 99, 235, 0.1);
+  font-weight: 700;
+}
+
+.linkActive:hover {
+  background-color: rgba(37, 99, 235, 0.3);
+}

@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.pageSizeControl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pageSizeLabel {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pageSizeSelect {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+}
+
+.pageSizeSelect:hover {
+  border-color: #94a3b8;
+}
+
+.pageSizeSelect:focus {
+  border-color: var(--blue-active);
+}
+
+.paginationWrapper :global(.MuiPaginationItem-root) {
+  color: var(--text-primary);
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.paginationWrapper :global(.MuiPaginationItem-root:hover) {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.paginationWrapper :global(.Mui-selected) {
+  background-color: var(--blue-active) !important;
+  color: var(--bg-surface) !important;
+}
+
+.paginationWrapper :global(.Mui-selected:hover) {
+  background-color: #1d4ed8 !important;
+}

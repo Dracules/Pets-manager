@@ -5,6 +5,9 @@ import { useAnimalEditor } from '../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
 import { CatsApi } from '../api/catsApi';
 import catEditorSchema from '../model/validation/catEditorSchema';
+import commonStyles from '../../editor/ui/css/AnimalEditor.module.css';
+import specialStyles from './css/CatEditor.module.css';
+import { FiChevronDown } from 'react-icons/fi';
 
 export function CatEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
@@ -19,32 +22,40 @@ export function CatEditor() {
     defaultValues: { litterStatus: 'unknown' },
   });
 
-  if (isLoading) return <LoadingComponent />;
   return (
-    <AnimalEditor<Cat>
-      fields={
-        <div>
-          <label style={{ margin: 20 }}>Litter status</label>
-          <select {...methods.register('litterStatus')}>
-            {LITTER_STATUS.map((status) => (
-              <option key={status} value={status}>
-                {status === 'unknown'
-                  ? 'Choose status'
-                  : status.charAt(0).toUpperCase() + status.slice(1)}
-              </option>
-            ))}
-          </select>
-          <div>
+    <div className={commonStyles.formContainer}>
+      <AnimalEditor<Cat>
+        fields={
+          <div className={commonStyles.field}>
+            <label className={commonStyles.label}>Litter status</label>
+            <div className={specialStyles.selectWrapper}>
+              <select
+                {...methods.register('litterStatus')}
+                className={`${commonStyles.input} ${specialStyles.customSelect}`}
+              >
+                {LITTER_STATUS.map((status) => (
+                  <option key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </option>
+                ))}
+              </select>
+              <FiChevronDown className={specialStyles.arrowIcon} />
+            </div>
             {methods.formState.errors.litterStatus && (
-              <span style={{ color: 'red' }}>
+              <div className={commonStyles.errorMessage}>
                 {methods.formState.errors.litterStatus.message}
-              </span>
+              </div>
             )}
           </div>
+        }
+        onSubmit={onSubmit}
+        methods={methods}
+      />
+      {isLoading && (
+        <div className={commonStyles.formLoaderOverlay}>
+          <LoadingComponent />
         </div>
-      }
-      onSubmit={onSubmit}
-      methods={methods}
-    />
+      )}
+    </div>
   );
 }

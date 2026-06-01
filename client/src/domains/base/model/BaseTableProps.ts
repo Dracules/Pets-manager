@@ -13,4 +13,5 @@ export interface BaseTableProps<T extends AnimalResponse> {
   columns?: ColumnDef<T>[];
   options?: BaseTablePropsOptions | undefined;
   footerPaginationComponent: JSX.Element;
+  loading: boolean;
 }
