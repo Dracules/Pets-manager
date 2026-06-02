@@ -76,7 +76,7 @@ export function AnimalEditor<T extends Animal>({
                 placeholder="Enter description"
                 maxLength={1000}
                 rows={4}
-                className={`${styles.input} ${errors.description ? styles.inputError : ''}`}
+                className={`${styles.input} ${styles.textarea} ${errors.description ? styles.inputError : ''}`}
               />
               <div>{renderError(errors.description?.message)}</div>
             </div>
