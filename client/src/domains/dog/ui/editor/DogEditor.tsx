@@ -12,8 +12,13 @@ export function DogEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
     loadById: DogsApi.getDogById,
     createItem: async (data: Dog) => {
-      const { name, birthDate, trainedCommands } = data;
-      await DogsApi.createDog({ name, birthDate, trainedCommands });
+      const { name, birthDate, trainedCommands, description } = data;
+      await DogsApi.createDog({
+        name,
+        birthDate,
+        trainedCommands,
+        description,
+      });
     },
     updateItem: DogsApi.updateDog,
     validationSchema: dogEditorSchema,

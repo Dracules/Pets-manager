@@ -13,8 +13,8 @@ export function CatEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
     loadById: CatsApi.getCatById,
     createItem: async (data: Cat) => {
-      const { name, birthDate, litterStatus } = data;
-      await CatsApi.createCat({ name, birthDate, litterStatus });
+      const { name, birthDate, litterStatus, description } = data;
+      await CatsApi.createCat({ name, birthDate, litterStatus, description });
     },
     updateItem: CatsApi.updateCat,
     afterSubmit: `/mycats`,
