@@ -8,6 +8,7 @@ const baseColumns: ColumnDef<CatResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'litterStatus', header: 'Litter Status' },
+  { accessorKey: 'description', header: 'Description' },
 ];
 
 function CatTable({

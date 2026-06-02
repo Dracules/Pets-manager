@@ -8,6 +8,7 @@ const baseColumns: ColumnDef<DogResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
   { accessorKey: 'trainedCommands', header: 'Commands' },
+  { accessorKey: 'description', header: 'Description' },
 ];
 
 function DogTable({
