@@ -4,4 +4,5 @@ export interface AnimalResponse {
   age: string;
   birthDate: Date;
   owner: { _id: string; login: string };
+  description?: string;
 }
