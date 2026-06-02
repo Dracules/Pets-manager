@@ -15,6 +15,9 @@ export class Animal {
     required: true,
   })
   owner: string;
+
+  @Prop({ maxlength: 1000 })
+  description?: string;
 }
 
 export const createAnimalSchema = (specificSchema: Type<any>) => {
