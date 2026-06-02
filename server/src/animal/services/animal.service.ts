@@ -44,6 +44,7 @@ export class AnimalService {
               birthDate: 1,
               type: 1,
               owner: { _id: '$owner._id', login: '$owner.login' },
+              description: 1,
             },
           },
         ])
@@ -114,6 +115,7 @@ export class AnimalService {
               birthDate: 1,
               type: 1,
               owner: { _id: '$owner._id', login: '$owner.login' },
+              description: 1,
             },
           },
         ])
