@@ -66,6 +66,21 @@ export function AnimalEditor<T extends Animal>({
               <div>{renderError(errors.birthDate?.message)}</div>
             </div>
             {fields}
+            <div className={styles.field}>
+              <label className={styles.label}>Description</label>
+              <textarea
+                {...methods.register('description' as Path<T>, {
+                  setValueAs: (value: string) =>
+                    value === '' ? undefined : value,
+                })}
+                placeholder="Enter description"
+                maxLength={1000}
+                rows={4}
+                className={`${styles.input} ${errors.description ? styles.inputError : ''}`}
+              />
+              <div>{renderError(errors.description?.message)}</div>
+            </div>
+
             <div className={styles.actions}>
               <input
                 type="submit"
