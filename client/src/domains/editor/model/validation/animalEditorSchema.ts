@@ -13,6 +13,12 @@ const animalEditorSchema = yup.object({
     .max(50, 'Name is too long'),
 
   birthDate: animalBirthDateSchema,
+
+  description: yup
+    .string()
+    .trim()
+    .min(1, 'Please, enter a valid description')
+    .max(1000, 'Description is too long'),
 });
 
 export default animalEditorSchema;
