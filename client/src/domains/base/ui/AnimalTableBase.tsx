@@ -5,8 +5,8 @@ import { useMemo } from 'react';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 
 const baseColumns: ColumnDef<AnimalResponse>[] = [
-  { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'age', header: 'Age' },
+  { accessorKey: 'name', header: 'Name', meta: { size: 170 } },
+  { accessorKey: 'age', header: 'Age', meta: { size: 170 } },
   { accessorKey: 'description', header: 'Description' },
 ];
 
@@ -26,6 +26,7 @@ function AnimalTableBase<T extends AnimalResponse>({
       cols.push({
         accessorKey: 'owner.login',
         header: 'Owner',
+        meta: { size: 170 },
       });
     }
     return cols;

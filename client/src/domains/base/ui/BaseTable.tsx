@@ -50,6 +50,7 @@ export default function BaseTable<T extends AnimalResponse>({
             </button>
           </div>
         ),
+        meta: { size: 150 },
       };
       return [...columns, actionColumn];
     }

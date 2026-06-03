@@ -12,6 +12,7 @@ function CatTable(props: CommonBaseTableProps<CatResponse>) {
           {
             accessorKey: 'litterStatus',
             header: 'Litter Status',
+            meta: { size: 130 },
           },
         ] as ColumnDef<CatResponse>[]
       }
