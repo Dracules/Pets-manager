@@ -1,5 +1,5 @@
 import useFetchData from '../model/useFetchData';
-import { BaseTableProps } from '../model/BaseTableProps';
+import { CommonBaseTableProps } from '../model/BaseTableProps';
 import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
@@ -10,7 +10,7 @@ import PaginationComponent from './PaginationComponent';
 import { ErrorComponent } from './ErrorComponent';
 
 function BaseAnimalPage<T extends AnimalResponse>(
-  AnimalTable: React.ComponentType<BaseTableProps<T>>,
+  AnimalTable: React.ComponentType<CommonBaseTableProps<T>>,
   fetchFn: (options: string) => Promise<PaginationResult<T[]>>,
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {

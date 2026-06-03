@@ -1,9 +1,9 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { BaseTableProps } from '../../base/model/BaseTableProps';
+import { CommonBaseTableProps } from '../../base/model/BaseTableProps';
 import { CatResponse } from '../model/cat.response.interface';
 import AnimalTableBase from '../../base/ui/AnimalTableBase';
 
-function CatTable(props: BaseTableProps<CatResponse>) {
+function CatTable(props: CommonBaseTableProps<CatResponse>) {
   return (
     <AnimalTableBase
       {...props}
