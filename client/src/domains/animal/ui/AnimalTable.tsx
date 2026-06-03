@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 const baseColumns: ColumnDef<AnimalResponse>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'age', header: 'Age' },
+  { accessorKey: 'description', header: 'Description' },
 ];
 
 function AnimalTable({
