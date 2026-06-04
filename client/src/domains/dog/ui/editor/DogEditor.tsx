@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { AnimalEditor } from '../../../editor/ui/AnimalEditor';
 import { Dog } from '../../model/dog.interface';
-import { MultiTagsSelect } from './MultiTagsSelect';
+import { MultiTagsSelect } from '../../../../shared/ui/MultiTagsSelect';
 import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../../shared/ui/LoadingComponent';
 import { DogsApi } from '../../api/dogsApi';
@@ -37,6 +37,7 @@ export function DogEditor() {
                 <MultiTagsSelect
                   value={field.value}
                   onChange={field.onChange}
+                  placeholder="Commands..."
                 />
               )}
             />

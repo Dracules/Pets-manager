@@ -1,5 +1,5 @@
 import CreatableSelect from 'react-select/creatable';
-import './сss/MultiTagsSelect.module.css';
+import './css/MultiTagsSelect.module.css';
 
 type Option = {
   readonly value: string;
@@ -9,11 +9,13 @@ type Option = {
 interface MultiTagsSelectProps {
   value: string[] | undefined;
   onChange: (value: string[] | undefined) => void;
+  placeholder: string;
 }
 
 export function MultiTagsSelect({
   value = [],
   onChange,
+  placeholder,
 }: MultiTagsSelectProps) {
   const selectValue: readonly Option[] = value.map((element) => ({
     value: element,
@@ -36,7 +38,7 @@ export function MultiTagsSelect({
       }}
       isMulti
       isClearable
-      placeholder="Commands..."
+      placeholder={placeholder}
       formatCreateLabel={(input) => {
         const formatted = capitalizeFirstLetter(input);
         return `Add "${formatted}"`;
