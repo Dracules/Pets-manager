@@ -4,6 +4,7 @@ import { setApiAuth } from '../api/axiosApi';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/Header.module.css';
 import { PiCat, PiDog, PiPawPrint } from 'react-icons/pi';
+import { GiParrotHead } from 'react-icons/gi';
 
 export function Header({ type }: { type: HeaderType }) {
   const { getTokenStorage, logout, updateToken } = useAuth();
@@ -17,6 +18,7 @@ export function Header({ type }: { type: HeaderType }) {
     { to: `/${prefix}`, label: 'All', icon: <PiPawPrint /> },
     { to: `/${prefix}cats`, label: 'Cats', icon: <PiCat /> },
     { to: `/${prefix}dogs`, label: 'Dogs', icon: <PiDog /> },
+    { to: `/${prefix}parrots`, label: 'Parrots', icon: <GiParrotHead /> },
   ];
 
   return (
