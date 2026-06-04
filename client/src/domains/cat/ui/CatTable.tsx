@@ -1,36 +1,21 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import BaseTable from '../../base/ui/BaseTable';
-import { BaseTableProps } from '../../base/model/BaseTableProps';
+import { CommonBaseTableProps } from '../../base/model/BaseTableProps';
 import { CatResponse } from '../model/cat.response.interface';
-import { useMemo } from 'react';
+import AnimalTableBase from '../../base/ui/AnimalTableBase';
 
-const baseColumns: ColumnDef<CatResponse>[] = [
-  { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'age', header: 'Age' },
-  { accessorKey: 'litterStatus', header: 'Litter Status' },
-  { accessorKey: 'description', header: 'Description' },
-];
-
-function CatTable({
-  data,
-  options,
-  footerPaginationComponent,
-  loading,
-}: BaseTableProps<CatResponse>) {
-  const catColumns = useMemo<ColumnDef<CatResponse>[]>(() => {
-    const cols = [...baseColumns];
-    if (!options) {
-      cols.push({ accessorKey: 'owner.login', header: 'Owner' });
-    }
-    return cols;
-  }, [options]);
+function CatTable(props: CommonBaseTableProps<CatResponse>) {
   return (
-    <BaseTable
-      data={data}
-      columns={catColumns}
-      options={options}
-      footerPaginationComponent={footerPaginationComponent}
-      loading={loading}
+    <AnimalTableBase
+      {...props}
+      additionalColumns={
+        [
+          {
+            accessorKey: 'litterStatus',
+            header: 'Litter Status',
+            meta: { size: 130 },
+          },
+        ] as ColumnDef<CatResponse>[]
+      }
     />
   );
 }

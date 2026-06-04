@@ -8,10 +8,21 @@ type BaseTablePropsOptions = {
   onEdit: (id: string, type: AnimalType) => Promise<void>;
 };
 
-export interface BaseTableProps<T extends AnimalResponse> {
+export interface CommonBaseTableProps<T extends AnimalResponse> {
   data: T[];
-  columns?: ColumnDef<T>[];
   options?: BaseTablePropsOptions | undefined;
   footerPaginationComponent: JSX.Element;
   loading: boolean;
+}
+
+export interface AnimalTableBaseProps<
+  T extends AnimalResponse,
+> extends CommonBaseTableProps<T> {
+  additionalColumns?: ColumnDef<T>[];
+}
+
+export interface BaseTableProps<
+  T extends AnimalResponse,
+> extends CommonBaseTableProps<T> {
+  columns: ColumnDef<T>[];
 }
