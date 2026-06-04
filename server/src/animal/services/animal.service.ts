@@ -5,6 +5,7 @@ import { Cat, CatDocument } from '../../cats/schemas/cat.schema';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
+import { AnimalType } from '../types/animal.type';
 
 @Injectable()
 export class AnimalService {
@@ -17,11 +18,17 @@ export class AnimalService {
     const [animals, totalResult] = await Promise.all([
       this.catModel
         .aggregate([
-          { $addFields: { type: 'cat' } },
+          { $addFields: { type: 'cat' as AnimalType } },
           {
             $unionWith: {
               coll: 'dogs',
-              pipeline: [{ $addFields: { type: 'dog' } }],
+              pipeline: [{ $addFields: { type: 'dog' as AnimalType } }],
+            },
+          },
+          {
+            $unionWith: {
+              coll: 'parrots',
+              pipeline: [{ $addFields: { type: 'parrot' as AnimalType } }],
             },
           },
           {
@@ -52,11 +59,17 @@ export class AnimalService {
 
       this.catModel
         .aggregate([
-          { $addFields: { type: 'cat' } },
+          { $addFields: { type: 'cat' as AnimalType } },
           {
             $unionWith: {
               coll: 'dogs',
-              pipeline: [{ $addFields: { type: 'dog' } }],
+              pipeline: [{ $addFields: { type: 'dog' as AnimalType } }],
+            },
+          },
+          {
+            $unionWith: {
+              coll: 'parrots',
+              pipeline: [{ $addFields: { type: 'parrot' as AnimalType } }],
             },
           },
           { $count: 'total' },
@@ -85,13 +98,22 @@ export class AnimalService {
       this.catModel
         .aggregate([
           { $match: { owner: userObjectId } },
-          { $addFields: { type: 'cat' } },
+          { $addFields: { type: 'cat' as AnimalType } },
           {
             $unionWith: {
               coll: 'dogs',
               pipeline: [
                 { $match: { owner: userObjectId } },
-                { $addFields: { type: 'dog' } },
+                { $addFields: { type: 'dog' as AnimalType } },
+              ],
+            },
+          },
+          {
+            $unionWith: {
+              coll: 'parrots',
+              pipeline: [
+                { $match: { owner: userObjectId } },
+                { $addFields: { type: 'parrot' as AnimalType } },
               ],
             },
           },
@@ -127,6 +149,12 @@ export class AnimalService {
           {
             $unionWith: {
               coll: 'dogs',
+              pipeline: [{ $match: { owner: userObjectId } }],
+            },
+          },
+          {
+            $unionWith: {
+              coll: 'parrots',
               pipeline: [{ $match: { owner: userObjectId } }],
             },
           },
