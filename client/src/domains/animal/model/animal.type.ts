@@ -1,1 +1,1 @@
-export type AnimalType = 'cat' | 'dog';
+export type AnimalType = 'cat' | 'dog' | 'parrot';

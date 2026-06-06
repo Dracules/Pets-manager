@@ -42,6 +42,10 @@ export default function AppLayout() {
         return 'My cats';
       case '/mydogs':
         return 'My dogs';
+      case '/parrots':
+        return 'Parrots';
+      case '/myparrots':
+        return 'My parrots';
       default:
         return null;
     }
