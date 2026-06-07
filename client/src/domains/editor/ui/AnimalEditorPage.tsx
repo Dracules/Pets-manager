@@ -4,9 +4,8 @@ import { CatEditor } from '../../cat/ui/CatEditor';
 import { DogEditor } from '../../dog/ui/editor/DogEditor';
 import { useSearchParams } from 'react-router';
 import styles from './css/AnimalEditorPage.module.css';
-import { PiCat, PiDog } from 'react-icons/pi';
-import { GiParrotHead } from 'react-icons/gi';
 import { ParrotEditor } from '../../parrot/ui/editor/ParrotEditor';
+import { CatIcon, DogIcon, ParrotIcon } from '../../../shared/ui/Icons';
 
 type EditorPageMode = 'edit' | 'create';
 interface AnimalEditorPageProps {
@@ -31,7 +30,7 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
               onChange={() => setAnimalType('cat')}
               className={styles.radioInput}
             />
-            <PiCat className={styles.radioIcon} />
+            <CatIcon className={styles.radioIcon} />
             <span>Cat</span>
           </label>
 
@@ -43,7 +42,7 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
               onChange={() => setAnimalType('dog')}
               className={styles.radioInput}
             />
-            <PiDog className={styles.radioIcon} />
+            <DogIcon className={styles.radioIcon} />
             <span>Dog</span>
           </label>
 
@@ -55,7 +54,7 @@ function AnimalEditorPage({ mode }: AnimalEditorPageProps) {
               onChange={() => setAnimalType('parrot')}
               className={styles.radioInput}
             />
-            <GiParrotHead className={styles.radioIcon} />
+            <ParrotIcon className={styles.radioIcon} />
             <span>Parrot</span>
           </label>
         </div>
