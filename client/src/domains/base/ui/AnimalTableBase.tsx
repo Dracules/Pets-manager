@@ -9,6 +9,7 @@ import {
   DogIcon,
   ParrotIcon,
 } from '../../../shared/ui/Icons';
+import styles from './css/AnimalTableBase.module.css';
 
 const baseColumns: ColumnDef<AnimalResponse>[] = [
   {
@@ -31,7 +32,9 @@ const baseColumns: ColumnDef<AnimalResponse>[] = [
       }
 
       return (
-          <IconComponent />
+        <div className={styles.iconWrapper}>
+          <IconComponent className={styles.icon} />
+        </div>
       );
     },
     meta: { size: 70 },
