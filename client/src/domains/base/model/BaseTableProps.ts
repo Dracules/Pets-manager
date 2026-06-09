@@ -21,8 +21,9 @@ export interface AnimalTableBaseProps<
   additionalColumns?: ColumnDef<T>[];
 }
 
-export interface BaseTableProps<
-  T extends AnimalResponse,
-> extends CommonBaseTableProps<T> {
+export interface BaseTableProps<T extends AnimalResponse> extends Omit<
+  CommonBaseTableProps<T>,
+  'options'
+> {
   columns: ColumnDef<T>[];
 }

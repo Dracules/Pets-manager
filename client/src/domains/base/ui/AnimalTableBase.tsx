@@ -99,7 +99,6 @@ function AnimalTableBase<T extends AnimalResponse>({
     <BaseTable
       data={data}
       columns={sharedColumns}
-      options={options}
       footerPaginationComponent={footerPaginationComponent}
       loading={loading}
     />

@@ -18,7 +18,6 @@ declare module '@tanstack/react-table' {
 export default function BaseTable<T extends AnimalResponse>({
   data,
   columns = [],
-  options,
   footerPaginationComponent,
   loading,
 }: BaseTableProps<T>) {
