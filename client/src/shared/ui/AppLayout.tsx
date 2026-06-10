@@ -6,22 +6,17 @@ import { HeaderType } from '../model/types/header.type';
 import styles from './css/AppLayout.module.css';
 
 export default function AppLayout() {
-  const [headerType, setHeaderType] = useState<HeaderType>('all');
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
   const pathname = location.pathname;
 
-  const userHeaderPaths = ['/my', '/mycats', '/mydogs'];
   const noHeaderPaths = ['/login', '/edit', '/register'];
 
-  useEffect(() => {
-    if (noHeaderPaths.some((path) => pathname.startsWith(path))) {
-      return setHeaderType('no');
-    }
-    if (userHeaderPaths.includes(pathname)) {
-      return setHeaderType('user');
-    }
-    return setHeaderType('all');
+  const headerType: HeaderType = useMemo(() => {
+    if (noHeaderPaths.some((path) => pathname.startsWith(path))) return 'no';
+
+    if (pathname.startsWith('/my')) return 'user';
+    return 'all';
   }, [pathname]);
 
   const getPageTitle = (): string | null => {
