@@ -21,7 +21,7 @@ export function Header({
     type === 'all' ? '/' : type === 'owner' ? `/owner/${id}/` : '/my/';
 
   const links = [
-    { to: `${prefix}`, label: 'All', icon: <AnimalIcon /> },
+    { to: `${prefix}`, label: 'All', icon: <AnimalIcon />, end: true },
     { to: `${prefix}cats`, label: 'Cats', icon: <CatIcon /> },
     { to: `${prefix}dogs`, label: 'Dogs', icon: <DogIcon /> },
     { to: `${prefix}parrots`, label: 'Parrots', icon: <ParrotIcon /> },
@@ -29,10 +29,11 @@ export function Header({
 
   return (
     <nav className={styles.nav}>
-      {links.map(({ to, label, icon }) => (
+      {links.map(({ to, label, icon, end }) => (
         <NavLink
           key={to}
           to={to}
+          end={!!end}
           className={({ isActive }) =>
             `${styles.link} ${isActive ? styles.linkActive : ''}`
           }
