@@ -13,3 +13,7 @@ export const UserAnimalsPage = () => {
     AnimalsApi.deleteAnimals,
   );
 };
+
+export const AnimalsPageByOwner = () => {
+  return BaseAnimalPage(AnimalTable, AnimalsApi.getUserAnimals);
+};
