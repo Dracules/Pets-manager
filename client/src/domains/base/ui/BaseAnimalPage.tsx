@@ -11,7 +11,7 @@ import { ErrorComponent } from './ErrorComponent';
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<CommonBaseTableProps<T>>,
-  fetchFn: (options: string) => Promise<PaginationResult<T[]>>,
+  fetchFn: (options: string, id?: string) => Promise<PaginationResult<T[]>>,
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
   const [page, setPage] = useState(0);
