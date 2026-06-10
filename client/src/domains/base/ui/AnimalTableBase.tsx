@@ -63,6 +63,7 @@ function AnimalTableBase<T extends AnimalResponse>({
         cell: ({ row }) => (
           <a
             href="#"
+            className={styles.ownerLink}
             onClick={(e) => {
               e.preventDefault();
               options.onOwnerClick(
