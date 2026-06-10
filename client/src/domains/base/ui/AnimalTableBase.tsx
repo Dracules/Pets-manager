@@ -56,10 +56,24 @@ function AnimalTableBase<T extends AnimalResponse>({
 
     if (additionalColumns) cols.push(...additionalColumns);
 
-    if (!options) {
+    if ('onOwnerClick' in options) {
       cols.push({
         accessorKey: 'owner.login',
         header: 'Owner',
+        cell: ({ row }) => (
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              options.onOwnerClick(
+                row.original.owner._id,
+                row.original.owner.login,
+              );
+            }}
+          >
+            {row.original.owner.login}
+          </a>
+        ),
         meta: { size: 170 },
       });
     } else {
