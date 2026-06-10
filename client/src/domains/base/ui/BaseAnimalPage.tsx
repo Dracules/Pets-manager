@@ -53,7 +53,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
       }
     }
 
-    async function handleEdit(id: string, type: AnimalType) {
+    function handleEdit(id: string, type: AnimalType) {
       navigate(`/edit/${id}?type=${type}`);
     }
 
@@ -61,22 +61,31 @@ function BaseAnimalPage<T extends AnimalResponse>(
       <div>
         <AnimalTable
           data={data ?? []}
-          options={{ onDelete: handleDelete, onEdit: handleEdit }}
+          options={{
+            onDelete: handleDelete,
+            onEdit: handleEdit,
+          }}
           footerPaginationComponent={paginationComponent}
           loading={loading}
         />
       </div>
     );
-  } else
+  } else {
+    function handleOwnerClick(id: string, ownerLogin: string) {
+      navigate(`/owner/${id}/`, { state: { ownerLogin } });
+    }
+
     return (
       <div>
         <AnimalTable
           data={data ?? []}
+          options={{ onOwnerClick: handleOwnerClick }}
           footerPaginationComponent={paginationComponent}
           loading={loading}
         />
       </div>
     );
+  }
 }
 
 export default BaseAnimalPage;
