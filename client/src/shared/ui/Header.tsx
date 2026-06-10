@@ -5,14 +5,20 @@ import { HeaderType } from '../model/types/header.type';
 import styles from './css/Header.module.css';
 import { AnimalIcon, CatIcon, DogIcon, ParrotIcon } from './Icons';
 
-export function Header({ type }: { type: HeaderType }) {
+export function Header({
+  type,
+  id,
+}: {
+  type: HeaderType;
+  id: string | undefined;
+}) {
   const { getTokenStorage, logout, updateToken } = useAuth();
   setApiAuth(getTokenStorage, logout, updateToken);
 
   if (type === 'no') return null;
 
   const prefix =
-    type === 'all' ? '/'  : '/my/';
+    type === 'all' ? '/' : type === 'owner' ? `/owner/${id}/` : '/my/';
 
   const links = [
     { to: `${prefix}`, label: 'All', icon: <AnimalIcon /> },

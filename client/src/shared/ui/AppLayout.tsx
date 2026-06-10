@@ -86,7 +86,7 @@ export default function AppLayout() {
       <div className={styles.contentArea}>
         {headerType !== 'no' ? (
           <div className={styles.header}>
-            <Header type={headerType} />
+            <Header type={headerType} id={ownerId} />
           </div>
         ) : undefined}
         {pageTitle ? (
