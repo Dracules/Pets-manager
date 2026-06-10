@@ -19,7 +19,7 @@ export default function AppLayout() {
     return 'all';
   }, [pathname]);
 
-  const getPageTitle = (): string | null => {
+  const pageTitle = useMemo(() => {
     if (pathname.startsWith('/edit')) {
       if (pathname === '/edit') return 'Create animal';
       else return 'Update animal';
@@ -44,9 +44,8 @@ export default function AppLayout() {
       default:
         return null;
     }
-  };
+  }, [pathname]);
 
-  const pageTitle = getPageTitle();
   return (
     <div className={styles.layout}>
       <div
