@@ -49,7 +49,7 @@ export class ParrotController extends BaseAnimalController<
     @Query() paginationDto: PaginationDTO,
   ): Promise<PaginationResult<ParrotResponse[]>> {
     return await super.getAnimalByUser(
-      request,
+      request.user.sub,
       paginationDto.limit,
       paginationDto.skip,
     );

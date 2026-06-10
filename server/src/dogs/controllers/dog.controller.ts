@@ -46,7 +46,7 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
     @Query() paginationDto: PaginationDTO,
   ): Promise<PaginationResult<DogResponse[]>> {
     return await super.getAnimalByUser(
-      request,
+      request.user.sub,
       paginationDto.limit,
       paginationDto.skip,
     );

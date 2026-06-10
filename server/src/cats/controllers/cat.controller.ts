@@ -46,7 +46,7 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Query() paginationDto: PaginationDTO,
   ): Promise<PaginationResult<CatResponse[]>> {
     return await super.getAnimalByUser(
-      request,
+      request.user.sub,
       paginationDto.limit,
       paginationDto.skip,
     );

@@ -23,12 +23,11 @@ export abstract class BaseAnimalController<
   }
 
   protected async getAnimalByUser(
-    request: RequestWithUser,
+    id: string,
     limit: number,
     skip: number,
   ): Promise<PaginationResult<Resp[]>> {
-    const userId = request.user.sub;
-    return this.animalService.findByUser(userId, limit, skip);
+    return this.animalService.findByUser(id, limit, skip);
   }
 
   protected async getAnimalById(id: string): Promise<Resp> {
