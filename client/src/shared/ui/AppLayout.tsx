@@ -40,6 +40,13 @@ export default function AppLayout() {
       if (pathname === '/edit') return 'Create animal';
       else return 'Update animal';
     }
+
+    if (headerType === 'owner') {
+      return ownerData.login
+        ? `Animals of user '${ownerData.login}'`
+        : `Animals of user with ID '${ownerId}'`;
+    }
+
     switch (pathname) {
       case '/':
         return 'Animals';
@@ -60,7 +67,7 @@ export default function AppLayout() {
       default:
         return null;
     }
-  }, [pathname]);
+  }, [pathname, headerType, ownerData, ownerId]);
 
   return (
     <div className={styles.layout}>
