@@ -2,7 +2,7 @@ import useFetchData from '../model/useFetchData';
 import { CommonBaseTableProps } from '../model/BaseTableProps';
 import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { useState } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
@@ -16,11 +16,13 @@ function BaseAnimalPage<T extends AnimalResponse>(
 ) {
   const [page, setPage] = useState(0);
   const [pageLimit, setPageLimit] = useState(10);
+  const { id } = useParams();
 
   const { data, totalCount, loading, error, setData, load } = useFetchData(
     fetchFn,
     page,
     pageLimit,
+    id,
   );
   const navigate = useNavigate();
 
