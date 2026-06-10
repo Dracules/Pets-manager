@@ -14,7 +14,12 @@ export class CatsApi {
 
   static async getUserCats(
     options: string,
+    id?: string,
   ): Promise<PaginationResult<CatResponse[]>> {
+    if (id)
+      return apiClient.get<PaginationResult<CatResponse[]>>(
+        `/animals/cats/user/${id}${options}`,
+      );
     return apiClient.get<PaginationResult<CatResponse[]>>(
       '/animals/cats/user' + options,
     );

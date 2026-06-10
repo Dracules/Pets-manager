@@ -17,7 +17,12 @@ export class AnimalsApi {
 
   static async getUserAnimals(
     options: string,
+    id?: string,
   ): Promise<PaginationResult<AnimalResponse[]>> {
+    if (id)
+      return apiClient.get<PaginationResult<AnimalResponse[]>>(
+        `/animals/user/${id}${options}`,
+      );
     return apiClient.get<PaginationResult<AnimalResponse[]>>(
       '/animals/user' + options,
     );
