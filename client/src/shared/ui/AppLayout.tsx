@@ -1,14 +1,30 @@
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation, useParams } from 'react-router';
 import { Header } from './Header';
 import { AppSidebar } from './Sidebar';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/AppLayout.module.css';
 
 export default function AppLayout() {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
+  const { id: ownerId } = useParams();
+
   const pathname = location.pathname;
+
+  const state = location.state as { ownerLogin?: string } | null;
+  const [ownerData, setOwnerData] = useState(() => ({
+    login: state?.ownerLogin || '',
+    id: ownerId || '',
+  }));
+
+  useEffect(() => {
+    if (ownerId && ownerId !== ownerData.id) {
+      const newState = location.state as { ownerLogin?: string } | null;
+      const ownerLogin = newState?.ownerLogin;
+      if (ownerLogin) setOwnerData({ login: ownerLogin, id: ownerId });
+    }
+  }, [ownerId, location.state]);
 
   const noHeaderPaths = ['/login', '/edit', '/register'];
 
