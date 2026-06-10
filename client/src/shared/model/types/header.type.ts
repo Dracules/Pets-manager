@@ -1,1 +1,1 @@
-export type HeaderType = 'all' | 'user' | 'no';
+export type HeaderType = 'all' | 'user' | 'owner' | 'no';
