@@ -55,6 +55,18 @@ export class ParrotController extends BaseAnimalController<
     );
   }
 
+  @Get('/user/:id')
+  async getParrotBySelectedUser(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<ParrotResponse[]>> {
+    return await super.getAnimalByUser(
+      id,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
+  }
+
   @Get('/:id')
   @UseFilters(AnimalExceptionFilter)
   @UseInterceptors(AnimalCacheInterceptor)

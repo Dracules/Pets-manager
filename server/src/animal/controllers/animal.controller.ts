@@ -1,10 +1,11 @@
-import { Controller, Get, Query, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
 import { AnimalResponse } from '../interfaces/animal.interface';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { PaginationDTO } from '../../shared/dto/pagination.dto';
 import { PaginationResult } from '../interfaces/pagination.result';
+import { ParseObjectIdPipe } from '@nestjs/mongoose';
 
 @Controller('animals')
 export class AnimalController {
@@ -29,6 +30,18 @@ export class AnimalController {
     const userId = request.user.sub;
     return await this.animalService.findAnimalsByUser(
       userId,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
+  }
+
+  @Get('/user/:id')
+  async getSelectedUserAnimals(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<AnimalResponse[]>> {
+    return await this.animalService.findAnimalsByUser(
+      id,
       paginationDto.limit,
       paginationDto.skip,
     );

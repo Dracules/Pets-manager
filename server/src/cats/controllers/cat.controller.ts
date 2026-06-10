@@ -52,6 +52,18 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     );
   }
 
+  @Get('/user/:id')
+  async getCatBySelectedUser(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<CatResponse[]>> {
+    return await super.getAnimalByUser(
+      id,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
+  }
+
   @Get('/:id')
   @UseFilters(AnimalExceptionFilter)
   @UseInterceptors(AnimalCacheInterceptor)

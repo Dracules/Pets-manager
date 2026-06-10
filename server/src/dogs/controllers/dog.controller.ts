@@ -52,6 +52,18 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
     );
   }
 
+  @Get('/user/:id')
+  async getDogBySelectedUser(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<DogResponse[]>> {
+    return await super.getAnimalByUser(
+      id,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
+  }
+
   @Get('/:id')
   @UseFilters(AnimalExceptionFilter)
   @UseInterceptors(AnimalCacheInterceptor)
