@@ -32,10 +32,12 @@ export function AppRoutes() {
         <Route path="dogs" element={<DogsPage />} />
         <Route path="cats" element={<CatsPage />} />
         <Route path="parrots" element={<ParrotsPage />} />
-        <Route path="my" element={<UserAnimalsPage />} />
-        <Route path="mycats" element={<UserCatsPage />} />
-        <Route path="mydogs" element={<UserDogsPage />} />
-        <Route path="myparrots" element={<UserParrotsPage />} />
+        <Route path="my/">
+          <Route index element={<UserAnimalsPage />} />
+          <Route path="cats" element={<UserCatsPage />} />
+          <Route path="dogs" element={<UserDogsPage />} />
+          <Route path="parrots" element={<UserParrotsPage />} />
+        </Route>
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegistrationPage />} />
         <Route path="edit" element={<AnimalEditorPage mode="create" />} />

@@ -11,13 +11,14 @@ export function Header({ type }: { type: HeaderType }) {
 
   if (type === 'no') return null;
 
-  const prefix = type === 'all' ? '' : 'my';
+  const prefix =
+    type === 'all' ? '/'  : '/my/';
 
   const links = [
-    { to: `/${prefix}`, label: 'All', icon: <AnimalIcon /> },
-    { to: `/${prefix}cats`, label: 'Cats', icon: <CatIcon /> },
-    { to: `/${prefix}dogs`, label: 'Dogs', icon: <DogIcon /> },
-    { to: `/${prefix}parrots`, label: 'Parrots', icon: <ParrotIcon /> },
+    { to: `${prefix}`, label: 'All', icon: <AnimalIcon /> },
+    { to: `${prefix}cats`, label: 'Cats', icon: <CatIcon /> },
+    { to: `${prefix}dogs`, label: 'Dogs', icon: <DogIcon /> },
+    { to: `${prefix}parrots`, label: 'Parrots', icon: <ParrotIcon /> },
   ];
 
   return (
