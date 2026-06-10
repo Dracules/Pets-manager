@@ -30,7 +30,7 @@ export default function AppLayout() {
 
   const headerType: HeaderType = useMemo(() => {
     if (noHeaderPaths.some((path) => pathname.startsWith(path))) return 'no';
-
+    if (pathname.startsWith('/owner')) return 'owner';
     if (pathname.startsWith('/my')) return 'user';
     return 'all';
   }, [pathname]);
