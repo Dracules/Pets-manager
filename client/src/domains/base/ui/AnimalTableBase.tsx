@@ -62,6 +62,35 @@ function AnimalTableBase<T extends AnimalResponse>({
         header: 'Owner',
         meta: { size: 170 },
       });
+    } else {
+      const { onDelete, onEdit } = options;
+
+      const actionColumn: ColumnDef<T> = {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }) => (
+          <div className={styles.actions}>
+            <button
+              className={`${styles.actionBtn} ${styles.actionBtnEdit}`}
+              onClick={() => {
+                onEdit(row.original._id, row.original.type);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className={`${styles.actionBtn} ${styles.actionBtnDelete}`}
+              onClick={async () => {
+                await onDelete(row.original._id, row.original.type);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ),
+        meta: { size: 150 },
+      };
+      cols.push(actionColumn);
     }
     return cols;
   }, [options, additionalColumns]);
@@ -70,7 +99,6 @@ function AnimalTableBase<T extends AnimalResponse>({
     <BaseTable
       data={data}
       columns={sharedColumns}
-      options={options}
       footerPaginationComponent={footerPaginationComponent}
       loading={loading}
     />
