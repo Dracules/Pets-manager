@@ -2,7 +2,7 @@ import useFetchData from '../model/useFetchData';
 import { CommonBaseTableProps } from '../model/BaseTableProps';
 import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { useState } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
@@ -11,16 +11,18 @@ import { ErrorComponent } from './ErrorComponent';
 
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<CommonBaseTableProps<T>>,
-  fetchFn: (options: string) => Promise<PaginationResult<T[]>>,
+  fetchFn: (options: string, id?: string) => Promise<PaginationResult<T[]>>,
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
   const [page, setPage] = useState(0);
   const [pageLimit, setPageLimit] = useState(10);
+  const { id } = useParams();
 
   const { data, totalCount, loading, error, setData, load } = useFetchData(
     fetchFn,
     page,
     pageLimit,
+    id,
   );
   const navigate = useNavigate();
 
@@ -51,7 +53,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
       }
     }
 
-    async function handleEdit(id: string, type: AnimalType) {
+    function handleEdit(id: string, type: AnimalType) {
       navigate(`/edit/${id}?type=${type}`);
     }
 
@@ -59,22 +61,31 @@ function BaseAnimalPage<T extends AnimalResponse>(
       <div>
         <AnimalTable
           data={data ?? []}
-          options={{ onDelete: handleDelete, onEdit: handleEdit }}
+          options={{
+            onDelete: handleDelete,
+            onEdit: handleEdit,
+          }}
           footerPaginationComponent={paginationComponent}
           loading={loading}
         />
       </div>
     );
-  } else
+  } else {
+    function handleOwnerClick(id: string, ownerLogin: string) {
+      navigate(`/owner/${id}/`, { state: { ownerLogin } });
+    }
+
     return (
       <div>
         <AnimalTable
           data={data ?? []}
+          options={{ onOwnerClick: handleOwnerClick }}
           footerPaginationComponent={paginationComponent}
           loading={loading}
         />
       </div>
     );
+  }
 }
 
 export default BaseAnimalPage;

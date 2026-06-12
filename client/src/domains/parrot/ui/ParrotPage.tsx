@@ -13,3 +13,7 @@ export const UserParrotsPage = () => {
     ParrotsApi.deleteParrots,
   );
 };
+
+export const ParrotsPageByOwner = () => {
+  return BaseAnimalPage(ParrotTable, ParrotsApi.getUserParrots);
+};

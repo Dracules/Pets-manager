@@ -68,7 +68,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                       <TbCircleLetterM size={iconSize} />
                     </div>
                   }
-                  component={<Link to="/my" className={styles.navLink} />}
+                  component={<Link to="/my/" className={styles.navLink} />}
                 >
                   My animals
                 </MenuItem>

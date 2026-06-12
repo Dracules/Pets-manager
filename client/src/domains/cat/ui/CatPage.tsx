@@ -9,3 +9,7 @@ export const CatsPage = () => {
 export const UserCatsPage = () => {
   return BaseAnimalPage(CatTable, CatsApi.getUserCats, CatsApi.deleteCats);
 };
+
+export const CatsPageByOwner = () => {
+  return BaseAnimalPage(CatTable, CatsApi.getUserCats);
+};

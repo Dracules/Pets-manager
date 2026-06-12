@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 
 function useFetchData<T>(
-  fetchFn: (options: string) => Promise<PaginationResult<T>>,
+  fetchFn: (options: string, id?: string) => Promise<PaginationResult<T>>,
   page: number,
   pageLimit: number,
+  id?: string,
 ) {
   const [data, setData] = useState<T | null>(null);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -18,7 +19,7 @@ function useFetchData<T>(
   const load = async () => {
     setLoading(true);
     try {
-      const result = await fetchFn(`?page=${page + 1}&limit=${pageLimit}`);
+      const result = await fetchFn(`?page=${page + 1}&limit=${pageLimit}`, id);
       setData(result.animals);
       setTotalCount(result.totalCount);
       setError('');
