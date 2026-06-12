@@ -77,7 +77,7 @@ export class AnimalService {
         .exec(),
     ]);
 
-    const total = (totalResult as [{ total: number }])[0].total || 0;
+    const total = (totalResult[0]?.total || 0) as number;
 
     return {
       animals: animals.map((obj) => ({
@@ -163,7 +163,7 @@ export class AnimalService {
         .exec(),
     ]);
 
-    const total = (totalResult as [{ total: number }])[0].total || 0;
+    const total = (totalResult[0]?.total || 0) as number;
     return {
       animals: animals.map((obj) => ({
         ...obj,
