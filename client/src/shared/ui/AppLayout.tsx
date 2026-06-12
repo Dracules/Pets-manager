@@ -15,7 +15,7 @@ export default function AppLayout() {
   const state = location.state as { ownerLogin?: string } | null;
   const [ownerData, setOwnerData] = useState(() => ({
     login: state?.ownerLogin || '',
-    id: ownerId || '',
+    id: state?.ownerLogin ? ownerId || '' : '',
   }));
 
   useEffect(() => {
@@ -23,8 +23,9 @@ export default function AppLayout() {
       const newState = location.state as { ownerLogin?: string } | null;
       const ownerLogin = newState?.ownerLogin;
       if (ownerLogin) setOwnerData({ login: ownerLogin, id: ownerId });
+      else setOwnerData({ login: '', id: '' });
     }
-  }, [ownerId, location.state]);
+  }, [ownerId, ownerData.id, location.state]);
 
   const noHeaderPaths = ['/login', '/edit', '/register'];
 
