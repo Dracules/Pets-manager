@@ -14,7 +14,12 @@ export class ParrotsApi {
 
   static async getUserParrots(
     options: string,
+    id?: string,
   ): Promise<PaginationResult<ParrotResponse[]>> {
+    if (id)
+      return apiClient.get<PaginationResult<ParrotResponse[]>>(
+        `/animals/parrots/user/${id}${options}`,
+      );
     return apiClient.get<PaginationResult<ParrotResponse[]>>(
       '/animals/parrots/user' + options,
     );

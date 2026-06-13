@@ -1,34 +1,53 @@
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation, useParams } from 'react-router';
 import { Header } from './Header';
 import { AppSidebar } from './Sidebar';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/AppLayout.module.css';
 
 export default function AppLayout() {
-  const [headerType, setHeaderType] = useState<HeaderType>('all');
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
+  const { id: ownerId } = useParams();
+
   const pathname = location.pathname;
 
-  const userHeaderPaths = ['/my', '/mycats', '/mydogs'];
-  const noHeaderPaths = ['/login', '/edit', '/register'];
+  const state = location.state as { ownerLogin?: string } | null;
+  const [ownerData, setOwnerData] = useState(() => ({
+    login: state?.ownerLogin || '',
+    id: state?.ownerLogin ? ownerId || '' : '',
+  }));
 
   useEffect(() => {
-    if (noHeaderPaths.some((path) => pathname.startsWith(path))) {
-      return setHeaderType('no');
+    if (ownerId && ownerId !== ownerData.id) {
+      const newState = location.state as { ownerLogin?: string } | null;
+      const ownerLogin = newState?.ownerLogin;
+      if (ownerLogin) setOwnerData({ login: ownerLogin, id: ownerId });
+      else setOwnerData({ login: '', id: '' });
     }
-    if (userHeaderPaths.includes(pathname)) {
-      return setHeaderType('user');
-    }
-    return setHeaderType('all');
+  }, [ownerId, ownerData.id, location.state]);
+
+  const noHeaderPaths = ['/login', '/edit', '/register'];
+
+  const headerType: HeaderType = useMemo(() => {
+    if (noHeaderPaths.some((path) => pathname.startsWith(path))) return 'no';
+    if (pathname.startsWith('/owner')) return 'owner';
+    if (pathname.startsWith('/my')) return 'user';
+    return 'all';
   }, [pathname]);
 
-  const getPageTitle = (): string | null => {
+  const pageTitle = useMemo(() => {
     if (pathname.startsWith('/edit')) {
       if (pathname === '/edit') return 'Create animal';
       else return 'Update animal';
     }
+
+    if (headerType === 'owner') {
+      return ownerData.login
+        ? `Animals of user '${ownerData.login}'`
+        : `Animals of user with ID '${ownerId}'`;
+    }
+
     switch (pathname) {
       case '/':
         return 'Animals';
@@ -36,22 +55,21 @@ export default function AppLayout() {
         return 'Dogs';
       case '/cats':
         return 'Cats';
-      case '/my':
+      case '/my/':
         return 'My animals';
-      case '/mycats':
+      case '/my/cats':
         return 'My cats';
-      case '/mydogs':
+      case '/my/dogs':
         return 'My dogs';
       case '/parrots':
         return 'Parrots';
-      case '/myparrots':
+      case '/my/parrots':
         return 'My parrots';
       default:
         return null;
     }
-  };
+  }, [pathname, headerType, ownerData, ownerId]);
 
-  const pageTitle = getPageTitle();
   return (
     <div className={styles.layout}>
       <div
@@ -69,7 +87,7 @@ export default function AppLayout() {
       <div className={styles.contentArea}>
         {headerType !== 'no' ? (
           <div className={styles.header}>
-            <Header type={headerType} />
+            <Header type={headerType} id={ownerId} />
           </div>
         ) : undefined}
         {pageTitle ? (

@@ -3,14 +3,18 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { JSX } from 'react';
 
-type BaseTablePropsOptions = {
+type UserBaseTablePropsOptions = {
   onDelete: (id: string, type: AnimalType) => Promise<void>;
-  onEdit: (id: string, type: AnimalType) => Promise<void>;
+  onEdit: (id: string, type: AnimalType) => void;
+};
+
+type BaseTablePropsOptions = {
+  onOwnerClick: (id: string, ownerLogin: string) => void;
 };
 
 export interface CommonBaseTableProps<T extends AnimalResponse> {
   data: T[];
-  options?: BaseTablePropsOptions | undefined;
+  options: BaseTablePropsOptions | UserBaseTablePropsOptions;
   footerPaginationComponent: JSX.Element;
   loading: boolean;
 }
