@@ -1,0 +1,39 @@
+.tagsContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow: hidden;
+  align-items: center;
+  width: 100%;
+}
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: default;
+}
+
+.emptyState {
+  border: 1px dashed #d1d5db;
+  color: #9ca3af;
+}
+
+.commandTag {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 25%;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.commandTagMore {
+  background-color: #f1f5f9;
+  color: #64748b;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
