@@ -48,7 +48,7 @@
   padding: 14px 16px;
   color: var(--text-primary);
   vertical-align: middle;
-  border-bottom: 1px solid var(--border-color);
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
