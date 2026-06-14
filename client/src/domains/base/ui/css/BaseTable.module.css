@@ -50,7 +50,7 @@
   vertical-align: middle;
   border-bottom: 1px solid var(--border-color);
   box-sizing: border-box;
-  min-width: 150px;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
