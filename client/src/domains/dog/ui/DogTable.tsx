@@ -2,6 +2,7 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { CommonBaseTableProps } from '../../base/model/BaseTableProps';
 import { DogResponse } from '../model/dog.response.interface';
 import AnimalTableBase from '../../base/ui/AnimalTableBase';
+import { MultiTags } from '../../../shared/ui/MultiTags';
 
 function DogTable(props: CommonBaseTableProps<DogResponse>) {
   return (
@@ -9,7 +10,14 @@ function DogTable(props: CommonBaseTableProps<DogResponse>) {
       {...props}
       additionalColumns={
         [
-          { accessorKey: 'trainedCommands', header: 'Commands' },
+          {
+            accessorKey: 'trainedCommands',
+            header: 'Commands',
+            cell: ({ getValue }) => {
+              const commands = getValue() as string[] | undefined;
+              return <MultiTags elements={commands} />;
+            },
+          },
         ] as ColumnDef<DogResponse>[]
       }
     />
