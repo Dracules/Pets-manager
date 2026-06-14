@@ -17,7 +17,7 @@ export function CatEditor() {
       await CatsApi.createCat({ name, birthDate, litterStatus, description });
     },
     updateItem: CatsApi.updateCat,
-    afterSubmit: `/mycats`,
+    afterSubmit: `/my/cats`,
     validationSchema: catEditorSchema,
     defaultValues: { litterStatus: 'unknown' },
   });
