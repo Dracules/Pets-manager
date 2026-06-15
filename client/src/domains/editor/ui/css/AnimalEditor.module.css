@@ -92,6 +92,7 @@
 
 .textarea {
   resize: vertical;
+  min-height: 70px;
 }
 
 .button {
