@@ -30,7 +30,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const login = (newToken: FullJwtToken) => {
     updateToken(newToken);
-    navigate('/my');
+    navigate('/my/');
   };
 
   const updateToken = (newToken: FullJwtToken) => {

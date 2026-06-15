@@ -22,7 +22,7 @@ export function DogEditor() {
     },
     updateItem: DogsApi.updateDog,
     validationSchema: dogEditorSchema,
-    afterSubmit: `/mydogs`,
+    afterSubmit: `/my/dogs`,
   });
   return (
     <div className={commonStyles.formContainer}>

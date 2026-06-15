@@ -22,7 +22,7 @@ export function ParrotEditor() {
     },
     updateItem: ParrotsApi.updateParrot,
     validationSchema: parrotEditorSchema,
-    afterSubmit: `/myparrots`,
+    afterSubmit: `/my/parrots`,
   });
   return (
     <div className={commonStyles.formContainer}>

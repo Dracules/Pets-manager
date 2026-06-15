@@ -49,7 +49,19 @@ export class ParrotController extends BaseAnimalController<
     @Query() paginationDto: PaginationDTO,
   ): Promise<PaginationResult<ParrotResponse[]>> {
     return await super.getAnimalByUser(
-      request,
+      request.user.sub,
+      paginationDto.limit,
+      paginationDto.skip,
+    );
+  }
+
+  @Get('/user/:id')
+  async getParrotBySelectedUser(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query() paginationDto: PaginationDTO,
+  ): Promise<PaginationResult<ParrotResponse[]>> {
+    return await super.getAnimalByUser(
+      id,
       paginationDto.limit,
       paginationDto.skip,
     );

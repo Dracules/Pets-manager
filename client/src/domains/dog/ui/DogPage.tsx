@@ -9,3 +9,7 @@ export const DogsPage = () => {
 export const UserDogsPage = () => {
   return BaseAnimalPage(DogTable, DogsApi.getUserDogs, DogsApi.deleteDogs);
 };
+
+export const DogsPageByOwner = () => {
+  return BaseAnimalPage(DogTable, DogsApi.getUserDogs);
+};

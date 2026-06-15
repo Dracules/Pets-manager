@@ -28,7 +28,7 @@
 
 .th {
   padding: 14px 16px;
-  text-align: left;
+  text-align: center;
   font-weight: 600;
   color: var(--text-primary);
   font-size: 0.8rem;
@@ -48,9 +48,10 @@
   padding: 14px 16px;
   color: var(--text-primary);
   vertical-align: middle;
-  border-bottom: 1px solid var(--border-color);
+  align-content: center;
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
-  min-width: 150px;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -60,44 +61,6 @@
   text-align: center;
   color: var(--text-secondary);
   height: 40vh;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.actionBtn {
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  font-family: inherit;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-surface);
-  cursor: pointer;
-}
-
-.actionBtnEdit {
-  color: var(--blue-active);
-  border-color: rgba(37, 99, 235, 0.3);
-}
-
-.actionBtnEdit:hover {
-  background: rgba(37, 99, 235, 0.08);
-  border-color: var(--blue-active);
-}
-
-.actionBtnDelete {
-  color: var(--red-error);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.actionBtnDelete:hover {
-  background: rgba(239, 68, 68, 0.08);
-  border-color: var(--red-error);
 }
 
 .tfootCell {

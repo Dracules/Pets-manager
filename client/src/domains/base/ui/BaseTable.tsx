@@ -2,7 +2,6 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
-  ColumnDef,
 } from '@tanstack/react-table';
 import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
@@ -19,47 +18,12 @@ declare module '@tanstack/react-table' {
 export default function BaseTable<T extends AnimalResponse>({
   data,
   columns = [],
-  options,
   footerPaginationComponent,
   loading,
 }: BaseTableProps<T>) {
-  const finalColumns = (function getFinalColumns() {
-    if (options) {
-      const { onDelete, onEdit } = options;
-
-      const actionColumn: ColumnDef<T> = {
-        id: 'actions',
-        header: 'Actions',
-        cell: ({ row }) => (
-          <div className={styles.actions}>
-            <button
-              className={`${styles.actionBtn} ${styles.actionBtnEdit}`}
-              onClick={() => {
-                onEdit(row.original._id, row.original.type);
-              }}
-            >
-              Edit
-            </button>
-            <button
-              className={`${styles.actionBtn} ${styles.actionBtnDelete}`}
-              onClick={async () => {
-                await onDelete(row.original._id, row.original.type);
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        ),
-        meta: { size: 150 },
-      };
-      return [...columns, actionColumn];
-    }
-    return columns;
-  })();
-
   const table = useReactTable({
     data,
-    columns: finalColumns,
+    columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
