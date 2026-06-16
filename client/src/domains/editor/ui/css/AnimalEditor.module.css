@@ -6,6 +6,8 @@
   );
 
   position: relative;
+  min-width: var(--editor-form-max-width);
+  width: 100%;
   max-width: var(--editor-form-max-width);
   margin: 40px auto;
   border-radius: 16px;
