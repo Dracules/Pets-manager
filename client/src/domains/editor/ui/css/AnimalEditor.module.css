@@ -1,6 +1,14 @@
 .formContainer {
+  --editor-form-max-width: 600px;
+  --editor-form-padding: 32px;
+  --editor-inputs-max-width: calc(
+    var(--editor-form-max-width) - (var(--editor-form-padding) * 2)
+  );
+
   position: relative;
-  max-width: 600px;
+  min-width: var(--editor-form-max-width);
+  width: 100%;
+  max-width: var(--editor-form-max-width);
   margin: 40px auto;
   border-radius: 16px;
   overflow: hidden;
@@ -10,7 +18,7 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: 32px;
+  padding: var(--editor-form-padding);
 }
 
 .fieldset {
@@ -47,7 +55,7 @@
 }
 
 .input {
-  width: 100%;
+  width: var(--editor-inputs-max-width);
   padding: 12px 16px;
   font-size: 1rem;
   font-family: inherit;
@@ -86,6 +94,7 @@
 
 .textarea {
   resize: vertical;
+  min-height: 70px;
 }
 
 .button {

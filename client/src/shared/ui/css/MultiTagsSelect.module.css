@@ -1,5 +1,6 @@
 :global(.multi-tags__control) {
   width: 100% !important;
+  max-width: var(--editor-inputs-max-width) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 8px !important;
   background-color: var(--bg-primary) !important;

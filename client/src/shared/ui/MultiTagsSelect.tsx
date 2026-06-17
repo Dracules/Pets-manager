@@ -33,7 +33,7 @@ export function MultiTagsSelect({
       onChange={(newValue) => {
         const stringValues = newValue?.length
           ? newValue.map((element) => capitalizeFirstLetter(element.value))
-          : undefined;
+          : [];
         onChange(stringValues);
       }}
       isMulti
