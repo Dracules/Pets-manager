@@ -22,13 +22,14 @@ export const AuthLayout = ({
       {children}
 
       {message && <p className={styles.message}>{message}</p>}
-      <div className={styles.footer}>
-        {footerLink && (
+
+      {footerLink && (
+        <div className={styles.footer}>
           <Link to={footerLink.to} className={styles.footerLink}>
             {footerLink.text}
           </Link>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   </div>
 );
