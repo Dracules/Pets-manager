@@ -1,18 +1,23 @@
 services:
   app:
-    build: .
+    build: ./server
     ports:
       - '3000:3000'
     env_file:
-      - .env
-      - .env.docker
+      - ./server/.env
+      - ./server/.env.docker
     depends_on:
       - mongo
 
+  client:
+    build: ./client
+    ports:
+      - '3001:80'
+    depends_on:
+      - app
+
   mongo:
     image: mongo:8.0
-    ports:
-      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ADMIN_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ADMIN_PASSWORD}
@@ -27,7 +32,7 @@ services:
       MONGO_USERS_USER_PASSWORD_HASH: ${MONGODB_USERS_USER_PASSWORD_HASH}
     volumes:
       - mongo_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./server/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
 volumes:
   mongo_data:
