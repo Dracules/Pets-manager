@@ -24,7 +24,7 @@ if (!db.getUser(appUser)) {
 let adminUser = getEnv('MONGO_USERS_ADMIN_LOGIN');
 let adminUserPass = getEnv('MONGO_USERS_ADMIN_PASSWORD_HASH');
 let userUser = getEnv('MONGO_USERS_USER_LOGIN');
-let userUserPass = getEnv('MONGOD_USERS_USER_PASSWORD_HASH');
+let userUserPass = getEnv('MONGO_USERS_USER_PASSWORD_HASH');
 
 db = db.getSiblingDB(appDb);
 if (db.users.countDocuments({}) === 0) {
