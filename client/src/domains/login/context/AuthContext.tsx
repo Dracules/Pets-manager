@@ -22,10 +22,10 @@ const AuthContext = createContext({
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [token, setToken] = useState<AuthState>({
+  const [token, setToken] = useState<AuthState>(() => ({
     access_token: localStorage.getItem('access_token'),
     refresh_token: localStorage.getItem('refresh_token'),
-  });
+  }));
   const navigate = useNavigate();
 
   const login = (newToken: FullJwtToken) => {
