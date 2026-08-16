@@ -9,6 +9,8 @@ import { PaginationResult } from '../../../shared/model/interfaces/pagination.re
 import PaginationComponent from './PaginationComponent';
 import { ErrorComponent } from './ErrorComponent';
 
+const EMPTY_ARRAY: never[] = [];
+
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<CommonBaseTableProps<T>>,
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T[]>>,
@@ -79,7 +81,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
   return (
     <div>
       <AnimalTable
-        data={data ?? []}
+        data={data ?? EMPTY_ARRAY}
         options={tableOptions}
         footerPaginationComponent={paginationComponent}
         loading={loading}
