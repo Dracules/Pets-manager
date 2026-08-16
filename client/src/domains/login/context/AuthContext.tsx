@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router';
 import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
+import { setApiAuth } from '../../../shared/api/axiosApi';
 
 const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
@@ -55,6 +56,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     navigate('/login');
   }, []);
+
+  useEffect(() => {
+    setApiAuth(getTokenStorage, logout, updateToken);
+  }, [getTokenStorage, logout, updateToken]);
 
   useEffect(() => {
     const onStorageChange = () =>

@@ -1,6 +1,4 @@
 import { NavLink } from 'react-router';
-import { useAuth } from '../../domains/login/context/AuthContext';
-import { setApiAuth } from '../api/axiosApi';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/Header.module.css';
 import { AnimalIcon, CatIcon, DogIcon, ParrotIcon } from './Icons';
@@ -12,9 +10,6 @@ export function Header({
   type: HeaderType;
   id: string | undefined;
 }) {
-  const { getTokenStorage, logout, updateToken } = useAuth();
-  setApiAuth(getTokenStorage, logout, updateToken);
-
   if (type === 'no') return null;
 
   const prefix =
