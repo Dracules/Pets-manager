@@ -4,7 +4,7 @@ import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
 import { ErrorComponent } from './ErrorComponent';
@@ -42,53 +42,50 @@ function BaseAnimalPage<T extends AnimalResponse>(
     [page, pageLimit, totalCount],
   );
 
-  if (deleteFn) {
-    async function handleDelete(id: string, type: AnimalType) {
-      const toastId = toast.loading('Deleting...');
-      try {
-        const response = await deleteFn!(id, type);
-        setData((current) => current!.filter((animal) => animal._id !== id));
-        toast(response);
-      } catch {
-        toast('Deletion failed!');
-      } finally {
-        toast.dismiss(toastId);
+  const tableOptions = useMemo(() => {
+    if (deleteFn) {
+      async function handleDelete(id: string, type: AnimalType) {
+        const toastId = toast.loading('Deleting...');
+        try {
+          const response = await deleteFn!(id, type);
+          setData((current) => current!.filter((animal) => animal._id !== id));
+          toast(response);
+        } catch {
+          toast('Deletion failed!');
+        } finally {
+          toast.dismiss(toastId);
+        }
       }
+
+      function handleEdit(id: string, type: AnimalType) {
+        navigate(`/edit/${id}?type=${type}`);
+      }
+
+      return {
+        onDelete: handleDelete,
+        onEdit: handleEdit,
+      };
     }
 
-    function handleEdit(id: string, type: AnimalType) {
-      navigate(`/edit/${id}?type=${type}`);
-    }
-
-    return (
-      <div>
-        <AnimalTable
-          data={data ?? []}
-          options={{
-            onDelete: handleDelete,
-            onEdit: handleEdit,
-          }}
-          footerPaginationComponent={paginationComponent}
-          loading={loading}
-        />
-      </div>
-    );
-  } else {
     function handleOwnerClick(id: string, ownerLogin: string) {
       navigate(`/owner/${id}/`, { state: { ownerLogin } });
     }
 
-    return (
-      <div>
-        <AnimalTable
-          data={data ?? []}
-          options={{ onOwnerClick: handleOwnerClick }}
-          footerPaginationComponent={paginationComponent}
-          loading={loading}
-        />
-      </div>
-    );
-  }
+    return {
+      onOwnerClick: handleOwnerClick,
+    };
+  }, [deleteFn]);
+
+  return (
+    <div>
+      <AnimalTable
+        data={data ?? []}
+        options={tableOptions}
+        footerPaginationComponent={paginationComponent}
+        loading={loading}
+      />
+    </div>
+  );
 }
 
 export default BaseAnimalPage;
