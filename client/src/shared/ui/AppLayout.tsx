@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useParams } from 'react-router';
 import Header from './Header';
 import AppSidebar from './Sidebar';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/AppLayout.module.css';
 
@@ -13,19 +13,13 @@ export default function AppLayout() {
   const pathname = location.pathname;
 
   const state = location.state as { ownerLogin?: string } | null;
-  const [ownerData, setOwnerData] = useState(() => ({
-    login: state?.ownerLogin || '',
-    id: state?.ownerLogin ? ownerId || '' : '',
-  }));
+  const [ownerLogin, setOwnerLogin] = useState(() => state?.ownerLogin || '');
+  const prevOwnerIdRef = useRef(ownerId);
 
-  useEffect(() => {
-    if (ownerId && ownerId !== ownerData.id) {
-      const newState = location.state as { ownerLogin?: string } | null;
-      const ownerLogin = newState?.ownerLogin;
-      if (ownerLogin) setOwnerData({ login: ownerLogin, id: ownerId });
-      else setOwnerData({ login: '', id: '' });
-    }
-  }, [ownerId, ownerData.id, location.state]);
+  if (ownerId !== prevOwnerIdRef.current) {
+    setOwnerLogin(state?.ownerLogin || '');
+    prevOwnerIdRef.current = ownerId;
+  }
 
   const noHeaderPaths = ['/login', '/edit', '/register'];
 
@@ -43,8 +37,8 @@ export default function AppLayout() {
     }
 
     if (headerType === 'owner') {
-      return ownerData.login
-        ? `Animals of user '${ownerData.login}'`
+      return ownerLogin
+        ? `Animals of user '${ownerLogin}'`
         : `Animals of user with ID '${ownerId}'`;
     }
 
@@ -68,7 +62,7 @@ export default function AppLayout() {
       default:
         return null;
     }
-  }, [pathname, headerType, ownerData, ownerId]);
+  }, [pathname, headerType, ownerLogin, ownerId]);
 
   const handleToggle = useCallback(() => {
     setCollapsed((prev) => !prev);
