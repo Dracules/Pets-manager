@@ -29,14 +29,17 @@ function BaseAnimalPage<T extends AnimalResponse>(
   if (error)
     return <ErrorComponent error={error} load={load} loading={loading} />;
 
-  const paginationComponent = (
-    <PaginationComponent
-      page={page}
-      setPage={setPage}
-      pageLimit={pageLimit}
-      setPageLimit={setPageLimit}
-      totalCount={totalCount}
-    />
+  const paginationComponent = useMemo(
+    () => (
+      <PaginationComponent
+        page={page}
+        setPage={setPage}
+        pageLimit={pageLimit}
+        setPageLimit={setPageLimit}
+        totalCount={totalCount}
+      />
+    ),
+    [page, pageLimit, totalCount],
   );
 
   if (deleteFn) {
