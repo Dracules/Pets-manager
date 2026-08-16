@@ -7,7 +7,7 @@ import { BaseTableProps } from '../model/BaseTableProps';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import styles from './css/BaseTable.module.css';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
@@ -15,7 +15,7 @@ declare module '@tanstack/react-table' {
   }
 }
 
-export default function BaseTable<T extends AnimalResponse>({
+function BaseTable<T extends AnimalResponse>({
   data,
   columns = [],
   footerPaginationComponent,
@@ -94,3 +94,5 @@ export default function BaseTable<T extends AnimalResponse>({
     </div>
   );
 }
+
+export default memo(BaseTable) as typeof BaseTable;
