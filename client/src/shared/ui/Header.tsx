@@ -2,14 +2,9 @@ import { NavLink } from 'react-router';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/Header.module.css';
 import { AnimalIcon, CatIcon, DogIcon, ParrotIcon } from './Icons';
+import { memo } from 'react';
 
-export function Header({
-  type,
-  id,
-}: {
-  type: HeaderType;
-  id: string | undefined;
-}) {
+function Header({ type, id }: { type: HeaderType; id: string | undefined }) {
   if (type === 'no') return null;
 
   const prefix =
@@ -40,3 +35,5 @@ export function Header({
     </nav>
   );
 }
+
+export default memo(Header);
