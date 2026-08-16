@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useParams } from 'react-router';
-import { Header } from './Header';
-import { AppSidebar } from './Sidebar';
-import { useEffect, useMemo, useState } from 'react';
+import Header from './Header';
+import AppSidebar from './Sidebar';
+import { useCallback, useMemo, useState } from 'react';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/AppLayout.module.css';
 
@@ -70,6 +70,10 @@ export default function AppLayout() {
     }
   }, [pathname, headerType, ownerData, ownerId]);
 
+  const handleToggle = useCallback(() => {
+    setCollapsed((prev) => !prev);
+  }, []);
+
   return (
     <div className={styles.layout}>
       <div
@@ -79,10 +83,7 @@ export default function AppLayout() {
       <div
         className={`${styles.sidebarWrapper} ${!collapsed ? styles.sidebarOverlay : ''}`}
       >
-        <AppSidebar
-          collapsed={collapsed}
-          onToggle={() => setCollapsed(!collapsed)}
-        />
+        <AppSidebar collapsed={collapsed} onToggle={handleToggle} />
       </div>
       <div className={styles.contentArea}>
         {headerType !== 'no' ? (
