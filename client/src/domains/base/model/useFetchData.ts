@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 
 function useFetchData<T>(
@@ -12,11 +12,7 @@ function useFetchData<T>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    void load();
-  }, [page, pageLimit]);
-
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const result = await fetchFn(`?page=${page + 1}&limit=${pageLimit}`, id);
@@ -30,7 +26,11 @@ function useFetchData<T>(
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, pageLimit, id]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   return { data, totalCount, loading, error, setData, load };
 }
