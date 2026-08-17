@@ -10,13 +10,14 @@ import {
 import { RxExit } from 'react-icons/rx';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import styles from './css/AppSidebar.module.css';
+import { memo } from 'react';
 
 interface AppSidebarProps {
   collapsed: boolean;
   onToggle: () => void;
 }
 
-export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
+function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const { token, logout } = useAuth();
   const iconSize = 30;
 
@@ -121,3 +122,5 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
     </Sidebar>
   );
 }
+
+export default memo(AppSidebar);
