@@ -8,6 +8,7 @@ import { AnimalType } from '../model/animal.type';
 
 export class AnimalsApi {
   static async getAnimals(
+    this: void,
     options: string,
   ): Promise<PaginationResult<AnimalResponse[]>> {
     return apiClient.get<PaginationResult<AnimalResponse[]>>(
@@ -16,6 +17,7 @@ export class AnimalsApi {
   }
 
   static async getUserAnimals(
+    this: void,
     options: string,
     id?: string,
   ): Promise<PaginationResult<AnimalResponse[]>> {
@@ -28,7 +30,11 @@ export class AnimalsApi {
     );
   }
 
-  static async deleteAnimals(id: string, type: AnimalType): Promise<string> {
+  static async deleteAnimals(
+    this: void,
+    id: string,
+    type: AnimalType,
+  ): Promise<string> {
     switch (type) {
       case 'cat':
         return CatsApi.deleteCats(id);
