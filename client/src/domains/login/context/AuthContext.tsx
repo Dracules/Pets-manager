@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 import { setApiAuth } from '../../../shared/api/axiosApi';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
   login: (newToken: FullJwtToken) => {},
