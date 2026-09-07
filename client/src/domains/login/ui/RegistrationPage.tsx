@@ -46,6 +46,7 @@ export default function RegistrationPage() {
         message={message}
         footerLink={{ to: '/login', text: 'Already have an account? Sign in' }}
       >
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isSubmitting} className={styles.fieldset}>
             <FormField

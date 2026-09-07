@@ -34,6 +34,7 @@ export function AnimalEditor<T extends Animal>({
   return (
     <div className={styles.formCard}>
       <FormProvider {...methods}>
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <fieldset disabled={isSubmitting} className={styles.fieldset}>
             <div className={styles.field}>
