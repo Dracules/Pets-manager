@@ -92,7 +92,7 @@ export function AnimalEditor<T extends Animal>({
               <button
                 type="button"
                 className={`${styles.button} ${styles.cancelButton}`}
-                onClick={() => navigate(-1)}
+                onClick={() => void navigate(-1)}
                 disabled={isSubmitting}
               >
                 Cancel

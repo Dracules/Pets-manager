@@ -39,7 +39,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const login = useCallback((newToken: FullJwtToken) => {
     updateToken(newToken);
-    navigate('/my/');
+    void navigate('/my/');
   }, []);
 
   const getTokenStorage = useCallback(() => {
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     localStorage.removeItem('refresh_token');
     setToken({ access_token: null, refresh_token: null });
 
-    navigate('/login');
+    void navigate('/login');
   }, []);
 
   useEffect(() => {

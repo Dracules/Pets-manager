@@ -60,7 +60,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
       }
 
       function handleEdit(id: string, type: AnimalType) {
-        navigate(`/edit/${id}?type=${type}`);
+        void navigate(`/edit/${id}?type=${type}`);
       }
 
       return {
@@ -70,7 +70,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
     }
 
     function handleOwnerClick(id: string, ownerLogin: string) {
-      navigate(`/owner/${id}/`, { state: { ownerLogin } });
+      void navigate(`/owner/${id}/`, { state: { ownerLogin } });
     }
 
     return {
