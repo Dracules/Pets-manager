@@ -43,7 +43,7 @@ export function useAnimalEditor<T extends Animal>({
       }
     };
 
-    loadAnimal();
+    void loadAnimal();
   }, [id, methods]);
 
   const onSubmit = async (data: T) => {

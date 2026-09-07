@@ -95,8 +95,8 @@ function AnimalTableBase<T extends AnimalResponse>({
             </button>
             <button
               className={`${styles.actionBtn} ${styles.actionBtnDelete}`}
-              onClick={async () => {
-                await onDelete(row.original._id, row.original.type);
+              onClick={() => {
+                void onDelete(row.original._id, row.original.type);
               }}
             >
               Delete
