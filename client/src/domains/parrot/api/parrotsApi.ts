@@ -5,6 +5,7 @@ import { ParrotResponse } from '../model/parrot.response.interface';
 
 export class ParrotsApi {
   static async getParrots(
+    this: void,
     options: string,
   ): Promise<PaginationResult<ParrotResponse[]>> {
     return apiClient.get<PaginationResult<ParrotResponse[]>>(
@@ -13,6 +14,7 @@ export class ParrotsApi {
   }
 
   static async getUserParrots(
+    this: void,
     options: string,
     id?: string,
   ): Promise<PaginationResult<ParrotResponse[]>> {
@@ -25,7 +27,7 @@ export class ParrotsApi {
     );
   }
 
-  static async getParrotById(id: string): Promise<Parrot> {
+  static async getParrotById(this: void, id: string): Promise<Parrot> {
     return apiClient.get<Parrot>(`/animals/parrots/${id}`);
   }
 
@@ -33,11 +35,15 @@ export class ParrotsApi {
     return apiClient.post(`/animals/parrots`, data);
   }
 
-  static async updateParrot<Parrot>(id: string, data: object): Promise<Parrot> {
+  static async updateParrot<Parrot>(
+    this: void,
+    id: string,
+    data: object,
+  ): Promise<Parrot> {
     return apiClient.put(`/animals/parrots/${id}`, data);
   }
 
-  static async deleteParrots(id: string): Promise<string> {
+  static async deleteParrots(this: void, id: string): Promise<string> {
     return apiClient.delete(`/animals/parrots/${id}`);
   }
 }

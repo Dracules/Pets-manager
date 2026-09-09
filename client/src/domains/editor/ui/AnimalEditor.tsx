@@ -34,6 +34,7 @@ export function AnimalEditor<T extends Animal>({
   return (
     <div className={styles.formCard}>
       <FormProvider {...methods}>
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <fieldset disabled={isSubmitting} className={styles.fieldset}>
             <div className={styles.field}>
@@ -91,7 +92,7 @@ export function AnimalEditor<T extends Animal>({
               <button
                 type="button"
                 className={`${styles.button} ${styles.cancelButton}`}
-                onClick={() => navigate(-1)}
+                onClick={() => void navigate(-1)}
                 disabled={isSubmitting}
               >
                 Cancel

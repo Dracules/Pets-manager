@@ -43,7 +43,7 @@ export function useAnimalEditor<T extends Animal>({
       }
     };
 
-    loadAnimal();
+    void loadAnimal();
   }, [id, methods]);
 
   const onSubmit = async (data: T) => {
@@ -70,7 +70,7 @@ export function useAnimalEditor<T extends Animal>({
         await createItem(data);
         toast.success(`Animal ${data.name} created!`);
       }
-      navigate(afterSubmit);
+      void navigate(afterSubmit);
     } catch {
       toast.error(id ? 'Update failed!' : 'Creation failed!');
     } finally {

@@ -5,6 +5,7 @@ import { CatResponse } from '../model/cat.response.interface';
 
 export class CatsApi {
   static async getCats(
+    this: void,
     options: string,
   ): Promise<PaginationResult<CatResponse[]>> {
     return apiClient.get<PaginationResult<CatResponse[]>>(
@@ -13,6 +14,7 @@ export class CatsApi {
   }
 
   static async getUserCats(
+    this: void,
     options: string,
     id?: string,
   ): Promise<PaginationResult<CatResponse[]>> {
@@ -25,19 +27,23 @@ export class CatsApi {
     );
   }
 
-  static async getCatById(id: string): Promise<Cat> {
+  static async getCatById(this: void, id: string): Promise<Cat> {
     return apiClient.get<Cat>(`/animals/cats/${id}`);
   }
 
-  static async createCat(data: object): Promise<Cat> {
+  static async createCat(this: void, data: object): Promise<Cat> {
     return apiClient.post(`/animals/cats`, data);
   }
 
-  static async updateCat<Cat>(id: string, data: object): Promise<Cat> {
+  static async updateCat<Cat>(
+    this: void,
+    id: string,
+    data: object,
+  ): Promise<Cat> {
     return apiClient.put(`/animals/cats/${id}`, data);
   }
 
-  static async deleteCats(id: string): Promise<string> {
+  static async deleteCats(this: void, id: string): Promise<string> {
     return apiClient.delete(`/animals/cats/${id}`);
   }
 }
