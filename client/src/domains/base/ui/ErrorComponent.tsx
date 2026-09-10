@@ -10,7 +10,7 @@ interface LoadErrorComponentProps extends InfoErrorComponentProps {
   loading: boolean;
 }
 
-export function ErrorComponent({
+export function LoadErrorComponent({
   error,
   load,
   loading,
