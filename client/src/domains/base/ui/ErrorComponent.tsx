@@ -26,7 +26,6 @@ export function LoadErrorComponent({
         <button
           className={styles.retryButton}
           onClick={() => {
-            console.log('Click');
             load();
           }}
           disabled={loading}
