@@ -1,13 +1,20 @@
 import { AiOutlineWarning } from 'react-icons/ai';
 import styles from './css/ErrorComponent.module.css';
 
-interface ErrorComponentProps {
+interface InfoErrorComponentProps {
   error: string;
+}
+
+interface LoadErrorComponentProps extends InfoErrorComponentProps {
   load: () => void;
   loading: boolean;
 }
 
-export function ErrorComponent({ error, load, loading }: ErrorComponentProps) {
+export function LoadErrorComponent({
+  error,
+  load,
+  loading,
+}: LoadErrorComponentProps) {
   return (
     <div className={styles.container}>
       <div className={styles.errorContainer}>
@@ -19,7 +26,6 @@ export function ErrorComponent({ error, load, loading }: ErrorComponentProps) {
         <button
           className={styles.retryButton}
           onClick={() => {
-            console.log('Click');
             load();
           }}
           disabled={loading}
@@ -30,6 +36,23 @@ export function ErrorComponent({ error, load, loading }: ErrorComponentProps) {
             'Repeat request'
           )}
         </button>
+      </div>
+    </div>
+  );
+}
+
+export function UnfoundedErrorComponent() {
+  return <InfoErrorComponent error={'Page not found 404'} />;
+}
+
+function InfoErrorComponent({ error }: InfoErrorComponentProps) {
+  return (
+    <div className={styles.container}>
+      <div className={styles.errorContainer}>
+        <div className={styles.errorIcon}>
+          <AiOutlineWarning />
+        </div>
+        <p className={styles.errorText}>{error}</p>
       </div>
     </div>
   );

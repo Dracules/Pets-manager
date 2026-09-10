@@ -7,7 +7,7 @@ import { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { useMemo, useState } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
-import { ErrorComponent } from './ErrorComponent';
+import { LoadErrorComponent } from './ErrorComponent';
 
 const EMPTY_ARRAY: never[] = [];
 
@@ -30,7 +30,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
 
   if (error)
     return (
-      <ErrorComponent
+      <LoadErrorComponent
         error={error}
         load={() => void load()}
         loading={loading}
