@@ -1,13 +1,20 @@
 import { AiOutlineWarning } from 'react-icons/ai';
 import styles from './css/ErrorComponent.module.css';
 
-interface ErrorComponentProps {
+interface InfoErrorComponentProps {
   error: string;
+}
+
+interface LoadErrorComponentProps extends InfoErrorComponentProps {
   load: () => void;
   loading: boolean;
 }
 
-export function ErrorComponent({ error, load, loading }: ErrorComponentProps) {
+export function ErrorComponent({
+  error,
+  load,
+  loading,
+}: LoadErrorComponentProps) {
   return (
     <div className={styles.container}>
       <div className={styles.errorContainer}>
