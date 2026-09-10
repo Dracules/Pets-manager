@@ -40,3 +40,16 @@ export function LoadErrorComponent({
     </div>
   );
 }
+
+function InfoErrorComponent({ error }: InfoErrorComponentProps) {
+  return (
+    <div className={styles.container}>
+      <div className={styles.errorContainer}>
+        <div className={styles.errorIcon}>
+          <AiOutlineWarning />
+        </div>
+        <p className={styles.errorText}>{error}</p>
+      </div>
+    </div>
+  );
+}
