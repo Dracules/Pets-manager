@@ -23,6 +23,7 @@ import {
   ParrotsPageByOwner,
   UserParrotsPage,
 } from '../../domains/parrot/ui/ParrotPage';
+import { UnfoundedErrorComponent } from '../../domains/base/ui/ErrorComponent';
 
 export function AppRoutes() {
   return (
@@ -49,6 +50,7 @@ export function AppRoutes() {
           <Route path="parrots" element={<ParrotsPageByOwner />} />
         </Route>
       </Route>
+      <Route path="*" element={<UnfoundedErrorComponent />} />
     </Routes>
   );
 }
