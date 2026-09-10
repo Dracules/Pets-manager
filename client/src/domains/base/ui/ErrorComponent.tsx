@@ -41,6 +41,10 @@ export function LoadErrorComponent({
   );
 }
 
+export function UnfoundedErrorComponent() {
+  return <InfoErrorComponent error={'Page not found 404'} />;
+}
+
 function InfoErrorComponent({ error }: InfoErrorComponentProps) {
   return (
     <div className={styles.container}>
