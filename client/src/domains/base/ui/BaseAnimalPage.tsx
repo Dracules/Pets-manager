@@ -28,15 +28,6 @@ function BaseAnimalPage<T extends AnimalResponse>(
   );
   const navigate = useNavigate();
 
-  if (error)
-    return (
-      <LoadErrorComponent
-        error={error}
-        load={() => void load()}
-        loading={loading}
-      />
-    );
-
   const paginationComponent = useMemo(
     () => (
       <PaginationComponent
@@ -83,6 +74,15 @@ function BaseAnimalPage<T extends AnimalResponse>(
       onOwnerClick: handleOwnerClick,
     };
   }, [deleteFn]);
+
+  if (error)
+    return (
+      <LoadErrorComponent
+        error={error}
+        load={() => void load()}
+        loading={loading}
+      />
+    );
 
   return (
     <div>
