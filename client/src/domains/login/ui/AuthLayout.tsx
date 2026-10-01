@@ -6,7 +6,7 @@ interface AuthLayoutProps {
   title: string;
   children?: ReactNode;
   footerLink?: { to: string; text: string };
-  message?: string;
+  message?: { text: string; error: boolean };
 }
 
 export const AuthLayout = ({
@@ -21,7 +21,13 @@ export const AuthLayout = ({
 
       {children}
 
-      {message && <p className={styles.message}>{message}</p>}
+      {message && (
+        <p
+          className={`${styles.authLayoutMessage} ${message.error ? styles.authLayoutMessageError : ''}`}
+        >
+          {message.text}
+        </p>
+      )}
 
       {footerLink && (
         <div className={styles.footer}>

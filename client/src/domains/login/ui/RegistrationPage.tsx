@@ -18,7 +18,7 @@ export default function RegistrationPage() {
       confirmPassword: '',
     },
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ text: '', error: false });
   const [isForm, setIsForm] = useState(true);
 
   const {
@@ -29,13 +29,16 @@ export default function RegistrationPage() {
   const errors = methods.formState.errors;
 
   const onSubmit: SubmitHandler<RegistrationFormInput> = async (data) => {
-    setMessage('');
+    setMessage({ text: '', error: false });
     try {
       const result = await Auth.signUp(data.login, data.password);
-      setMessage(result);
+      setMessage({ text: result, error: false });
       setIsForm(false);
     } catch (e) {
-      setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
+      setMessage({
+        text: 'Error: ' + (e instanceof Error ? e.message : String(e)),
+        error: true,
+      });
     }
   };
 

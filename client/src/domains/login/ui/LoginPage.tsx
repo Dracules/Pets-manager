@@ -19,7 +19,7 @@ export default function LoginPage() {
       password: '',
     },
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ text: '', error: false });
   const { token, login } = useAuth();
 
   const {
@@ -30,17 +30,20 @@ export default function LoginPage() {
   const errors = methods.formState.errors;
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
-    setMessage('');
+    setMessage({ text: '', error: false });
     try {
       const result = await Auth.signIn(data.login, data.password);
       if (result.access_token && result.refresh_token) {
         login(result);
-      } else setMessage('Something wrong!');
+      } else setMessage({ text: 'Something wrong!', error: true });
     } catch (e) {
       if (isApiError(e) && e.response?.status === 401) {
-        setMessage('Wrong login or password!');
+        setMessage({ text: 'Wrong login or password!', error: true });
       } else {
-        setMessage('Error: ' + (e instanceof Error ? e.message : String(e)));
+        setMessage({
+          text: 'Error: ' + (e instanceof Error ? e.message : String(e)),
+          error: true,
+        });
       }
     }
   };

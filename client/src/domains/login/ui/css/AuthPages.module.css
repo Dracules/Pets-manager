@@ -104,11 +104,16 @@
   opacity: 0.7;
 }
 
-.message {
+.authLayoutMessage {
   margin: 20px 0px;
   font-size: 0.9rem;
   color: var(--text-secondary);
   text-align: center;
+}
+
+.authLayoutMessageError {
+  color: var(--red-error);
+  font-weight: 500;
 }
 
 .footer {
