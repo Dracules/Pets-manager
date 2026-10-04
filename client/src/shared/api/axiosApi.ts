@@ -5,7 +5,9 @@ import {
   FullJwtToken,
 } from '../../domains/login/model/jwtToken.interface';
 
-const api = axios.create();
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+});
 
 let getToken: () => AuthState = () => {
   return { access_token: null, refresh_token: null };
