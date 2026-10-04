@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { Auth } from './authApi';
 import {
   AuthState,
   FullJwtToken,
@@ -9,14 +8,28 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
 });
 
-let getToken: () => AuthState = () => {
-  return { access_token: null, refresh_token: null };
+interface AuthActions {
+  getToken: () => AuthState;
+  refreshToken: () => Promise<FullJwtToken>;
+  handleLogout: () => void;
+  updateToken: (newToken: FullJwtToken) => void;
+}
+
+let authActions: AuthActions = {
+  getToken: () => ({ access_token: null, refresh_token: null }),
+  handleLogout: () => {},
+  updateToken: () => {},
+  refreshToken: async () => {
+    throw new Error('Auth not initialized');
+  },
 };
-let handleLogout: () => void = () => {};
-let updateToken: (newToken: FullJwtToken) => void = () => {};
+
+export const setApiAuth = (actions: AuthActions) => {
+  authActions = actions;
+};
 
 api.interceptors.request.use((config) => {
-  const token = getToken();
+  const token = authActions.getToken();
   if (token.access_token) {
     config.headers.Authorization = `Bearer ${token.access_token}`;
   }
@@ -36,7 +49,10 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as AxiosRequestConfig;
 
-    if (error.response?.status === 401 && getToken().access_token) {
+    if (
+      error.response?.status === 401 &&
+      authActions.getToken().refresh_token
+    ) {
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
           failedQueue.push((err: Error, newToken) => {
@@ -60,8 +76,8 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await refresh();
-        const newToken = getToken();
+        const newToken = await authActions.refreshToken();
+        authActions.updateToken(newToken);
 
         processQueue(null, newToken);
         isRefreshing = false;
@@ -70,35 +86,14 @@ api.interceptors.response.use(
       } catch (e) {
         processQueue(e);
         isRefreshing = false;
-        handleLogout();
+        authActions.handleLogout();
         return Promise.reject(e as Error);
       }
     } else if (error.response?.status === 401) {
-      handleLogout();
+      authActions.handleLogout();
     }
     return Promise.reject(error);
   },
 );
-
-const refresh = async () => {
-  const tokens = getToken();
-  if (!tokens.refresh_token) {
-    throw new Error('Error: No refresh token');
-  }
-
-  const response = await Auth.refresh(tokens.refresh_token);
-
-  updateToken(response);
-};
-
-export const setApiAuth = (
-  getTokenFn: () => AuthState,
-  handleLogoutFn: () => void,
-  updateTokenFn: (newToken: FullJwtToken) => void,
-) => {
-  getToken = getTokenFn;
-  handleLogout = handleLogoutFn;
-  updateToken = updateTokenFn;
-};
 
 export default api;
