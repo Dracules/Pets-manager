@@ -5,7 +5,7 @@ import {
 } from '../../domains/login/model/jwtToken.interface';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000',
 });
 
 interface AuthActions {
@@ -19,8 +19,8 @@ let authActions: AuthActions = {
   getToken: () => ({ access_token: null, refresh_token: null }),
   handleLogout: () => {},
   updateToken: () => {},
-  refreshToken: async () => {
-    throw new Error('Auth not initialized');
+  refreshToken: () => {
+    return Promise.reject(new Error('Auth not initialized'));
   },
 };
 
