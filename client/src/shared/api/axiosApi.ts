@@ -54,6 +54,8 @@ api.interceptors.response.use(
       authActions.getToken().refresh_token
     ) {
       if (isRefreshing) {
+        if (originalRequest.url?.includes('/auth/refresh'))
+          return Promise.reject(error);
         return new Promise(function (resolve, reject) {
           failedQueue.push((err: Error, newToken) => {
             if (err) {
