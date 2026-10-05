@@ -10,6 +10,7 @@ import {
 import { useNavigate } from 'react-router';
 import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 import { setApiAuth } from '../../../shared/api/axiosApi';
+import { Auth } from '../../../shared/api/authApi';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const AuthContext = createContext({
@@ -58,9 +59,22 @@ export function AuthProvider({ children }: PropsWithChildren) {
     void navigate('/login');
   }, []);
 
+  const refresh = useCallback(async () => {
+    const tokens = getTokenStorage();
+    if (!tokens.refresh_token) {
+      throw new Error('Error: No refresh token');
+    }
+    return await Auth.refresh(tokens.refresh_token);
+  }, []);
+
   useEffect(() => {
-    setApiAuth(getTokenStorage, logout, updateToken);
-  }, [getTokenStorage, logout, updateToken]);
+    setApiAuth({
+      getToken: getTokenStorage,
+      handleLogout: logout,
+      updateToken: updateToken,
+      refreshToken: refresh,
+    });
+  }, [getTokenStorage, logout, updateToken, refresh]);
 
   useEffect(() => {
     const onStorageChange = () =>
