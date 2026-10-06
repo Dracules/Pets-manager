@@ -17,8 +17,10 @@ function BaseAnimalPage<T extends AnimalResponse>(
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get('page') || '0', 10);
+  const urlPage = parseInt(searchParams.get('page') || '1', 10);
   const pageLimit = parseInt(searchParams.get('limit') || '10', 10);
+  const page = urlPage - 1;
+
   const { id } = useParams();
 
   const { data, totalCount, loading, error, setData, load } = useFetchData(
@@ -31,10 +33,14 @@ function BaseAnimalPage<T extends AnimalResponse>(
 
   const updatePageParams = useCallback(
     (newPage: number, newLimit: number) => {
-      setSearchParams({
-        page: newPage.toString(),
+      const params: Record<string, string> = {
+        page: (newPage + 1).toString(),
         limit: newLimit.toString(),
-      });
+      };
+
+      if (newPage === 0) delete params.page;
+
+      setSearchParams(params);
     },
     [setSearchParams],
   );
