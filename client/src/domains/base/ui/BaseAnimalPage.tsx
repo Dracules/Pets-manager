@@ -2,9 +2,9 @@ import useFetchData from '../model/useFetchData';
 import { CommonBaseTableProps } from '../model/BaseTableProps';
 import { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { AnimalResponse } from '../../animal/model/animal.response.interface';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
 import { LoadErrorComponent } from './ErrorComponent';
@@ -16,8 +16,9 @@ function BaseAnimalPage<T extends AnimalResponse>(
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T[]>>,
   deleteFn?: (id: string, type: AnimalType) => Promise<string>,
 ) {
-  const [page, setPage] = useState(0);
-  const [pageLimit, setPageLimit] = useState(10);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || '0', 10);
+  const pageLimit = parseInt(searchParams.get('limit') || '10', 10);
   const { id } = useParams();
 
   const { data, totalCount, loading, error, setData, load } = useFetchData(
@@ -28,17 +29,27 @@ function BaseAnimalPage<T extends AnimalResponse>(
   );
   const navigate = useNavigate();
 
+  const updatePageParams = useCallback(
+    (newPage: number, newLimit: number) => {
+      setSearchParams({
+        page: newPage.toString(),
+        limit: newLimit.toString(),
+      });
+    },
+    [setSearchParams],
+  );
+
   const paginationComponent = useMemo(
     () => (
       <PaginationComponent
         page={page}
-        setPage={setPage}
+        setPage={(newPage) => updatePageParams(newPage, pageLimit)}
         pageLimit={pageLimit}
-        setPageLimit={setPageLimit}
+        setPageLimit={(newLimit) => updatePageParams(0, newLimit)} // При смене лимита сбрасываем на первую страницу
         totalCount={totalCount}
       />
     ),
-    [page, pageLimit, totalCount],
+    [page, pageLimit, totalCount, updatePageParams],
   );
 
   const tableOptions = useMemo(() => {
