@@ -27,7 +27,6 @@ export default function PaginationComponent({
           value={pageLimit}
           onChange={(e) => {
             setPageLimit(parseInt(e.target.value, 10));
-            setPage(0);
           }}
         >
           {[5, 10, 25].map((limit) => (
