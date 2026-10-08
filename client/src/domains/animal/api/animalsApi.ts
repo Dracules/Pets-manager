@@ -21,13 +21,11 @@ export class AnimalsApi {
     options: string,
     id?: string,
   ): Promise<PaginationResult<AnimalResponse[]>> {
-    if (id)
-      return apiClient.get<PaginationResult<AnimalResponse[]>>(
-        `/animals/user/${id}${options}`,
-      );
-    return apiClient.get<PaginationResult<AnimalResponse[]>>(
-      '/animals/user' + options,
-    );
+    const uri = id
+      ? `/animals/user/${id}${options}`
+      : '/animals/user' + options;
+
+    return apiClient.get<PaginationResult<AnimalResponse[]>>(uri);
   }
 
   static async deleteAnimals(
