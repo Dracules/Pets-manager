@@ -18,13 +18,11 @@ export class DogsApi {
     options: string,
     id?: string,
   ): Promise<PaginationResult<DogResponse[]>> {
-    if (id)
-      return apiClient.get<PaginationResult<DogResponse[]>>(
-        `/animals/dogs/user/${id}${options}`,
-      );
-    return apiClient.get<PaginationResult<DogResponse[]>>(
-      '/animals/dogs/user' + options,
-    );
+    const uri = id
+      ? `/animals/dogs/user/${id}${options}`
+      : '/animals/dogs/user' + options;
+
+    return apiClient.get<PaginationResult<DogResponse[]>>(uri);
   }
 
   static async getDogById(this: void, id: string): Promise<Dog> {

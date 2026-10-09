@@ -18,13 +18,11 @@ export class CatsApi {
     options: string,
     id?: string,
   ): Promise<PaginationResult<CatResponse[]>> {
-    if (id)
-      return apiClient.get<PaginationResult<CatResponse[]>>(
-        `/animals/cats/user/${id}${options}`,
-      );
-    return apiClient.get<PaginationResult<CatResponse[]>>(
-      '/animals/cats/user' + options,
-    );
+    const uri = id
+      ? `/animals/cats/user/${id}${options}`
+      : '/animals/cats/user' + options;
+
+    return apiClient.get<PaginationResult<CatResponse[]>>(uri);
   }
 
   static async getCatById(this: void, id: string): Promise<Cat> {
