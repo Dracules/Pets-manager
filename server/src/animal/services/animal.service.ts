@@ -39,7 +39,12 @@ export class AnimalService {
               as: 'owner',
             },
           },
-          { $unwind: '$owner' },
+          {
+            $unwind: {
+              path: '$owner',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
           { $sort: { _id: 1 } },
           { $skip: skip },
           { $limit: limit },
@@ -125,7 +130,12 @@ export class AnimalService {
               as: 'owner',
             },
           },
-          { $unwind: '$owner' },
+          {
+            $unwind: {
+              path: '$owner',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
           { $sort: { _id: 1 } },
           { $skip: skip },
           { $limit: limit },

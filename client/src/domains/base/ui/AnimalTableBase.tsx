@@ -60,21 +60,26 @@ function AnimalTableBase<T extends AnimalResponse>({
       cols.push({
         accessorKey: 'owner.login',
         header: 'Owner',
-        cell: ({ row }) => (
-          <a
-            href="#"
-            className={styles.ownerLink}
-            onClick={(e) => {
-              e.preventDefault();
-              options.onOwnerClick(
-                row.original.owner._id,
-                row.original.owner.login,
-              );
-            }}
-          >
-            {row.original.owner.login}
-          </a>
-        ),
+        cell: ({ row }) => {
+          if (!row.original.owner?.login) {
+            return <span className={styles.noOwner}>Not found</span>;
+          }
+          return (
+            <a
+              href="#"
+              className={styles.ownerLink}
+              onClick={(e) => {
+                e.preventDefault();
+                options.onOwnerClick(
+                  row.original.owner._id,
+                  row.original.owner.login,
+                );
+              }}
+            >
+              {row.original.owner.login}
+            </a>
+          );
+        },
         meta: { size: 170 },
       });
     } else {
