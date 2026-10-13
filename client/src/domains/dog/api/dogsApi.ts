@@ -3,7 +3,7 @@ import { PaginationResult } from '../../../shared/model/interfaces/pagination.re
 import { Dog } from '../model/dog.interface';
 import { DogResponse } from '../model/dog.response.interface';
 
-export class DogsApi {
+export default class DogsApi {
   static async getDogs(
     this: void,
     options: string,

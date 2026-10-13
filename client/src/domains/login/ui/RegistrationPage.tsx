@@ -1,13 +1,13 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Auth } from '../../../shared/api/authApi';
+import Auth from '../../../shared/api/authApi';
 import { yupResolver } from '@hookform/resolvers/yup';
 import registrationSchema from '../model/validation/registrationSchema';
 import { RegistrationFormInput } from '../model/form-input.interface';
 import styles from './css/AuthPages.module.css';
-import { FormField } from './FormField';
-import { AuthLayout } from './AuthLayout';
-import { SubmitButton } from './SubmitButton';
+import FormField from './FormField';
+import AuthLayout from './AuthLayout';
+import SubmitButton from './SubmitButton';
 
 export default function RegistrationPage() {
   const methods = useForm<RegistrationFormInput>({

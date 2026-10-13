@@ -3,7 +3,7 @@ import { PaginationResult } from '../../../shared/model/interfaces/pagination.re
 import { Cat } from '../model/cat.interface';
 import { CatResponse } from '../model/cat.response.interface';
 
-export class CatsApi {
+export default class CatsApi {
   static async getCats(
     this: void,
     options: string,

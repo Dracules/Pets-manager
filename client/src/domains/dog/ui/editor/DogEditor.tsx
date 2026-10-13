@@ -1,14 +1,14 @@
 import { Controller } from 'react-hook-form';
-import { AnimalEditor } from '../../../editor/ui/AnimalEditor';
+import AnimalEditor from '../../../editor/ui/AnimalEditor';
 import { Dog } from '../../model/dog.interface';
-import { MultiTagsSelect } from '../../../../shared/ui/MultiTagsSelect';
-import { useAnimalEditor } from '../../../editor/model/useAnimalEditor';
+import MultiTagsSelect from '../../../../shared/ui/MultiTagsSelect';
+import useAnimalEditor from '../../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../../shared/ui/LoadingComponent';
-import { DogsApi } from '../../api/dogsApi';
+import DogsApi from '../../api/dogsApi';
 import dogEditorSchema from '../../model/validation/dogEditorSchema';
 import commonStyles from '../../../editor/ui/css/AnimalEditor.module.css';
 
-export function DogEditor() {
+export default function DogEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
     loadById: DogsApi.getDogById,
     createItem: async (data: Dog) => {

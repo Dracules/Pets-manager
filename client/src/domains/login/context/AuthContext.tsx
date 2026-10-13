@@ -10,7 +10,7 @@ import {
 import { useNavigate } from 'react-router';
 import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 import { setApiAuth } from '../../../shared/api/axiosApi';
-import { Auth } from '../../../shared/api/authApi';
+import Auth from '../../../shared/api/authApi';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const AuthContext = createContext({

@@ -1,5 +1,5 @@
 import BaseAnimalPage from '../../base/ui/BaseAnimalPage';
-import { AnimalsApi } from '../api/animalsApi';
+import AnimalsApi from '../api/animalsApi';
 import AnimalTable from './AnimalTable';
 
 export const AnimalsPage = () => {

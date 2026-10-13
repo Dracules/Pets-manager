@@ -10,7 +10,7 @@ interface FormFieldProps {
   error: FieldError | undefined;
 }
 
-export const FormField = ({
+const FormField = ({
   label,
   name,
   type = 'text',
@@ -31,3 +31,5 @@ export const FormField = ({
     </div>
   );
 };
+
+export default FormField;

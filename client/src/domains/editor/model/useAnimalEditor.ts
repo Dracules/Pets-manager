@@ -15,7 +15,7 @@ type UseAnimalEditorOptions<T> = {
   defaultValues?: DefaultValues<T>;
 };
 
-export function useAnimalEditor<T extends Animal>({
+export default function useAnimalEditor<T extends Animal>({
   loadById,
   createItem,
   updateItem,

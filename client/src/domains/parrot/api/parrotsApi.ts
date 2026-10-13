@@ -3,7 +3,7 @@ import { PaginationResult } from '../../../shared/model/interfaces/pagination.re
 import { Parrot } from '../model/parrot.interface';
 import { ParrotResponse } from '../model/parrot.response.interface';
 
-export class ParrotsApi {
+export default class ParrotsApi {
   static async getParrots(
     this: void,
     options: string,

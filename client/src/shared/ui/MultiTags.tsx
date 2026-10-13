@@ -4,7 +4,7 @@ interface MultiTagsProps {
   elements: string[] | undefined;
 }
 
-export const MultiTags = ({ elements }: MultiTagsProps) => {
+const MultiTags = ({ elements }: MultiTagsProps) => {
   if (!elements || elements.length === 0) {
     return (
       <span className={`${styles.tag} ${styles.emptyState}`}>No commands</span>
@@ -37,3 +37,5 @@ export const MultiTags = ({ elements }: MultiTagsProps) => {
     </div>
   );
 };
+
+export default MultiTags;
