@@ -4,7 +4,7 @@ import { Dog, DogDocument } from '../schemas/dog.schema';
 import { Model } from 'mongoose';
 import { DogDTO } from '../dto/dog.dto';
 import { BaseAnimalService } from '../../animal/services/base.animal.service';
-import { DogResponse } from '../interfaces/dog.interface';
+import type { DogResponse } from '../interfaces/dog.interface';
 
 @Injectable()
 export class DogService extends BaseAnimalService<

@@ -1,6 +1,6 @@
 import { Controller } from 'react-hook-form';
 import AnimalEditor from '../../../editor/ui/AnimalEditor';
-import { Parrot } from '../../model/parrot.interface';
+import type { Parrot } from '../../model/parrot.interface';
 import MultiTagsSelect from '../../../../shared/ui/MultiTagsSelect';
 import useAnimalEditor from '../../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../../shared/ui/LoadingComponent';

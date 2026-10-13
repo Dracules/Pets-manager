@@ -1,10 +1,10 @@
 import apiClient from '../../../shared/api/apiClient';
-import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import CatsApi from '../../cat/api/catsApi';
 import DogsApi from '../../dog/api/dogsApi';
 import ParrotsApi from '../../parrot/api/parrotsApi';
-import { AnimalResponse } from '../model/animal.response.interface';
-import { AnimalType } from '../model/animal.type';
+import type { AnimalResponse } from '../model/animal.response.interface';
+import type { AnimalType } from '../model/animal.type';
 
 export default class AnimalsApi {
   static async getAnimals(

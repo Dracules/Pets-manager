@@ -1,5 +1,5 @@
 import { CatDTO } from '../../dto/cat.dto';
-import { CatResponse } from '../../interfaces/cat.interface';
+import type { CatResponse } from '../../interfaces/cat.interface';
 
 export const mockCatDTO = (overrides: Partial<CatDTO> = {}): CatDTO => ({
   name: 'Bars',

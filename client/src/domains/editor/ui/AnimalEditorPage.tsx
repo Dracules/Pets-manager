@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimalType } from '../../animal/model/animal.type';
+import { type AnimalType } from '../../animal/model/animal.type';
 import CatEditor from '../../cat/ui/CatEditor';
 import DogEditor from '../../dog/ui/editor/DogEditor';
 import { useSearchParams } from 'react-router';

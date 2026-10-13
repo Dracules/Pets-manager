@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { CommonBaseTableProps } from '../../base/model/BaseTableProps';
-import { ParrotResponse } from '../model/parrot.response.interface';
+import type { CommonBaseTableProps } from '../../base/model/BaseTableProps';
+import type { ParrotResponse } from '../model/parrot.response.interface';
 import AnimalTableBase from '../../base/ui/AnimalTableBase';
 import MultiTags from '../../../shared/ui/MultiTags';
 

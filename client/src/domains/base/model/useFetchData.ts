@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 
 function useFetchData<T>(
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T>>,

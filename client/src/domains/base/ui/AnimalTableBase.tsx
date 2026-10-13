@@ -1,8 +1,8 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import BaseTable from './BaseTable';
-import { AnimalTableBaseProps } from '../model/BaseTableProps';
+import type { AnimalTableBaseProps } from '../model/BaseTableProps';
 import { useMemo } from 'react';
-import { AnimalResponse } from '../../animal/model/animal.response.interface';
+import type { AnimalResponse } from '../../animal/model/animal.response.interface';
 import {
   AnimalIcon,
   CatIcon,

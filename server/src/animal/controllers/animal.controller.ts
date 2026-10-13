@@ -1,10 +1,10 @@
 import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { AnimalService } from '../services/animal.service';
-import { AnimalResponse } from '../interfaces/animal.interface';
+import type { AnimalResponse } from '../interfaces/animal.interface';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { PaginationDTO } from '../../shared/dto/pagination.dto';
-import { PaginationResult } from '../interfaces/pagination.result';
+import type { PaginationResult } from '../interfaces/pagination.result';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
 
 @Controller('animals')

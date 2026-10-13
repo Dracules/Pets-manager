@@ -3,7 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { CatService } from '../services/cat.service';
 import { AnimalException } from '../../animal/exception_filters/exceptions/animal.exception';
 import { mockCat, mockCatsList } from './mocks/cat.mock';
-import { CatResponse } from '../interfaces/cat.interface';
+import type { CatResponse } from '../interfaces/cat.interface';
 import { Types } from 'mongoose';
 
 describe('CatService', () => {

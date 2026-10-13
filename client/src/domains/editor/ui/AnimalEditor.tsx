@@ -5,7 +5,7 @@ import {
   SubmitHandler,
   UseFormReturn,
 } from 'react-hook-form';
-import { Animal } from '../../animal/model/animal.interface';
+import type { Animal } from '../../animal/model/animal.interface';
 import { useNavigate, useParams } from 'react-router';
 import MonthYearPicker from './MonthYearPicker';
 import styles from './css/AnimalEditor.module.css';

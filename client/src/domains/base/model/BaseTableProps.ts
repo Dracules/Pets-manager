@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { AnimalType } from '../../animal/model/animal.type';
-import { AnimalResponse } from '../../animal/model/animal.response.interface';
+import type { AnimalType } from '../../animal/model/animal.type';
+import type { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { JSX } from 'react';
 
 type UserBaseTablePropsOptions = {

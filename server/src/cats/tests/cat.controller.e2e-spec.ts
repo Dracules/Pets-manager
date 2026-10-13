@@ -8,10 +8,10 @@ import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection, ObjectId } from 'mongodb';
 import { AppModule } from '../../app.module';
 import { mockCatDTO, mockCatDTOList } from './mocks/cat.mock';
-import { CatResponse } from '../interfaces/cat.interface';
+import type { CatResponse } from '../interfaces/cat.interface';
 import { App } from 'supertest/types';
 import { initMongoDB } from './mocks/init-mongo-for-tests';
-import { PaginationResult } from '../../animal/interfaces/pagination.result';
+import type { PaginationResult } from '../../animal/interfaces/pagination.result';
 
 describe('CatController', () => {
   let app: INestApplication;

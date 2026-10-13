@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import {
-  AuthState,
-  FullJwtToken,
+  type AuthState,
+  type FullJwtToken,
 } from '../../domains/login/model/jwtToken.interface';
 
 const api = axios.create({

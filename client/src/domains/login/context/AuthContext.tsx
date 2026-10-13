@@ -8,7 +8,7 @@ import {
   useCallback,
 } from 'react';
 import { useNavigate } from 'react-router';
-import { AuthState, FullJwtToken } from '../model/jwtToken.interface';
+import type { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 import { setApiAuth } from '../../../shared/api/axiosApi';
 import Auth from '../../../shared/api/authApi';
 

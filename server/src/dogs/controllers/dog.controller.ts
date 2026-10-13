@@ -21,9 +21,9 @@ import { DogDTO, UpdateDogDTO } from '../dto/dog.dto';
 import { Public } from '../../shared/decorators/public.decorator';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalController } from '../../animal/controllers/base.animal.controller';
-import { DogResponse } from '../interfaces/dog.interface';
+import type { DogResponse } from '../interfaces/dog.interface';
 import { AnimalCacheService } from '../../animal/services/animal.cache.service';
-import { PaginationResult } from '../../animal/interfaces/pagination.result';
+import type { PaginationResult } from '../../animal/interfaces/pagination.result';
 import { PaginationDTO } from '../../shared/dto/pagination.dto';
 
 @Controller('animals/dogs')

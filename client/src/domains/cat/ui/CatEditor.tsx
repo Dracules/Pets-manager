@@ -1,4 +1,4 @@
-import { Cat } from '../model/cat.interface';
+import type { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
 import AnimalEditor from '../../editor/ui/AnimalEditor';
 import useAnimalEditor from '../../editor/model/useAnimalEditor';
