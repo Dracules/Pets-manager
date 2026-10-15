@@ -9,7 +9,7 @@ interface AuthLayoutProps {
   message?: { text: string; error: boolean };
 }
 
-export const AuthLayout = ({
+const AuthLayout = ({
   title,
   children,
   footerLink,
@@ -39,3 +39,5 @@ export const AuthLayout = ({
     </div>
   </div>
 );
+
+export default AuthLayout;

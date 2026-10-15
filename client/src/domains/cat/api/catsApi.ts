@@ -1,9 +1,9 @@
 import apiClient from '../../../shared/api/apiClient';
-import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
-import { Cat } from '../model/cat.interface';
-import { CatResponse } from '../model/cat.response.interface';
+import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import type { Cat } from '../model/cat.interface';
+import type { CatResponse } from '../model/cat.response.interface';
 
-export class CatsApi {
+export default class CatsApi {
   static async getCats(
     this: void,
     options: string,

@@ -3,9 +3,9 @@ import { AnimalDTO } from '../dto/animal.dto';
 import { HydratedDocument, Model, Types, UpdateQuery } from 'mongoose';
 import { AnimalException } from '../exception_filters/exceptions/animal.exception';
 import { Animal } from '../schemas/animal.schema';
-import { AnimalResponse } from '../interfaces/animal.interface';
-import { AnimalType } from '../types/animal.type';
-import { PaginationResult } from '../interfaces/pagination.result';
+import type { AnimalResponse } from '../interfaces/animal.interface';
+import type { AnimalType } from '../types/animal.type';
+import type { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { AnimalResponse } from '../interfaces/animal.interface';
+import type { AnimalResponse } from '../interfaces/animal.interface';
 import { CacheService } from '../../shared/services/cache.service';
 import { Injectable } from '@nestjs/common';
 

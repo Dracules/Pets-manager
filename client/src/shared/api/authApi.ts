@@ -1,7 +1,7 @@
 import api from './axiosApi';
-import { FullJwtToken } from '../../domains/login/model/jwtToken.interface';
+import { type FullJwtToken } from '../../domains/login/model/jwtToken.interface';
 
-export class Auth {
+export default class Auth {
   static async signIn(login: string, password: string): Promise<FullJwtToken> {
     return api
       .post<FullJwtToken>('/auth/login', { login: login, password: password })

@@ -7,10 +7,7 @@ interface MonthYearPickerProps {
   onChange: (date: Date | null) => void;
 }
 
-export const MonthYearPicker = ({
-  selected,
-  onChange,
-}: MonthYearPickerProps) => {
+const MonthYearPicker = ({ selected, onChange }: MonthYearPickerProps) => {
   return (
     <DatePicker
       selected={selected}
@@ -25,3 +22,5 @@ export const MonthYearPicker = ({
     />
   );
 };
+
+export default MonthYearPicker;

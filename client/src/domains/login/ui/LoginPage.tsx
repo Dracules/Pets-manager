@@ -2,14 +2,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { isApiError } from '../../../shared/api/apiClient';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Auth } from '../../../shared/api/authApi';
+import Auth from '../../../shared/api/authApi';
 import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from '../model/validation/loginSchema';
 import { LoginFormInput } from '../model/form-input.interface';
 import styles from './css/AuthPages.module.css';
-import { FormField } from './FormField';
-import { AuthLayout } from './AuthLayout';
-import { SubmitButton } from './SubmitButton';
+import FormField from './FormField';
+import AuthLayout from './AuthLayout';
+import SubmitButton from './SubmitButton';
 
 export default function LoginPage() {
   const methods = useForm<LoginFormInput>({

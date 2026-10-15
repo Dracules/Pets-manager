@@ -1,8 +1,8 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { CommonBaseTableProps } from '../../base/model/BaseTableProps';
-import { DogResponse } from '../model/dog.response.interface';
+import type { CommonBaseTableProps } from '../../base/model/BaseTableProps';
+import type { DogResponse } from '../model/dog.response.interface';
 import AnimalTableBase from '../../base/ui/AnimalTableBase';
-import { MultiTags } from '../../../shared/ui/MultiTags';
+import MultiTags from '../../../shared/ui/MultiTags';
 
 const dogAdditionalColumns: ColumnDef<DogResponse>[] = [
   {

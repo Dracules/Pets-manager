@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
-import {
+import type {
   AccessJwtPayload,
   RefreshJwtPayload,
 } from '../interfaces/jwt.payload.interface';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
-import { FullJwtToken } from '../interfaces/jwt.token.interface';
+import type { FullJwtToken } from '../interfaces/jwt.token.interface';
 import { User } from '../../user/schemas/user.schema';
 
 @Injectable()

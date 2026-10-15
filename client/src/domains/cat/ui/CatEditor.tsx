@@ -1,15 +1,15 @@
-import { Cat } from '../model/cat.interface';
+import type { Cat } from '../model/cat.interface';
 import { LITTER_STATUS } from '../model/litterStatus.type';
-import { AnimalEditor } from '../../editor/ui/AnimalEditor';
-import { useAnimalEditor } from '../../editor/model/useAnimalEditor';
+import AnimalEditor from '../../editor/ui/AnimalEditor';
+import useAnimalEditor from '../../editor/model/useAnimalEditor';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
-import { CatsApi } from '../api/catsApi';
+import CatsApi from '../api/catsApi';
 import catEditorSchema from '../model/validation/catEditorSchema';
 import commonStyles from '../../editor/ui/css/AnimalEditor.module.css';
 import specialStyles from './css/CatEditor.module.css';
 import { FiChevronDown } from 'react-icons/fi';
 
-export function CatEditor() {
+export default function CatEditor() {
   const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
     loadById: CatsApi.getCatById,
     createItem: async (data: Cat) => {

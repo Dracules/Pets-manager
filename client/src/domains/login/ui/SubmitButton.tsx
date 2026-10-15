@@ -5,7 +5,7 @@ interface SubmitButtonProps {
   isSubmitting: boolean;
 }
 
-export const SubmitButton = ({ title, isSubmitting }: SubmitButtonProps) => {
+const SubmitButton = ({ title, isSubmitting }: SubmitButtonProps) => {
   return (
     <button
       type="submit"
@@ -16,3 +16,5 @@ export const SubmitButton = ({ title, isSubmitting }: SubmitButtonProps) => {
     </button>
   );
 };
+
+export default SubmitButton;

@@ -1,11 +1,11 @@
 import useFetchData from '../model/useFetchData';
-import { CommonBaseTableProps } from '../model/BaseTableProps';
-import { AnimalType } from '../../animal/model/animal.type';
+import type { CommonBaseTableProps } from '../model/BaseTableProps';
+import type { AnimalType } from '../../animal/model/animal.type';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { AnimalResponse } from '../../animal/model/animal.response.interface';
+import type { AnimalResponse } from '../../animal/model/animal.response.interface';
 import { useCallback, useMemo } from 'react';
-import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
 import { LoadErrorComponent } from './ErrorComponent';
 

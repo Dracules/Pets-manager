@@ -2,9 +2,9 @@ import { type Response } from 'express';
 import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalService } from '../services/base.animal.service';
 import { AnimalDTO } from '../dto/animal.dto';
-import { AnimalResponse } from '../interfaces/animal.interface';
+import type { AnimalResponse } from '../interfaces/animal.interface';
 import { AnimalCacheService } from '../services/animal.cache.service';
-import { PaginationResult } from '../interfaces/pagination.result';
+import type { PaginationResult } from '../interfaces/pagination.result';
 
 export abstract class BaseAnimalController<
   DTO extends AnimalDTO,

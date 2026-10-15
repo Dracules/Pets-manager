@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Cat, CatDocument } from '../../cats/schemas/cat.schema';
-import { AnimalResponse } from '../interfaces/animal.interface';
-import { PaginationResult } from '../interfaces/pagination.result';
+import type { AnimalResponse } from '../interfaces/animal.interface';
+import type { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
-import { AnimalType } from '../types/animal.type';
+import type { AnimalType } from '../types/animal.type';
 
 @Injectable()
 export class AnimalService {

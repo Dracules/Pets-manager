@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseAnimalService } from '../../animal/services/base.animal.service';
 import { ParrotDTO } from '../dto/parrot.dto';
-import { ParrotResponse } from '../interfaces/parrot.interface';
+import type { ParrotResponse } from '../interfaces/parrot.interface';
 import { ParrotDocument, Parrot } from '../schemas/parrot.schema';
 
 @Injectable()

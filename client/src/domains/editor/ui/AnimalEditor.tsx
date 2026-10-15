@@ -5,9 +5,9 @@ import {
   SubmitHandler,
   UseFormReturn,
 } from 'react-hook-form';
-import { Animal } from '../../animal/model/animal.interface';
+import type { Animal } from '../../animal/model/animal.interface';
 import { useNavigate, useParams } from 'react-router';
-import { MonthYearPicker } from './MonthYearPicker';
+import MonthYearPicker from './MonthYearPicker';
 import styles from './css/AnimalEditor.module.css';
 
 interface EditorProps<T extends Animal> {
@@ -21,7 +21,7 @@ const renderError = (message?: unknown) =>
     <span className={styles.errorMessage}>{message}</span>
   ) : null;
 
-export function AnimalEditor<T extends Animal>({
+export default function AnimalEditor<T extends Animal>({
   onSubmit,
   fields,
   methods,

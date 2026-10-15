@@ -1,6 +1,6 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import { CommonBaseTableProps } from '../../base/model/BaseTableProps';
-import { CatResponse } from '../model/cat.response.interface';
+import type { CommonBaseTableProps } from '../../base/model/BaseTableProps';
+import type { CatResponse } from '../model/cat.response.interface';
 import AnimalTableBase from '../../base/ui/AnimalTableBase';
 
 const catAdditionalColumns: ColumnDef<CatResponse>[] = [

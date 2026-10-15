@@ -1,4 +1,4 @@
-import { UserRole } from '../../shared/types/userRole.type';
+import { type UserRole } from '../../shared/types/userRole.type';
 
 export interface RefreshJwtPayload {
   sub: string;

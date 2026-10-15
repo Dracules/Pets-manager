@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { AnimalType } from '../../animal/model/animal.type';
-import { CatEditor } from '../../cat/ui/CatEditor';
-import { DogEditor } from '../../dog/ui/editor/DogEditor';
+import { type AnimalType } from '../../animal/model/animal.type';
+import CatEditor from '../../cat/ui/CatEditor';
+import DogEditor from '../../dog/ui/editor/DogEditor';
 import { useSearchParams } from 'react-router';
 import styles from './css/AnimalEditorPage.module.css';
-import { ParrotEditor } from '../../parrot/ui/editor/ParrotEditor';
+import ParrotEditor from '../../parrot/ui/editor/ParrotEditor';
 import { CatIcon, DogIcon, ParrotIcon } from '../../../shared/ui/Icons';
 
 type EditorPageMode = 'edit' | 'create';

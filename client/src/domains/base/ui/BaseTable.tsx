@@ -3,8 +3,8 @@ import {
   getCoreRowModel,
   flexRender,
 } from '@tanstack/react-table';
-import { BaseTableProps } from '../model/BaseTableProps';
-import { AnimalResponse } from '../../animal/model/animal.response.interface';
+import type { BaseTableProps } from '../model/BaseTableProps';
+import type { AnimalResponse } from '../../animal/model/animal.response.interface';
 import styles from './css/BaseTable.module.css';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
 import { memo, useMemo } from 'react';

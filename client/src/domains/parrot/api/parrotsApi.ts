@@ -1,9 +1,9 @@
 import apiClient from '../../../shared/api/apiClient';
-import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
-import { Parrot } from '../model/parrot.interface';
-import { ParrotResponse } from '../model/parrot.response.interface';
+import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import type { Parrot } from '../model/parrot.interface';
+import type { ParrotResponse } from '../model/parrot.response.interface';
 
-export class ParrotsApi {
+export default class ParrotsApi {
   static async getParrots(
     this: void,
     options: string,

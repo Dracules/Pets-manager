@@ -1,9 +1,9 @@
 import apiClient from '../../../shared/api/apiClient';
-import { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
-import { Dog } from '../model/dog.interface';
-import { DogResponse } from '../model/dog.response.interface';
+import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import type { Dog } from '../model/dog.interface';
+import type { DogResponse } from '../model/dog.response.interface';
 
-export class DogsApi {
+export default class DogsApi {
   static async getDogs(
     this: void,
     options: string,

@@ -1,5 +1,5 @@
 import BaseAnimalPage from '../../base/ui/BaseAnimalPage';
-import { ParrotsApi } from '../api/parrotsApi';
+import ParrotsApi from '../api/parrotsApi';
 import ParrotTable from './ParrotTable';
 
 export const ParrotsPage = () => {

@@ -12,7 +12,7 @@ interface MultiTagsSelectProps {
   placeholder: string;
 }
 
-export function MultiTagsSelect({
+export default function MultiTagsSelect({
   value = [],
   onChange,
   placeholder,

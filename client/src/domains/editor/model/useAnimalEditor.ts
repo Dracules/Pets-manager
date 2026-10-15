@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
-import { Animal } from '../../animal/model/animal.interface';
+import type { Animal } from '../../animal/model/animal.interface';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,7 +15,7 @@ type UseAnimalEditorOptions<T> = {
   defaultValues?: DefaultValues<T>;
 };
 
-export function useAnimalEditor<T extends Animal>({
+export default function useAnimalEditor<T extends Animal>({
   loadById,
   createItem,
   updateItem,
