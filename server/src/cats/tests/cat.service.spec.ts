@@ -9,29 +9,41 @@ import { Types } from 'mongoose';
 describe('CatService', () => {
   let service: CatService;
 
-  type MockFnWithExec = jest.Mock<{ exec: jest.Mock }>;
-  type MockFnWhereEquals = jest.Mock<{ equals: jest.Mock }>;
-  type MockQueryBuilder<T = any> = {
-    where: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    equals: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    populate: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    sort: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    skip: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    limit: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    lean: jest.MockedFunction<(...args: any[]) => MockQueryBuilder<T>>;
-    exec: jest.MockedFunction<jest.Mock>;
-  };
-
-  interface MockModel extends jest.Mock {
-    find: jest.MockedFunction<() => MockQueryBuilder>;
-    findById: jest.MockedFunction<() => MockQueryBuilder>;
-    findByIdAndUpdate: MockFnWithExec;
-    findByIdAndDelete: MockFnWithExec;
-    where: MockFnWhereEquals | jest.MockedFunction<() => MockQueryBuilder>;
-    toJSON: jest.Mock;
-    countDocuments: MockFnWithExec;
-    modelName: string;
+  interface MockQueryBuilder extends jest.Mock<any, any> {
+    where: jest.Mock<MockQueryBuilder, [string, any]>;
+    equals: jest.Mock<MockQueryBuilder, [any]>;
+    populate: jest.Mock<MockQueryBuilder, [string]>;
+    sort: jest.Mock<MockQueryBuilder, [any]>;
+    skip: jest.Mock<MockQueryBuilder, [number]>;
+    limit: jest.Mock<MockQueryBuilder, [number]>;
+    lean: jest.Mock<MockQueryBuilder, []>;
+    exec: jest.Mock<Promise<any>, []>;
   }
+
+  function createMockQueryBuilder(): MockQueryBuilder {
+    const mock = {
+      where: jest.fn().mockReturnThis(),
+      equals: jest.fn().mockReturnThis(),
+      populate: jest.fn().mockReturnThis(),
+      sort: jest.fn().mockReturnThis(),
+      skip: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockReturnThis(),
+      lean: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue([]),
+    };
+    return mock as unknown as MockQueryBuilder;
+  }
+
+  type MockModel = jest.Mock & {
+    find: jest.Mock;
+    findById: jest.Mock;
+    findByIdAndUpdate: jest.Mock;
+    findByIdAndDelete: jest.Mock;
+    where: jest.Mock;
+    toJSON: jest.Mock;
+    countDocuments: jest.Mock;
+    modelName: string;
+  };
 
   let mockCatModel: MockModel;
 
