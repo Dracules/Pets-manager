@@ -340,6 +340,32 @@ describe('CatService', () => {
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
       });
     });
+
+    describe('findByIdAndUpdate returns null (defensive branch)', () => {
+      it('must throw AnimalException', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a11111';
+        const newData: Partial<CatResponse> = {};
+
+        mockCatModel.where = jest.fn().mockReturnValue({
+          equals: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+              equals: jest.fn().mockResolvedValue({ length: 1 }),
+            }),
+          }),
+        });
+
+        mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(null),
+        });
+
+        await expect(
+          service.updateById(userId, catId, newData),
+        ).rejects.toThrow(AnimalException);
+
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+      });
+    });
   });
 
   describe('delete', () => {
@@ -415,6 +441,31 @@ describe('CatService', () => {
 
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(0);
+      });
+    });
+
+    describe('findByIdAndDelete returns null (defensive branch)', () => {
+      it('must throw AnimalException', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a11111';
+
+        mockCatModel.where = jest.fn().mockReturnValue({
+          equals: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+              equals: jest.fn().mockResolvedValue({ length: 1 }),
+            }),
+          }),
+        });
+
+        mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue(null),
+        });
+
+        await expect(service.delete(userId, catId)).rejects.toThrow(
+          AnimalException,
+        );
+
+        expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
       });
     });
   });
