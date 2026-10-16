@@ -81,28 +81,6 @@ describe('CatService', () => {
       expect(saveMock).toHaveBeenCalledTimes(1);
     });
   });
-  /*
-  describe('findAll', () => {
-    it('return all cats', async () => {
-      const mockCats = mockCatsList();
-      const catType = 'cat';
-      const mockCatsWithType = mockCats.map((obj) => ({
-        ...obj,
-        type: catType,
-      }));
-      mockCatModel.find = jest.fn().mockReturnValue({
-        exec: jest.fn().mockResolvedValue(
-          mockCats.map((cat) => ({
-            toJSON: () => cat,
-          })),
-        ),
-      }) as MockFnWithExec;
-
-      const result = await service.findAll();
-      expect(mockCatModel.find().exec).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(mockCatsWithType);
-    });
-  });*/
 
   describe('findAll', () => {
     it('returns first page of cats with pagination', async () => {
