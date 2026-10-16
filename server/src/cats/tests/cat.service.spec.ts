@@ -47,8 +47,19 @@ describe('CatService', () => {
 
   let mockCatModel: MockModel;
 
-  beforeAll(async () => {
-    mockCatModel = jest.fn() as MockModel;
+  beforeEach(async () => {
+    mockCatModel = jest.fn().mockImplementation((data: object) => ({
+      ...data,
+      toJSON: jest.fn().mockReturnValue(data),
+    })) as MockModel;
+
+    mockCatModel.find = jest.fn();
+    mockCatModel.findById = jest.fn();
+    mockCatModel.findByIdAndUpdate = jest.fn();
+    mockCatModel.findByIdAndDelete = jest.fn();
+    mockCatModel.countDocuments = jest.fn();
+    mockCatModel.modelName = 'Cat';
+    mockCatModel.toJSON = jest.fn();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -58,7 +69,6 @@ describe('CatService', () => {
     }).compile();
 
     service = module.get<CatService>(CatService);
-    mockCatModel.modelName = 'Cat';
   });
 
   afterEach(() => jest.clearAllMocks());
