@@ -86,11 +86,9 @@ describe('CatService', () => {
 
       const saveMock = jest.fn().mockResolvedValue({ toJSON: () => savedCat });
 
-      mockCatModel.mockImplementation(() => {
-        return {
-          save: saveMock,
-        };
-      });
+      mockCatModel.mockImplementation(() => ({
+        save: saveMock,
+      }));
 
       const result = await service.create(cat, userId);
 
@@ -288,7 +286,10 @@ describe('CatService', () => {
           newData,
           { new: true, runValidators: true },
         );
-        expect(mockCatModel.findByIdAndUpdate().exec).toHaveBeenCalledTimes(1);
+        expect(
+          (mockCatModel.findByIdAndUpdate() as unknown as MockQueryBuilder)
+            .exec,
+        ).toHaveBeenCalledTimes(1);
         expect(result).toEqual(updatedCat);
       });
     });
@@ -395,7 +396,10 @@ describe('CatService', () => {
         expect(mockCatModel.where).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledWith(catId);
-        expect(mockCatModel.findByIdAndDelete().exec).toHaveBeenCalledTimes(1);
+        expect(
+          (mockCatModel.findByIdAndDelete() as unknown as MockQueryBuilder)
+            .exec,
+        ).toHaveBeenCalledTimes(1);
         expect(result).toEqual(expectedResponse);
       });
     });
