@@ -117,14 +117,10 @@ describe('CatService', () => {
         type: catType,
       }));
 
-      const mockQuery = {
-        sort: jest.fn().mockReturnThis(),
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        populate: jest.fn().mockReturnThis(),
-        lean: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue(mockCatsPage),
-      } as any;
+      const mockQuery = createMockQueryBuilder();
+      mockQuery.exec = jest
+        .fn<Promise<any>, []>()
+        .mockResolvedValue(mockCatsPage);
 
       mockCatModel.find = jest.fn().mockReturnValue(mockQuery);
       mockCatModel.countDocuments = jest.fn().mockReturnValue({
@@ -154,11 +150,8 @@ describe('CatService', () => {
           login: 'string',
         };
 
-        const mockQuery = {
-          populate: jest.fn().mockReturnThis(),
-          lean: jest.fn().mockReturnThis(),
-          exec: jest.fn().mockResolvedValue(cat),
-        } as any;
+        const mockQuery = createMockQueryBuilder();
+        mockQuery.exec = jest.fn<Promise<any>, []>().mockResolvedValue(cat);
 
         mockCatModel.findById = jest.fn().mockReturnValue(mockQuery);
 
@@ -173,11 +166,8 @@ describe('CatService', () => {
       it('must throw AnimalException', async () => {
         const nonExistentId = '999999999999999999999999';
 
-        const mockQuery = {
-          populate: jest.fn().mockReturnThis(),
-          lean: jest.fn().mockReturnThis(),
-          exec: jest.fn().mockResolvedValue(null),
-        } as any;
+        const mockQuery = createMockQueryBuilder();
+        mockQuery.exec = jest.fn<Promise<any>, []>().mockResolvedValue(null);
 
         mockCatModel.findById = jest.fn().mockReturnValue(mockQuery);
 
@@ -211,21 +201,15 @@ describe('CatService', () => {
           };
         });
 
-        const mockQuery = {
-          equals: jest.fn().mockReturnThis(),
-          populate: jest.fn().mockReturnThis(),
-          sort: jest.fn().mockReturnThis(),
-          skip: jest.fn().mockReturnThis(),
-          limit: jest.fn().mockReturnThis(),
-          lean: jest.fn().mockReturnThis(),
-          exec: jest.fn().mockResolvedValue(mockCatsPage),
-        } as any;
+        const mockQuery = createMockQueryBuilder();
+        mockQuery.exec = jest
+          .fn<Promise<any>, []>()
+          .mockResolvedValue(mockCatsPage);
 
-        const mockQuery2 = {
-          where: jest.fn().mockReturnThis(),
-          equals: jest.fn().mockReturnThis(),
-          exec: jest.fn().mockResolvedValue(cats.length),
-        } as any;
+        const mockQuery2 = createMockQueryBuilder();
+        mockQuery2.exec = jest
+          .fn<Promise<any>, []>()
+          .mockResolvedValue(cats.length);
 
         mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
         mockCatModel.countDocuments = jest.fn().mockReturnValue(mockQuery2);
@@ -249,21 +233,13 @@ describe('CatService', () => {
         const limit = 2;
         const skip = 0;
 
-        const mockQuery = {
-          equals: jest.fn().mockReturnThis(),
-          populate: jest.fn().mockReturnThis(),
-          sort: jest.fn().mockReturnThis(),
-          skip: jest.fn().mockReturnThis(),
-          limit: jest.fn().mockReturnThis(),
-          lean: jest.fn().mockReturnThis(),
-          exec: jest.fn().mockResolvedValue(cats),
-        } as any;
+        const mockQuery = createMockQueryBuilder();
+        mockQuery.exec = jest.fn<Promise<any>, []>().mockResolvedValue(cats);
 
-        const mockQuery2 = {
-          where: jest.fn().mockReturnThis(),
-          equals: jest.fn().mockReturnThis(),
-          exec: jest.fn().mockResolvedValue(cats.length),
-        } as any;
+        const mockQuery2 = createMockQueryBuilder();
+        mockQuery2.exec = jest
+          .fn<Promise<any>, []>()
+          .mockResolvedValue(cats.length);
 
         mockCatModel.where = jest.fn().mockReturnValue(mockQuery);
         mockCatModel.countDocuments = jest.fn().mockReturnValue(mockQuery2);
@@ -296,13 +272,13 @@ describe('CatService', () => {
           equals: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
               equals: jest.fn().mockResolvedValue({ length: 1 }),
-            }) as MockFnWhereEquals,
+            }),
           }),
-        }) as MockFnWhereEquals;
+        });
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue({ toJSON: () => updatedCat }),
-        }) as MockFnWithExec;
+        });
 
         const result = await service.updateById(userId, catId, newData);
 
@@ -328,9 +304,9 @@ describe('CatService', () => {
           equals: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
               equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }) as MockFnWhereEquals,
+            }),
           }),
-        }) as MockFnWhereEquals;
+        });
 
         await expect(
           service.updateById(userId, nonExistentCatId, newData),
@@ -352,9 +328,9 @@ describe('CatService', () => {
           equals: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
               equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }) as MockFnWhereEquals,
+            }),
           }),
-        }) as MockFnWhereEquals;
+        });
 
         await expect(
           service.updateById(nonExistentUserId, catId, newData),
@@ -380,13 +356,13 @@ describe('CatService', () => {
           equals: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
               equals: jest.fn().mockResolvedValue({ length: 1 }),
-            }) as MockFnWhereEquals,
+            }),
           }),
-        }) as MockFnWhereEquals;
+        });
 
         mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(deletedCat),
-        }) as MockFnWithExec;
+        });
 
         const result = await service.delete(userId, catId);
 
@@ -407,9 +383,9 @@ describe('CatService', () => {
           equals: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
               equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }) as MockFnWhereEquals,
+            }),
           }),
-        }) as MockFnWhereEquals;
+        });
 
         await expect(service.delete(userId, nonExistentCatId)).rejects.toThrow(
           AnimalException,
@@ -429,9 +405,9 @@ describe('CatService', () => {
           equals: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
               equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }) as MockFnWhereEquals,
+            }),
           }),
-        }) as MockFnWhereEquals;
+        });
 
         await expect(service.delete(nonExistentUserId, catId)).rejects.toThrow(
           AnimalException,
