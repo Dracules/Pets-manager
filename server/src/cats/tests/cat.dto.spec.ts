@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CatDTO } from '../dto/cat.dto';
 import { mockCatDTO } from './mocks/cat.mock';
-import { addMonths, subMonths, addYears, subYears, addDays } from 'date-fns';
+import { addMonths, subMonths, subYears, addDays } from 'date-fns';
 
 describe('CatDto', () => {
   it('valid catDTO', async () => {
@@ -179,35 +179,4 @@ describe('CatDto', () => {
     const errors = await validate(catDTOWithFutureDate);
     expect(errors.length).toBe(1);
   });
-
-  /*
-  it('catDTO with negative age', async () => {
-    const catDTOWithNegativeAge: CatDTO = plainToInstance(
-      CatDTO,
-      mockCatDTO({ age: -1 }),
-    );
-
-    const errors = await validate(catDTOWithNegativeAge);
-    expect(errors.length).toBe(1);
-  });
-
-  it('catDTO with zero age', async () => {
-    const catDTOWithZeroAge: CatDTO = plainToInstance(
-      CatDTO,
-      mockCatDTO({ age: 0 }),
-    );
-
-    const errors = await validate(catDTOWithZeroAge);
-    expect(errors.length).toBe(0);
-  });
-
-  it('catDTO with fractional age', async () => {
-    const catDTOWithFractionalAge: CatDTO = plainToInstance(
-      CatDTO,
-      mockCatDTO({ age: 0.1 }),
-    );
-
-    const errors = await validate(catDTOWithFractionalAge);
-    expect(errors.length).toBe(1);
-  });*/
 });

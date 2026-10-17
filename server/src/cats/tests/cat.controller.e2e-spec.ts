@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { CatDTO } from '../dto/cat.dto';
-import { getConnectionToken, MongooseModule } from '@nestjs/mongoose';
+import { getConnectionToken } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection, ObjectId } from 'mongodb';
@@ -74,17 +74,7 @@ describe('CatController', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
-        MongooseModule.forRootAsync({
-          connectionName: 'TEST_CONNECTION',
-          inject: [ConfigService],
-          useFactory: (config: ConfigService) => ({
-            uri: config.get<string>('MONGO_TEST_URI'),
-          }),
-        }),
-        AppModule,
-      ],
+      imports: [ConfigModule.forRoot({ isGlobal: true }), AppModule],
     })
       .overrideProvider(getConnectionToken())
       .useFactory({
@@ -101,10 +91,7 @@ describe('CatController', () => {
     {
       const configService = app.get(ConfigService);
 
-      mongooseConnection = moduleRef.get<Connection>(
-        getConnectionToken('TEST_CONNECTION'),
-      );
-
+      mongooseConnection = moduleRef.get<Connection>(getConnectionToken());
       await initMongoDB(configService, mongooseConnection);
 
       const loginResAdmin = (await request(app.getHttpServer() as App)
@@ -164,8 +151,7 @@ describe('CatController', () => {
     });
     it('gets all from DB', async () => {
       const cats = mockCatDTOList(5);
-      const catsDeepCopy = structuredClone(cats) as CatDTO[];
-      structuredClone;
+      const catsDeepCopy = structuredClone(cats);
       await populateCatsDB(cats);
       await request(app.getHttpServer() as App)
         .get('/animals/cats/')
