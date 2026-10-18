@@ -82,13 +82,13 @@ export class AnimalService {
         .exec(),
     ]);
 
-    const total = (totalResult[0]?.total || 0) as number;
+    const total = (totalResult[0] as { total: number })?.total || 0;
 
     return {
-      animals: animals.map((obj) => ({
+      animals: (animals as AnimalResponse[]).map((obj) => ({
         ...obj,
         age: calculateAge(obj.birthDate),
-      })) as AnimalResponse[],
+      })),
       totalCount: total,
     };
   }
@@ -173,12 +173,12 @@ export class AnimalService {
         .exec(),
     ]);
 
-    const total = (totalResult[0]?.total || 0) as number;
+    const total = (totalResult[0] as { total: number })?.total || 0;
     return {
-      animals: animals.map((obj) => ({
+      animals: (animals as AnimalResponse[]).map((obj) => ({
         ...obj,
         age: calculateAge(obj.birthDate),
-      })) as AnimalResponse[],
+      })),
       totalCount: total,
     };
   }

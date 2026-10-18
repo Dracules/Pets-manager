@@ -1,6 +1,6 @@
 import { Type } from '@nestjs/common';
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
 export class Animal {
   @Prop({ required: true })
@@ -20,6 +20,8 @@ export class Animal {
   description?: string;
 }
 
-export const createAnimalSchema = (specificSchema: Type<any>) => {
+export const createAnimalSchema = <T extends Animal>(
+  specificSchema: Type<T>,
+): Schema<T> => {
   return SchemaFactory.createForClass(specificSchema);
 };

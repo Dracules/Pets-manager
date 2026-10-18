@@ -10,7 +10,7 @@ import {
 class IsBirthDateRealisticConstraint implements ValidatorConstraintInterface {
   validate(date: Date, args: ValidationArguments) {
     if (!(date instanceof Date) || isNaN(date.getTime())) return false;
-    const maxYears = args.constraints[0];
+    const maxYears = args.constraints[0] as number;
 
     const now = new Date();
     if (maxYears) {
@@ -33,7 +33,7 @@ export function IsBirthDateRealistic(
   years?: number,
   validationOptions?: ValidationOptions,
 ) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName,
