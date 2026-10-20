@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { CatDTO } from '../dto/cat.dto';
 import { getConnectionToken } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import mongoose, { Connection, InsertManyResult, Types } from 'mongoose';
 import { Collection, ObjectId } from 'mongodb';
 import { AppModule } from '../../app.module';
@@ -74,7 +74,7 @@ describe('CatController', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot({ isGlobal: true }), AppModule],
+      imports: [AppModule],
     })
       .overrideProvider(getConnectionToken())
       .useFactory({
