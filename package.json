@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "format": "prettier --write \"{backend,client}/src/**/*.ts\" \"test/**/*.ts\"",
-    "lint": "eslint \"{backend,client}/{src,apps,libs,test}/**/*.{ts,tsx,js,jsx,mjs,cjs}\" --fix"
+    "format": "prettier --write \"{server,client}/{src,test}/**/*.{ts,tsx,js,jsx,mjs,cjs}\" \"*.{js,ts,json,md}\"",
+    "lint": "eslint \"{server,client}/{src,test}/**/*.{ts,tsx,js,jsx,mjs,cjs}\" --fix"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

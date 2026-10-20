@@ -11,7 +11,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { IsBirthDateRealistic } from '../../shared/validators/isBirthDateRealisticvalidator';
 
 export class ParrotDTO extends AnimalDTO {
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(value as string))
   @IsDefined()
   @IsDate()
   @IsBirthDateRealistic(80)

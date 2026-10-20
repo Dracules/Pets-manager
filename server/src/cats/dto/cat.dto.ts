@@ -6,7 +6,7 @@ import { Transform } from 'class-transformer';
 import { IsBirthDateRealistic } from '../../shared/validators/isBirthDateRealisticvalidator';
 
 export class CatDTO extends AnimalDTO {
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(value as string))
   @IsDefined()
   @IsDate()
   @IsBirthDateRealistic(40)
