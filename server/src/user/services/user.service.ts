@@ -9,7 +9,7 @@ import * as bcrypt from 'bcryptjs';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findUserByLogin(userLogin: string): Promise<UserDocument | null> {
+  async findUserByLogin(userLogin: string) {
     return this.userModel.findOne({ login: userLogin }).lean();
   }
 
