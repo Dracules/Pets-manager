@@ -7,7 +7,7 @@ import type { AnimalResponse } from '../interfaces/animal.interface';
 import type { AnimalType } from '../types/animal.type';
 import type { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
-import { SortColumns, SortOrder } from 'src/shared/dto/query.params.dto';
+import { SortColumns, SortOrder } from '../../shared/dto/query.params.dto';
 
 @Injectable()
 export abstract class BaseAnimalService<

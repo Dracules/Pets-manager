@@ -5,7 +5,7 @@ import { AnimalDTO } from '../dto/animal.dto';
 import type { AnimalResponse } from '../interfaces/animal.interface';
 import { AnimalCacheService } from '../services/animal.cache.service';
 import type { PaginationResult } from '../interfaces/pagination.result';
-import { SortColumns, SortOrder } from 'src/shared/dto/query.params.dto';
+import { SortColumns, SortOrder } from '../../shared/dto/query.params.dto';
 
 export abstract class BaseAnimalController<
   DTO extends AnimalDTO,

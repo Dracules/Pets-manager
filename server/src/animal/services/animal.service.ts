@@ -6,7 +6,7 @@ import type { AnimalResponse } from '../interfaces/animal.interface';
 import type { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
 import type { AnimalType } from '../types/animal.type';
-import { SortColumns, SortOrder } from 'src/shared/dto/query.params.dto';
+import { SortColumns, SortOrder } from '../../shared/dto/query.params.dto';
 
 @Injectable()
 export class AnimalService {
