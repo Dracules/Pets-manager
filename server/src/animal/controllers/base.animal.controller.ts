@@ -5,6 +5,7 @@ import { AnimalDTO } from '../dto/animal.dto';
 import type { AnimalResponse } from '../interfaces/animal.interface';
 import { AnimalCacheService } from '../services/animal.cache.service';
 import type { PaginationResult } from '../interfaces/pagination.result';
+import { SortColumns, SortOrder } from 'src/shared/dto/query.params.dto';
 
 export abstract class BaseAnimalController<
   DTO extends AnimalDTO,
@@ -18,16 +19,20 @@ export abstract class BaseAnimalController<
   protected async getAnimals(
     limit: number,
     skip: number,
+    sortBy?: SortColumns,
+    sortOrder?: SortOrder,
   ): Promise<PaginationResult<Resp[]>> {
-    return this.animalService.findAll(limit, skip);
+    return this.animalService.findAll(limit, skip, sortBy, sortOrder);
   }
 
   protected async getAnimalByUser(
     id: string,
     limit: number,
     skip: number,
+    sortBy?: SortColumns,
+    sortOrder?: SortOrder,
   ): Promise<PaginationResult<Resp[]>> {
-    return this.animalService.findByUser(id, limit, skip);
+    return this.animalService.findByUser(id, limit, skip, sortBy, sortOrder);
   }
 
   protected async getAnimalById(id: string): Promise<Resp> {
