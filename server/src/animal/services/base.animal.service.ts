@@ -37,7 +37,7 @@ export abstract class BaseAnimalService<
     const [findedAnimals, total] = await Promise.all([
       this.model
         .find()
-        .sort(sortBy ? { [sortBy]: sortOrder! } : { _id: 1 })
+        .sort(sortBy ? { [sortBy]: sortOrder === 'desc' ? -1 : 1 } : { _id: 1 })
         .skip(skip)
         .limit(limit)
         .populate('owner', 'login')
@@ -77,7 +77,7 @@ export abstract class BaseAnimalService<
       this.model
         .where('owner')
         .equals(new Types.ObjectId(userId))
-        .sort(sortBy ? { [sortBy]: sortOrder! } : { _id: 1 })
+        .sort(sortBy ? { [sortBy]: sortOrder === 'desc' ? -1 : 1 } : { _id: 1 })
         .skip(skip)
         .limit(limit)
         .populate('owner', 'login')
