@@ -6,6 +6,7 @@ import type { AnimalResponse } from '../interfaces/animal.interface';
 import type { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
 import type { AnimalType } from '../types/animal.type';
+import { SortColumns, SortOrder } from 'src/shared/dto/query.params.dto';
 
 @Injectable()
 export class AnimalService {
@@ -14,6 +15,8 @@ export class AnimalService {
   async findAllAnimals(
     limit: number,
     skip: number,
+    sortBy?: SortColumns,
+    sortOrder?: SortOrder,
   ): Promise<PaginationResult<AnimalResponse[]>> {
     const [animals, totalResult] = await Promise.all([
       this.catModel
@@ -45,7 +48,11 @@ export class AnimalService {
               preserveNullAndEmptyArrays: true,
             },
           },
-          { $sort: { _id: 1 } },
+          {
+            $sort: sortBy
+              ? { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
+              : { _id: 1 },
+          },
           { $skip: skip },
           { $limit: limit },
           {
@@ -97,6 +104,8 @@ export class AnimalService {
     userId: string,
     limit: number,
     skip: number,
+    sortBy?: SortColumns,
+    sortOrder?: SortOrder,
   ): Promise<PaginationResult<AnimalResponse[]>> {
     const userObjectId = new Types.ObjectId(userId);
     const [animals, totalResult] = await Promise.all([
@@ -136,7 +145,11 @@ export class AnimalService {
               preserveNullAndEmptyArrays: true,
             },
           },
-          { $sort: { _id: 1 } },
+          {
+            $sort: sortBy
+              ? { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
+              : { _id: 1 },
+          },
           { $skip: skip },
           { $limit: limit },
           {

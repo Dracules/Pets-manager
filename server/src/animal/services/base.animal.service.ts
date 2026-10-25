@@ -7,6 +7,7 @@ import type { AnimalResponse } from '../interfaces/animal.interface';
 import type { AnimalType } from '../types/animal.type';
 import type { PaginationResult } from '../interfaces/pagination.result';
 import { calculateAge } from '../../shared/utils/utils';
+import { SortColumns, SortOrder } from 'src/shared/dto/query.params.dto';
 
 @Injectable()
 export abstract class BaseAnimalService<
@@ -28,13 +29,15 @@ export abstract class BaseAnimalService<
   async findAll(
     limit: number,
     skip: number,
+    sortBy?: SortColumns,
+    sortOrder?: SortOrder,
   ): Promise<PaginationResult<Response[]>> {
     const animalType = this.model.modelName.toLowerCase() as AnimalType;
 
     const [findedAnimals, total] = await Promise.all([
       this.model
         .find()
-        .sort({ _id: 1 })
+        .sort(sortBy ? { [sortBy]: sortOrder! } : { _id: 1 })
         .skip(skip)
         .limit(limit)
         .populate('owner', 'login')
@@ -67,12 +70,14 @@ export abstract class BaseAnimalService<
     userId: string,
     limit: number,
     skip: number,
+    sortBy?: SortColumns,
+    sortOrder?: SortOrder,
   ): Promise<PaginationResult<Response[]>> {
     const [findedAnimals, total] = await Promise.all([
       this.model
         .where('owner')
         .equals(new Types.ObjectId(userId))
-        .sort({ _id: 1 })
+        .sort(sortBy ? { [sortBy]: sortOrder! } : { _id: 1 })
         .skip(skip)
         .limit(limit)
         .populate('owner', 'login')
