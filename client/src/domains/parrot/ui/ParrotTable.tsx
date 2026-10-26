@@ -12,6 +12,7 @@ const parrotAdditionalColumns: ColumnDef<ParrotResponse>[] = [
       const vocabulary = getValue() as string[] | undefined;
       return <MultiTags elements={vocabulary} />;
     },
+    enableSorting: false,
   },
 ];
 
