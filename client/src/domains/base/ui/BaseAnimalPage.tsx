@@ -8,6 +8,11 @@ import { useCallback, useMemo } from 'react';
 import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
 import { LoadErrorComponent } from './ErrorComponent';
+import { SortingState } from '@tanstack/react-table';
+import {
+  isSortColumn,
+  SortColumns,
+} from '../../../shared/model/types/sort.columns';
 
 const EMPTY_ARRAY: never[] = [];
 
@@ -21,12 +26,20 @@ function BaseAnimalPage<T extends AnimalResponse>(
   const pageLimit = parseInt(searchParams.get('limit') || '10', 10);
   const page = urlPage - 1;
 
+  const sortByParam = searchParams.get('sortBy');
+  const sortBy: SortColumns | undefined = isSortColumn(sortByParam)
+    ? sortByParam
+    : undefined;
+  const sortOrder = searchParams.get('sortOrder') || undefined;
+
   const { id } = useParams();
 
   const { data, totalCount, loading, error, setData, load } = useFetchData(
     fetchFn,
     page,
     pageLimit,
+    sortBy,
+    sortOrder === 'desc' ? 'desc' : 'asc',
     id,
   );
   const navigate = useNavigate();
