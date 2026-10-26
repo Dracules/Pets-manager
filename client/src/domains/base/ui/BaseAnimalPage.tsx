@@ -58,6 +58,37 @@ function BaseAnimalPage<T extends AnimalResponse>(
     [setSearchParams],
   );
 
+  const tableSortingState = useMemo<SortingState>(() => {
+    if (!sortBy) return [];
+    return [{ id: sortBy, desc: sortOrder === 'desc' }];
+  }, [sortBy, sortOrder]);
+
+  const handleSortingChange = useCallback(
+    (updaterOrValue: SortingState | ((old: SortingState) => SortingState)) => {
+      const newSorting =
+        typeof updaterOrValue === 'function'
+          ? updaterOrValue(tableSortingState)
+          : updaterOrValue;
+
+      const sortState = newSorting[0];
+
+      const params: Record<string, string> = {
+        page: (page + 1).toString(),
+        limit: pageLimit.toString(),
+      };
+
+      if (page === 0) delete params.page;
+
+      if (sortState) {
+        params.sortBy = sortState.id;
+        params.sortOrder = sortState.desc ? 'desc' : 'asc';
+      }
+
+      setSearchParams(params);
+    },
+    [tableSortingState, page, pageLimit, setSearchParams],
+  );
+
   const paginationComponent = useMemo(
     () => (
       <PaginationComponent
