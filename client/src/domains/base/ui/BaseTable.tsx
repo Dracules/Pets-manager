@@ -21,6 +21,7 @@ function BaseTable<T extends AnimalResponse>({
   columns = [],
   footerPaginationComponent,
   loading,
+  sortingOptions,
 }: BaseTableProps<T>) {
   const table = useReactTable({
     data,

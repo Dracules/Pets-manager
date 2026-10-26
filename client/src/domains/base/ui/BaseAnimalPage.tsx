@@ -136,6 +136,14 @@ function BaseAnimalPage<T extends AnimalResponse>(
     };
   }, [deleteFn]);
 
+  const tableSortingOptions = useMemo(
+    () => ({
+      sorting: tableSortingState,
+      onSortingChange: handleSortingChange,
+    }),
+    [tableSortingState, handleSortingChange],
+  );
+
   if (error)
     return (
       <LoadErrorComponent
@@ -152,6 +160,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
         options={tableOptions}
         footerPaginationComponent={paginationComponent}
         loading={loading}
+        sortingOptions={tableSortingOptions}
       />
     </div>
   );

@@ -65,6 +65,7 @@ function AnimalTableBase<T extends AnimalResponse>({
   footerPaginationComponent,
   loading,
   additionalColumns,
+  sortingOptions,
 }: AnimalTableBaseProps<T>) {
   const sharedColumns = useMemo<ColumnDef<T>[]>(() => {
     const cols = [...baseColumns] as ColumnDef<T>[];
@@ -138,6 +139,7 @@ function AnimalTableBase<T extends AnimalResponse>({
       columns={sharedColumns}
       footerPaginationComponent={footerPaginationComponent}
       loading={loading}
+      sortingOptions={sortingOptions}
     />
   );
 }
