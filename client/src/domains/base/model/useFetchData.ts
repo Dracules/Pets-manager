@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import { SortDirection } from '@tanstack/react-table';
 import { SortColumns } from '../../../shared/model/types/sort.columns';
+import axios from 'axios';
 
 function useFetchData<T>(
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T>>,
@@ -26,9 +27,14 @@ function useFetchData<T>(
       setTotalCount(result.totalCount);
       setError('');
     } catch (err) {
-      if (err instanceof Error) setError(err.message);
-      else setError('Undefined error! Failed to load data.');
-      console.error('API Error:', err);
+      if (axios.isAxiosError(err)) {
+        const serverMessage = err.response?.data?.message;
+        setError(serverMessage || err.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Undefined error! Failed to load data.');
+      }
     } finally {
       setLoading(false);
     }
