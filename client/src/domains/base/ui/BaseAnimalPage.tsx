@@ -45,13 +45,20 @@ function BaseAnimalPage<T extends AnimalResponse>(
   const navigate = useNavigate();
 
   const updatePageParams = useCallback(
-    (newPage: number, newLimit: number) => {
+    (
+      newPage: number,
+      newLimit: number,
+      currentSortBy?: string,
+      currentSortOrder?: string,
+    ) => {
       const params: Record<string, string> = {
         page: (newPage + 1).toString(),
         limit: newLimit.toString(),
       };
 
       if (newPage === 0) delete params.page;
+      if (currentSortBy) params.sortBy = currentSortBy;
+      if (currentSortOrder) params.sortOrder = currentSortOrder;
 
       setSearchParams(params);
     },
@@ -93,13 +100,17 @@ function BaseAnimalPage<T extends AnimalResponse>(
     () => (
       <PaginationComponent
         page={page}
-        setPage={(newPage) => updatePageParams(newPage, pageLimit)}
+        setPage={(newPage) =>
+          updatePageParams(newPage, pageLimit, sortBy, sortOrder)
+        }
         pageLimit={pageLimit}
-        setPageLimit={(newLimit) => updatePageParams(0, newLimit)} // При смене лимита сбрасываем на первую страницу
+        setPageLimit={(newLimit) =>
+          updatePageParams(0, newLimit, sortBy, sortOrder)
+        }
         totalCount={totalCount}
       />
     ),
-    [page, pageLimit, totalCount, updatePageParams],
+    [page, pageLimit, totalCount, updatePageParams, sortBy, sortOrder],
   );
 
   const tableOptions = useMemo(() => {
