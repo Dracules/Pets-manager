@@ -61,6 +61,7 @@ export default function CatEditor() {
         }
         onSubmit={onSubmit}
         methods={methods}
+        isLoading={isLoading}
       />
       {isLoading && (
         <div className={commonStyles.formLoaderOverlay}>

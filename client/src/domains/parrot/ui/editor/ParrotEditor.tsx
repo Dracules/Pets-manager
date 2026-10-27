@@ -58,6 +58,7 @@ export default function ParrotEditor() {
         }
         onSubmit={onSubmit}
         methods={methods}
+        isLoading={isLoading}
       />
       {isLoading && (
         <div className={commonStyles.formLoaderOverlay}>
