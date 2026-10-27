@@ -96,9 +96,17 @@ function BaseTable<T extends AnimalResponse>({
                     className={`${styles.sortIcon} ${isSorted ? styles.sortIconActive : ''}`}
                   >
                     {isSorted === 'asc' ? (
-                      <FaSortUp />
+                      header.id === 'birthDate' ? (
+                        <FaSortDown />
+                      ) : (
+                        <FaSortUp />
+                      )
                     ) : isSorted === 'desc' ? (
-                      <FaSortDown />
+                      header.id === 'birthDate' ? (
+                        <FaSortUp />
+                      ) : (
+                        <FaSortDown />
+                      )
                     ) : (
                       <FaSort />
                     )}
