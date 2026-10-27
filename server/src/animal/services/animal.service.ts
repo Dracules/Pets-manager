@@ -50,7 +50,7 @@ export class AnimalService {
           },
           {
             $sort: sortBy
-              ? { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
+              ? { [sortBy]: sortOrder === 'desc' ? -1 : 1 }
               : { _id: 1 },
           },
           { $skip: skip },
@@ -147,7 +147,7 @@ export class AnimalService {
           },
           {
             $sort: sortBy
-              ? { [sortBy]: sortOrder === 'asc' ? 1 : -1 }
+              ? { [sortBy]: sortOrder === 'desc' ? -1 : 1 }
               : { _id: 1 },
           },
           { $skip: skip },
