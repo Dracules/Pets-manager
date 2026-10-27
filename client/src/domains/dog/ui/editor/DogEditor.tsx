@@ -7,9 +7,12 @@ import LoadingComponent from '../../../../shared/ui/LoadingComponent';
 import DogsApi from '../../api/dogsApi';
 import dogEditorSchema from '../../model/validation/dogEditorSchema';
 import commonStyles from '../../../editor/ui/css/AnimalEditor.module.css';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 export default function DogEditor() {
-  const { methods, onSubmit, isLoading } = useAnimalEditor<Dog>({
+  const { methods, onSubmit, isLoading, error } = useAnimalEditor<Dog>({
     loadById: DogsApi.getDogById,
     createItem: async (data: Dog) => {
       const { name, birthDate, trainedCommands, description } = data;
@@ -24,6 +27,16 @@ export default function DogEditor() {
     validationSchema: dogEditorSchema,
     afterSubmit: `/my/dogs`,
   });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      navigate('/my/cats', { replace: true });
+    }
+  }, [error]);
+
   return (
     <div className={commonStyles.formContainer}>
       <AnimalEditor<Dog>

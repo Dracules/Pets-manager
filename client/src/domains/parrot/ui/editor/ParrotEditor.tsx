@@ -7,9 +7,12 @@ import LoadingComponent from '../../../../shared/ui/LoadingComponent';
 import ParrotsApi from '../../api/parrotsApi';
 import parrotEditorSchema from '../../model/validation/parrotEditorSchema';
 import commonStyles from '../../../editor/ui/css/AnimalEditor.module.css';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 export default function ParrotEditor() {
-  const { methods, onSubmit, isLoading } = useAnimalEditor<Parrot>({
+  const { methods, onSubmit, isLoading, error } = useAnimalEditor<Parrot>({
     loadById: ParrotsApi.getParrotById,
     createItem: async (data: Parrot) => {
       const { name, birthDate, vocabulary, description } = data;
@@ -24,6 +27,16 @@ export default function ParrotEditor() {
     validationSchema: parrotEditorSchema,
     afterSubmit: `/my/parrots`,
   });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      navigate('/my/cats', { replace: true });
+    }
+  }, [error]);
+
   return (
     <div className={commonStyles.formContainer}>
       <AnimalEditor<Parrot>

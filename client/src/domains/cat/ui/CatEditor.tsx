@@ -8,9 +8,12 @@ import catEditorSchema from '../model/validation/catEditorSchema';
 import commonStyles from '../../editor/ui/css/AnimalEditor.module.css';
 import specialStyles from './css/CatEditor.module.css';
 import { FiChevronDown } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 export default function CatEditor() {
-  const { methods, onSubmit, isLoading } = useAnimalEditor<Cat>({
+  const { methods, onSubmit, isLoading, error } = useAnimalEditor<Cat>({
     loadById: CatsApi.getCatById,
     createItem: async (data: Cat) => {
       const { name, birthDate, litterStatus, description } = data;
@@ -21,6 +24,14 @@ export default function CatEditor() {
     validationSchema: catEditorSchema,
     defaultValues: { litterStatus: 'unknown' },
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      navigate('/my/cats', { replace: true });
+    }
+  }, [error]);
 
   return (
     <div className={commonStyles.formContainer}>
