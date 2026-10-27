@@ -33,7 +33,7 @@ export default function ParrotEditor() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      navigate('/my/cats', { replace: true });
+      navigate('/my/parrots', { replace: true });
     }
   }, [error]);
 
