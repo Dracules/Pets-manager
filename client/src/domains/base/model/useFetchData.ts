@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
+import { SortDirection } from '@tanstack/react-table';
+import { SortColumns } from '../../../shared/model/types/sort.columns';
 
 function useFetchData<T>(
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T>>,
   page: number,
   pageLimit: number,
+  sortBy: SortColumns | undefined,
+  sortOrder: SortDirection,
   id?: string,
 ) {
   const [data, setData] = useState<T | null>(null);
@@ -15,7 +19,9 @@ function useFetchData<T>(
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const result = await fetchFn(`?page=${page + 1}&limit=${pageLimit}`, id);
+      let options = `?page=${page + 1}&limit=${pageLimit}`;
+      if (sortBy) options += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+      const result = await fetchFn(options, id);
       setData(result.animals);
       setTotalCount(result.totalCount);
       setError('');
@@ -26,7 +32,7 @@ function useFetchData<T>(
     } finally {
       setLoading(false);
     }
-  }, [page, pageLimit, id]);
+  }, [page, pageLimit, id, sortBy, sortOrder]);
 
   useEffect(() => {
     void load();

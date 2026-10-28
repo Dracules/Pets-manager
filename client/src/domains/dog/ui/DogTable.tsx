@@ -12,6 +12,7 @@ const dogAdditionalColumns: ColumnDef<DogResponse>[] = [
       const commands = getValue() as string[] | undefined;
       return <MultiTags elements={commands} />;
     },
+    enableSorting: false,
   },
 ];
 

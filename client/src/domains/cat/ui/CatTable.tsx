@@ -8,6 +8,7 @@ const catAdditionalColumns: ColumnDef<CatResponse>[] = [
     accessorKey: 'litterStatus',
     header: 'Litter Status',
     meta: { size: 130 },
+    enableSorting: true,
   },
 ];
 

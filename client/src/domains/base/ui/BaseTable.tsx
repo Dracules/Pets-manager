@@ -2,12 +2,14 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 import type { BaseTableProps } from '../model/BaseTableProps';
 import type { AnimalResponse } from '../../animal/model/animal.response.interface';
 import styles from './css/BaseTable.module.css';
 import LoadingComponent from '../../../shared/ui/LoadingComponent';
 import { memo, useMemo } from 'react';
+import { FaSortUp, FaSortDown, FaSort } from 'react-icons/fa';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,11 +23,28 @@ function BaseTable<T extends AnimalResponse>({
   columns = [],
   footerPaginationComponent,
   loading,
+  sortingOptions,
 }: BaseTableProps<T>) {
+  const sortingOptionsObj = useMemo(
+    () =>
+      sortingOptions
+        ? {
+            manualSorting: true,
+            state: {
+              sorting: sortingOptions.sorting,
+            },
+            onSortingChange: sortingOptions.onSortingChange,
+          }
+        : {},
+    [sortingOptions],
+  );
+
   const table = useReactTable({
+    ...sortingOptionsObj,
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const gridTemplateColumns = useMemo(() => {
@@ -49,19 +68,45 @@ function BaseTable<T extends AnimalResponse>({
         style={{ '--grid-cols': gridTemplateColumns } as React.CSSProperties}
       >
         {table.getHeaderGroups().map((headerGroup) =>
-          headerGroup.headers.map((header) => (
-            <div
-              className={`${styles.th} ${styles.headerCell}`}
-              key={header.id}
-            >
-              {header.isPlaceholder
-                ? null
-                : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-            </div>
-          )),
+          headerGroup.headers.map((header) => {
+            const canSort = header.column.getCanSort();
+            const isSorted = header.column.getIsSorted();
+
+            return (
+              <div
+                className={`${styles.th} ${styles.headerCell} ${canSort ? styles.sortableHeader : ''}`}
+                key={header.id}
+                onClick={
+                  canSort ? header.column.getToggleSortingHandler() : undefined
+                }
+                style={{
+                  cursor: canSort ? 'pointer' : 'default',
+                  userSelect: 'none',
+                }}
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+
+                {canSort && (
+                  <span
+                    className={`${styles.sortIcon} ${isSorted ? styles.sortIconActive : ''}`}
+                  >
+                    {isSorted === 'asc' ? (
+                      <FaSortUp />
+                    ) : isSorted === 'desc' ? (
+                      <FaSortDown />
+                    ) : (
+                      <FaSort />
+                    )}
+                  </span>
+                )}
+              </div>
+            );
+          }),
         )}
 
         {table.getRowModel().rows.length > 0 ? (
