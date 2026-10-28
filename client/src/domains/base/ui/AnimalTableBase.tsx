@@ -75,10 +75,13 @@ function AnimalTableBase<T extends AnimalResponse>({
 
     if (actionOptions.type === 'owner') {
       cols.push({
-        accessorKey: 'owner.login',
+        accessorKey: 'owner',
         header: 'Owner',
-        cell: ({ row }) => {
-          if (!row.original.owner?.login) {
+        cell: ({ getValue }) => {
+          const owner = getValue() as
+            | { _id: string; login: string }
+            | undefined;
+          if (!owner?.login) {
             return <span className={styles.noOwner}>Not found</span>;
           }
           return (
@@ -88,12 +91,12 @@ function AnimalTableBase<T extends AnimalResponse>({
               onClick={(e) => {
                 e.preventDefault();
                 actionOptions.ownerClickOptions.onOwnerClick(
-                  row.original.owner._id,
-                  row.original.owner.login,
+                  owner._id,
+                  owner.login,
                 );
               }}
             >
-              {row.original.owner.login}
+              {owner.login}
             </a>
           );
         },
