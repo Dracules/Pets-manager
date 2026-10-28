@@ -73,7 +73,7 @@ function AnimalTableBase<T extends AnimalResponse>({
 
     if (additionalColumns) cols.push(...additionalColumns);
 
-    if ('onOwnerClick' in actionOptions) {
+    if (actionOptions.type === 'owner') {
       cols.push({
         accessorKey: 'owner.login',
         header: 'Owner',
@@ -87,7 +87,7 @@ function AnimalTableBase<T extends AnimalResponse>({
               className={styles.ownerLink}
               onClick={(e) => {
                 e.preventDefault();
-                actionOptions.onOwnerClick(
+                actionOptions.ownerClickOptions.onOwnerClick(
                   row.original.owner._id,
                   row.original.owner.login,
                 );
@@ -101,7 +101,7 @@ function AnimalTableBase<T extends AnimalResponse>({
         enableSorting: false,
       });
     } else {
-      const { onDelete, onEdit } = actionOptions;
+      const { onDelete, onEdit } = actionOptions.editorOptions;
 
       const actionColumn: ColumnDef<T> = {
         id: 'actions',

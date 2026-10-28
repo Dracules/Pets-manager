@@ -10,13 +10,24 @@ type SortingOptions = {
     updater: SortingState | ((old: SortingState) => SortingState),
   ) => void;
 };
-type UserBaseTablePropsOptions = {
+
+type EditorOptions = {
   onDelete: (id: string, type: AnimalType) => Promise<void>;
   onEdit: (id: string, type: AnimalType) => void;
 };
 
-type BaseTablePropsOptions = {
+type OwnerClickOptions = {
   onOwnerClick: (id: string, ownerLogin: string) => void;
+};
+
+type UserBaseTablePropsOptions = {
+  type: 'editor';
+  editorOptions: EditorOptions;
+};
+
+type BaseTablePropsOptions = {
+  type: 'owner';
+  ownerClickOptions: OwnerClickOptions;
 };
 
 export interface CommonBaseTableProps<T extends AnimalResponse> {

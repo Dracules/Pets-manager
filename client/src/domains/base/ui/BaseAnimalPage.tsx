@@ -113,7 +113,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
     [page, pageLimit, totalCount, updatePageParams, sortBy, sortOrder],
   );
 
-  const tableOptions = useMemo(() => {
+  const tableActionOptions = useMemo(() => {
     if (deleteFn) {
       async function handleDelete(id: string, type: AnimalType) {
         const toastId = toast.loading('Deleting...');
@@ -133,8 +133,11 @@ function BaseAnimalPage<T extends AnimalResponse>(
       }
 
       return {
-        onDelete: handleDelete,
-        onEdit: handleEdit,
+        type: 'editor' as const,
+        editorOptions: {
+          onDelete: handleDelete,
+          onEdit: handleEdit,
+        },
       };
     }
 
@@ -143,7 +146,8 @@ function BaseAnimalPage<T extends AnimalResponse>(
     }
 
     return {
-      onOwnerClick: handleOwnerClick,
+      type: 'owner' as const,
+      ownerClickOptions: { onOwnerClick: handleOwnerClick },
     };
   }, [deleteFn]);
 
