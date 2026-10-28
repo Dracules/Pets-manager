@@ -53,10 +53,7 @@ function BaseTable<T extends AnimalResponse>({
     return columns
       .map((column) => {
         const size = column.columnDef.meta?.size;
-
-        if (size) {
-          return `${size}px`;
-        } else return '1fr';
+        return size ? `${size}px` : '1fr';
       })
       .join(' ');
   }, [table.options.columns]);
