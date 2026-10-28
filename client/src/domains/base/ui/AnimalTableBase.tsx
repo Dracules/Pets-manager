@@ -113,6 +113,7 @@ function AnimalTableBase<T extends AnimalResponse>({
         cell: ({ row }) => (
           <div className={styles.actions}>
             <button
+              type="button"
               className={`${styles.actionBtn} ${styles.actionBtnEdit}`}
               onClick={() => {
                 onEdit(row.original._id, row.original.type);
@@ -121,6 +122,7 @@ function AnimalTableBase<T extends AnimalResponse>({
               Edit
             </button>
             <button
+              type="button"
               className={`${styles.actionBtn} ${styles.actionBtnDelete}`}
               onClick={() => {
                 void onDelete(row.original._id, row.original.type);

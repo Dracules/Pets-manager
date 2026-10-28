@@ -24,6 +24,7 @@ export function LoadErrorComponent({
         <p className={styles.errorText}>Failed to load data</p>
         <p className={styles.errorHint}>{error}</p>
         <button
+          type="button"
           className={styles.retryButton}
           onClick={() => {
             load();
