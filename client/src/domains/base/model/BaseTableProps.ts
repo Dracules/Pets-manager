@@ -21,7 +21,7 @@ type BaseTablePropsOptions = {
 
 export interface CommonBaseTableProps<T extends AnimalResponse> {
   data: T[];
-  options: BaseTablePropsOptions | UserBaseTablePropsOptions;
+  actionOptions: BaseTablePropsOptions | UserBaseTablePropsOptions;
   footerPaginationComponent: JSX.Element;
   loading: boolean;
   sortingOptions: SortingOptions | undefined;
@@ -35,7 +35,7 @@ export interface AnimalTableBaseProps<
 
 export interface BaseTableProps<T extends AnimalResponse> extends Omit<
   CommonBaseTableProps<T>,
-  'options'
+  'actionOptions'
 > {
   columns: ColumnDef<T>[];
 }

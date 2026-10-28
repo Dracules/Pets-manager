@@ -168,7 +168,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
     <div>
       <AnimalTable
         data={data ?? EMPTY_ARRAY}
-        options={tableOptions}
+        actionOptions={tableActionOptions}
         footerPaginationComponent={paginationComponent}
         loading={loading}
         sortingOptions={tableSortingOptions}

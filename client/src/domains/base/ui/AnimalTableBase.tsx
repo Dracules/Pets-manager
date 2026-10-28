@@ -62,7 +62,7 @@ const baseColumns: ColumnDef<AnimalResponse>[] = [
 
 function AnimalTableBase<T extends AnimalResponse>({
   data,
-  options,
+  actionOptions,
   footerPaginationComponent,
   loading,
   additionalColumns,
@@ -73,7 +73,7 @@ function AnimalTableBase<T extends AnimalResponse>({
 
     if (additionalColumns) cols.push(...additionalColumns);
 
-    if ('onOwnerClick' in options) {
+    if ('onOwnerClick' in actionOptions) {
       cols.push({
         accessorKey: 'owner.login',
         header: 'Owner',
@@ -87,7 +87,7 @@ function AnimalTableBase<T extends AnimalResponse>({
               className={styles.ownerLink}
               onClick={(e) => {
                 e.preventDefault();
-                options.onOwnerClick(
+                actionOptions.onOwnerClick(
                   row.original.owner._id,
                   row.original.owner.login,
                 );
@@ -101,7 +101,7 @@ function AnimalTableBase<T extends AnimalResponse>({
         enableSorting: false,
       });
     } else {
-      const { onDelete, onEdit } = options;
+      const { onDelete, onEdit } = actionOptions;
 
       const actionColumn: ColumnDef<T> = {
         id: 'actions',
@@ -132,7 +132,7 @@ function AnimalTableBase<T extends AnimalResponse>({
       cols.push(actionColumn);
     }
     return cols;
-  }, [options, additionalColumns]);
+  }, [actionOptions, additionalColumns]);
 
   return (
     <BaseTable
