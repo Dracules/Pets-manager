@@ -10,13 +10,14 @@ import {
   ParrotIcon,
 } from '../../../shared/ui/Icons';
 import styles from './css/AnimalTableBase.module.css';
+import { AnimalType } from '../../animal/model/animal.type';
 
 const baseColumns: ColumnDef<AnimalResponse>[] = [
   {
-    id: 'type',
+    accessorKey: 'type',
     header: 'Type',
-    cell: ({ row }) => {
-      const type = row.original.type;
+    cell: ({ getValue }) => {
+      const type = getValue() as AnimalType;
       let IconComponent = AnimalIcon;
 
       switch (type) {
