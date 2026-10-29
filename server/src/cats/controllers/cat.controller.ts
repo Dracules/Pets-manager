@@ -78,8 +78,9 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   @UseInterceptors(AnimalCacheInterceptor)
   async getCatById(
     @Param('id', ParseObjectIdPipe) id: string,
+    @Req() request: RequestWithUser,
   ): Promise<CatResponse> {
-    return await super.getAnimalById(id);
+    return await super.getAnimalById(id, request.user.sub);
   }
 
   @Post('/')

@@ -78,8 +78,9 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
   @UseInterceptors(AnimalCacheInterceptor)
   async getDogById(
     @Param('id', ParseObjectIdPipe) id: string,
+    @Req() request: RequestWithUser,
   ): Promise<DogResponse> {
-    return await super.getAnimalById(id);
+    return await super.getAnimalById(id, request.user.sub);
   }
 
   @Post('/')

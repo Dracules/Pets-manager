@@ -35,8 +35,8 @@ export abstract class BaseAnimalController<
     return this.animalService.findByUser(id, limit, skip, sortBy, sortOrder);
   }
 
-  protected async getAnimalById(id: string): Promise<Resp> {
-    return this.animalService.findById(id);
+  protected async getAnimalById(id: string, userId: string): Promise<Resp> {
+    return this.animalService.findById(id, userId);
   }
 
   protected async createAnimal(

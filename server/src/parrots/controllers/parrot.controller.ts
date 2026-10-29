@@ -81,8 +81,9 @@ export class ParrotController extends BaseAnimalController<
   @UseInterceptors(AnimalCacheInterceptor)
   async getParrotById(
     @Param('id', ParseObjectIdPipe) id: string,
+    @Req() request: RequestWithUser,
   ): Promise<ParrotResponse> {
-    return await super.getAnimalById(id);
+    return await super.getAnimalById(id, request.user.sub);
   }
 
   @Post('/')
