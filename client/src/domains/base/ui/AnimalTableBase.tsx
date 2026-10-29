@@ -47,6 +47,7 @@ const baseColumns: ColumnDef<AnimalResponse>[] = [
     enableSorting: true,
   },
   {
+    id: 'birthDate',
     accessorKey: 'age',
     header: 'Age',
     meta: { size: 170 },
