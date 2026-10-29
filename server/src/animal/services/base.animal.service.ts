@@ -137,11 +137,11 @@ export abstract class BaseAnimalService<
     animalId: string,
     userId: string,
   ): Promise<boolean> {
-    const animals = await this.model
-      .where('_id')
-      .equals(animalId)
-      .where('owner')
-      .equals(new Types.ObjectId(userId));
-    return !!animals.length;
+    const exists = await this.model.exists({
+      _id: animalId,
+      owner: new Types.ObjectId(userId),
+    });
+
+    return !!exists;
   }
 }
