@@ -90,7 +90,7 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.createAnimal(catDTO, response, request);
+    return await super.createAnimal(catDTO, request.user.sub, response);
   }
 
   @Put('/:id')
@@ -101,7 +101,13 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.updateAnimal(id, catDTO, response, request);
+    return await super.updateAnimal(
+      id,
+      request.user.sub,
+      catDTO,
+      response,
+      request.url,
+    );
   }
 
   @Delete('/:id')
@@ -111,6 +117,6 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.deleteAnimal(id, response, request);
+    return await super.deleteAnimal(id, request.user.sub, response);
   }
 }

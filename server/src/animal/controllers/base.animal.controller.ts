@@ -1,5 +1,4 @@
 import { type Response } from 'express';
-import type { RequestWithUser } from '../../shared/interfaces/request-with-user';
 import { BaseAnimalService } from '../services/base.animal.service';
 import { AnimalDTO } from '../dto/animal.dto';
 import type { AnimalResponse } from '../interfaces/animal.interface';
@@ -41,38 +40,36 @@ export abstract class BaseAnimalController<
 
   protected async createAnimal(
     animalDTO: DTO,
+    userId: string,
     response: Response,
-    request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
     const animal = await this.animalService.create(animalDTO, userId);
     response.json(animal);
   }
 
   protected async updateAnimal(
     id: string,
+    userId: string,
     animalDTO: Partial<DTO>,
     response: Response,
-    request: RequestWithUser,
+    url: string,
     updateProps?: unknown,
   ): Promise<void> {
-    const userId = request.user.sub;
     const animal = await this.animalService.updateById(
       userId,
       id,
       animalDTO,
       updateProps,
     );
-    this.сacheService.saveToCache(request.url, animal);
+    this.сacheService.saveToCache(url, animal);
     response.json(animal);
   }
 
   protected async deleteAnimal(
     id: string,
+    userId: string,
     response: Response,
-    request: RequestWithUser,
   ): Promise<void> {
-    const userId = request.user.sub;
     const message = await this.animalService.delete(userId, id);
     response.json(message);
   }

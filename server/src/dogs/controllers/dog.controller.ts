@@ -90,7 +90,7 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.createAnimal(dogDTO, response, request);
+    return await super.createAnimal(dogDTO, request.user.sub, response);
   }
 
   @Put('/:id')
@@ -103,11 +103,24 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
   ): Promise<void> {
     if (dogDTO.trainedCommands && dogDTO.trainedCommands.length === 0) {
       dogDTO.trainedCommands = undefined;
-      return await super.updateAnimal(id, dogDTO, response, request, {
-        $unset: { trainedCommands: '' },
-      });
+      return await super.updateAnimal(
+        id,
+        request.user.sub,
+        dogDTO,
+        response,
+        request.url,
+        {
+          $unset: { trainedCommands: '' },
+        },
+      );
     }
-    return await super.updateAnimal(id, dogDTO, response, request);
+    return await super.updateAnimal(
+      id,
+      request.user.sub,
+      dogDTO,
+      response,
+      request.url,
+    );
   }
 
   @Delete('/:id')
@@ -117,6 +130,6 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.deleteAnimal(id, response, request);
+    return await super.deleteAnimal(id, request.user.sub, response);
   }
 }
