@@ -56,7 +56,9 @@ export abstract class BaseAnimalService<
     };
   }
 
-  async findById(animalId: string): Promise<Response> {
+  async findById(animalId: string, userId: string): Promise<Response> {
+    if (!(await this.isExistedWithIdAndUser(animalId, userId)))
+      throw new AnimalException();
     const animal = await this.model
       .findById(animalId)
       .populate('owner', 'login')
