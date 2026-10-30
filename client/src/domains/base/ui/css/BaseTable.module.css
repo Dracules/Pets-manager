@@ -22,6 +22,22 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.sortIcon {
+  margin-left: 4px;
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+  font-size: 0.8em;
+}
+
+.sortableHeader:hover .sortIcon {
+  opacity: 1;
+}
+
+.sortIconActive {
+  opacity: 1;
+  color: var(--blue-active);
+}
+
 .fullWidth {
   grid-column: 1 / -1;
 }

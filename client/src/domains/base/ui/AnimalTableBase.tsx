@@ -38,10 +38,26 @@ const baseColumns: ColumnDef<AnimalResponse>[] = [
       );
     },
     meta: { size: 70 },
+    enableSorting: false,
   },
-  { accessorKey: 'name', header: 'Name', meta: { size: 170 } },
-  { accessorKey: 'age', header: 'Age', meta: { size: 170 } },
-  { accessorKey: 'description', header: 'Description' },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    meta: { size: 170 },
+    enableSorting: true,
+  },
+  {
+    id: 'birthDate',
+    accessorKey: 'age',
+    header: 'Age',
+    meta: { size: 170 },
+    enableSorting: true,
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+    enableSorting: false,
+  },
 ];
 
 function AnimalTableBase<T extends AnimalResponse>({
@@ -50,6 +66,7 @@ function AnimalTableBase<T extends AnimalResponse>({
   footerPaginationComponent,
   loading,
   additionalColumns,
+  sortingOptions,
 }: AnimalTableBaseProps<T>) {
   const sharedColumns = useMemo<ColumnDef<T>[]>(() => {
     const cols = [...baseColumns] as ColumnDef<T>[];
@@ -81,6 +98,7 @@ function AnimalTableBase<T extends AnimalResponse>({
           );
         },
         meta: { size: 170 },
+        enableSorting: false,
       });
     } else {
       const { onDelete, onEdit } = options;
@@ -109,6 +127,7 @@ function AnimalTableBase<T extends AnimalResponse>({
           </div>
         ),
         meta: { size: 150 },
+        enableSorting: false,
       };
       cols.push(actionColumn);
     }
@@ -121,6 +140,7 @@ function AnimalTableBase<T extends AnimalResponse>({
       columns={sharedColumns}
       footerPaginationComponent={footerPaginationComponent}
       loading={loading}
+      sortingOptions={sortingOptions}
     />
   );
 }

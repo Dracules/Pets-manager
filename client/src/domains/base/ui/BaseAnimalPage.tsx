@@ -8,6 +8,11 @@ import { useCallback, useMemo } from 'react';
 import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import PaginationComponent from './PaginationComponent';
 import { LoadErrorComponent } from './ErrorComponent';
+import { SortingState } from '@tanstack/react-table';
+import {
+  isSortColumn,
+  SortColumns,
+} from '../../../shared/model/types/sort.columns';
 
 const EMPTY_ARRAY: never[] = [];
 
@@ -21,41 +26,91 @@ function BaseAnimalPage<T extends AnimalResponse>(
   const pageLimit = parseInt(searchParams.get('limit') || '10', 10);
   const page = urlPage - 1;
 
+  const sortByParam = searchParams.get('sortBy');
+  const sortBy: SortColumns | undefined = isSortColumn(sortByParam)
+    ? sortByParam
+    : undefined;
+  const sortOrder = searchParams.get('sortOrder') || undefined;
+
   const { id } = useParams();
 
   const { data, totalCount, loading, error, setData, load } = useFetchData(
     fetchFn,
     page,
     pageLimit,
+    sortBy,
+    sortOrder === 'desc' ? 'desc' : 'asc',
     id,
   );
   const navigate = useNavigate();
 
   const updatePageParams = useCallback(
-    (newPage: number, newLimit: number) => {
+    (
+      newPage: number,
+      newLimit: number,
+      currentSortBy?: string,
+      currentSortOrder?: string,
+    ) => {
       const params: Record<string, string> = {
         page: (newPage + 1).toString(),
         limit: newLimit.toString(),
       };
 
       if (newPage === 0) delete params.page;
+      if (currentSortBy) params.sortBy = currentSortBy;
+      if (currentSortOrder) params.sortOrder = currentSortOrder;
 
       setSearchParams(params);
     },
     [setSearchParams],
   );
 
+  const tableSortingState = useMemo<SortingState>(() => {
+    if (!sortBy) return [];
+    return [{ id: sortBy, desc: sortOrder === 'desc' }];
+  }, [sortBy, sortOrder]);
+
+  const handleSortingChange = useCallback(
+    (updaterOrValue: SortingState | ((old: SortingState) => SortingState)) => {
+      const newSorting =
+        typeof updaterOrValue === 'function'
+          ? updaterOrValue(tableSortingState)
+          : updaterOrValue;
+
+      const sortState = newSorting[0];
+
+      const params: Record<string, string> = {
+        page: (page + 1).toString(),
+        limit: pageLimit.toString(),
+      };
+
+      if (page === 0) delete params.page;
+
+      if (sortState) {
+        params.sortBy = sortState.id;
+        params.sortOrder = sortState.desc ? 'desc' : 'asc';
+      }
+
+      setSearchParams(params);
+    },
+    [tableSortingState, page, pageLimit, setSearchParams],
+  );
+
   const paginationComponent = useMemo(
     () => (
       <PaginationComponent
         page={page}
-        setPage={(newPage) => updatePageParams(newPage, pageLimit)}
+        setPage={(newPage) =>
+          updatePageParams(newPage, pageLimit, sortBy, sortOrder)
+        }
         pageLimit={pageLimit}
-        setPageLimit={(newLimit) => updatePageParams(0, newLimit)} // При смене лимита сбрасываем на первую страницу
+        setPageLimit={(newLimit) =>
+          updatePageParams(0, newLimit, sortBy, sortOrder)
+        }
         totalCount={totalCount}
       />
     ),
-    [page, pageLimit, totalCount, updatePageParams],
+    [page, pageLimit, totalCount, updatePageParams, sortBy, sortOrder],
   );
 
   const tableOptions = useMemo(() => {
@@ -92,6 +147,14 @@ function BaseAnimalPage<T extends AnimalResponse>(
     };
   }, [deleteFn]);
 
+  const tableSortingOptions = useMemo(
+    () => ({
+      sorting: tableSortingState,
+      onSortingChange: handleSortingChange,
+    }),
+    [tableSortingState, handleSortingChange],
+  );
+
   if (error)
     return (
       <LoadErrorComponent
@@ -108,6 +171,7 @@ function BaseAnimalPage<T extends AnimalResponse>(
         options={tableOptions}
         footerPaginationComponent={paginationComponent}
         loading={loading}
+        sortingOptions={tableSortingOptions}
       />
     </div>
   );

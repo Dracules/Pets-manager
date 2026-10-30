@@ -24,7 +24,7 @@ import { BaseAnimalController } from '../../animal/controllers/base.animal.contr
 import type { CatResponse } from '../interfaces/cat.interface';
 import { AnimalCacheService } from '../../animal/services/animal.cache.service';
 import type { PaginationResult } from '../../animal/interfaces/pagination.result';
-import { PaginationDTO } from '../../shared/dto/pagination.dto';
+import { QueryParamsDTO } from '../../shared/dto/query.params.dto';
 
 @Controller('animals/cats')
 export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
@@ -35,32 +35,41 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   @Public()
   @Get('/')
   async getCats(
-    @Query() paginationDto: PaginationDTO,
+    @Query() queryParamsDTO: QueryParamsDTO,
   ): Promise<PaginationResult<CatResponse[]>> {
-    return await super.getAnimals(paginationDto.limit, paginationDto.skip);
+    return await super.getAnimals(
+      queryParamsDTO.limit,
+      queryParamsDTO.skip,
+      queryParamsDTO.sortBy,
+      queryParamsDTO.sortOrder,
+    );
   }
 
   @Get('/user')
   async getCatByUser(
     @Req() request: RequestWithUser,
-    @Query() paginationDto: PaginationDTO,
+    @Query() queryParamsDTO: QueryParamsDTO,
   ): Promise<PaginationResult<CatResponse[]>> {
     return await super.getAnimalByUser(
       request.user.sub,
-      paginationDto.limit,
-      paginationDto.skip,
+      queryParamsDTO.limit,
+      queryParamsDTO.skip,
+      queryParamsDTO.sortBy,
+      queryParamsDTO.sortOrder,
     );
   }
 
   @Get('/user/:id')
   async getCatBySelectedUser(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Query() paginationDto: PaginationDTO,
+    @Query() queryParamsDTO: QueryParamsDTO,
   ): Promise<PaginationResult<CatResponse[]>> {
     return await super.getAnimalByUser(
       id,
-      paginationDto.limit,
-      paginationDto.skip,
+      queryParamsDTO.limit,
+      queryParamsDTO.skip,
+      queryParamsDTO.sortBy,
+      queryParamsDTO.sortOrder,
     );
   }
 
