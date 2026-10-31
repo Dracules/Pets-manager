@@ -10,13 +10,14 @@ import {
   ParrotIcon,
 } from '../../../shared/ui/Icons';
 import styles from './css/AnimalTableBase.module.css';
+import { AnimalType } from '../../animal/model/animal.type';
 
 const baseColumns: ColumnDef<AnimalResponse>[] = [
   {
-    id: 'type',
+    accessorKey: 'type',
     header: 'Type',
-    cell: ({ row }) => {
-      const type = row.original.type;
+    cell: ({ getValue }) => {
+      const type = getValue() as AnimalType;
       let IconComponent = AnimalIcon;
 
       switch (type) {
@@ -62,7 +63,7 @@ const baseColumns: ColumnDef<AnimalResponse>[] = [
 
 function AnimalTableBase<T extends AnimalResponse>({
   data,
-  options,
+  actionOptions,
   footerPaginationComponent,
   loading,
   additionalColumns,
@@ -73,12 +74,15 @@ function AnimalTableBase<T extends AnimalResponse>({
 
     if (additionalColumns) cols.push(...additionalColumns);
 
-    if ('onOwnerClick' in options) {
+    if (actionOptions.type === 'owner') {
       cols.push({
-        accessorKey: 'owner.login',
+        accessorKey: 'owner',
         header: 'Owner',
-        cell: ({ row }) => {
-          if (!row.original.owner?.login) {
+        cell: ({ getValue }) => {
+          const owner = getValue() as
+            | { _id: string; login: string }
+            | undefined;
+          if (!owner?.login) {
             return <span className={styles.noOwner}>Not found</span>;
           }
           return (
@@ -87,13 +91,13 @@ function AnimalTableBase<T extends AnimalResponse>({
               className={styles.ownerLink}
               onClick={(e) => {
                 e.preventDefault();
-                options.onOwnerClick(
-                  row.original.owner._id,
-                  row.original.owner.login,
+                actionOptions.ownerClickOptions.onOwnerClick(
+                  owner._id,
+                  owner.login,
                 );
               }}
             >
-              {row.original.owner.login}
+              {owner.login}
             </a>
           );
         },
@@ -101,7 +105,7 @@ function AnimalTableBase<T extends AnimalResponse>({
         enableSorting: false,
       });
     } else {
-      const { onDelete, onEdit } = options;
+      const { onDelete, onEdit } = actionOptions.editorOptions;
 
       const actionColumn: ColumnDef<T> = {
         id: 'actions',
@@ -109,6 +113,7 @@ function AnimalTableBase<T extends AnimalResponse>({
         cell: ({ row }) => (
           <div className={styles.actions}>
             <button
+              type="button"
               className={`${styles.actionBtn} ${styles.actionBtnEdit}`}
               onClick={() => {
                 onEdit(row.original._id, row.original.type);
@@ -117,6 +122,7 @@ function AnimalTableBase<T extends AnimalResponse>({
               Edit
             </button>
             <button
+              type="button"
               className={`${styles.actionBtn} ${styles.actionBtnDelete}`}
               onClick={() => {
                 void onDelete(row.original._id, row.original.type);
@@ -132,7 +138,7 @@ function AnimalTableBase<T extends AnimalResponse>({
       cols.push(actionColumn);
     }
     return cols;
-  }, [options, additionalColumns]);
+  }, [actionOptions, additionalColumns]);
 
   return (
     <BaseTable
