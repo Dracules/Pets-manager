@@ -18,6 +18,7 @@ describe('CatController', () => {
   let mongooseConnection: Connection;
   let collections: Collection[] | undefined;
   let adminToken: string, userToken: string;
+  let adminId: string, userId: string;
 
   async function cleanupDB(): Promise<void> {
     try {
@@ -35,6 +36,7 @@ describe('CatController', () => {
 
   async function populateCatsDB(
     catsArray: CatDTO[],
+    ownerId?: string,
   ): Promise<InsertManyResult<Document>> {
     const catsCollection = collections?.find(
       (collection) => collection.collectionName === 'cats',
@@ -43,7 +45,11 @@ describe('CatController', () => {
       throw Error('Cats collection not found');
     }
 
-    return await catsCollection.insertMany(catsArray);
+    const catsToInsert = ownerId
+      ? catsArray.map((cat) => ({ ...cat, owner: new Types.ObjectId(ownerId) }))
+      : catsArray;
+
+    return await catsCollection.insertMany(catsToInsert);
   }
 
   async function findCatDB(id: ObjectId) {
@@ -72,6 +78,26 @@ describe('CatController', () => {
     return await catsCollection.find({}).toArray();
   }
 
+  async function findUserIdByLoginDB(login: string) {
+    const usersCollection = collections?.find(
+      (collection) => collection.collectionName === 'users',
+    );
+    if (!usersCollection) {
+      throw Error('Users collection not found');
+    }
+
+    const doc = await usersCollection.findOne(
+      { login: login },
+      { projection: { _id: 1 } },
+    );
+
+    return String(doc?._id ?? '');
+  }
+
+  async function initCollections() {
+    if (!collections) collections = await mongooseConnection.db?.collections();
+  }
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
@@ -93,6 +119,7 @@ describe('CatController', () => {
 
       mongooseConnection = moduleRef.get<Connection>(getConnectionToken());
       await initMongoDB(configService, mongooseConnection);
+      await initCollections();
 
       const loginResAdmin = (await request(app.getHttpServer() as App)
         .post('/auth/login')
@@ -117,6 +144,13 @@ describe('CatController', () => {
         .expect(200)) as { body: { access_token: string } };
 
       userToken = loginResUser.body.access_token;
+
+      adminId = await findUserIdByLoginDB(
+        configService.get<string>('MONGODB_TEST_ADMIN_USER')!,
+      );
+      userId = await findUserIdByLoginDB(
+        configService.get<string>('MONGODB_TEST_USER')!,
+      );
     }
   });
 
@@ -127,7 +161,7 @@ describe('CatController', () => {
   });
 
   beforeEach(async () => {
-    if (!collections) collections = await mongooseConnection.db?.collections();
+    await initCollections();
     await cleanupDB();
   });
 
@@ -179,7 +213,7 @@ describe('CatController', () => {
 
       it('200 - valid catId and user role', async () => {
         const cats = mockCatDTOList(1);
-        const catId = (await populateCatsDB(cats)).insertedIds[0];
+        const catId = (await populateCatsDB(cats, userId)).insertedIds[0];
 
         await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId.toString()}`)
@@ -190,7 +224,7 @@ describe('CatController', () => {
 
       it('200 - valid catId and admin role', async () => {
         const cats = mockCatDTOList(1);
-        const catId = (await populateCatsDB(cats)).insertedIds[0];
+        const catId = (await populateCatsDB(cats, adminId)).insertedIds[0];
 
         await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId.toString()}`)
@@ -225,7 +259,7 @@ describe('CatController', () => {
 
       it('gets by id from DB', async () => {
         const cats = mockCatDTOList(1);
-        const catId = (await populateCatsDB(cats)).insertedIds[0];
+        const catId = (await populateCatsDB(cats, userId)).insertedIds[0];
 
         const response = await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId.toString()}`)
@@ -234,11 +268,18 @@ describe('CatController', () => {
           .expect(200);
 
         const findedCat = await findCatDB(catId);
+        expect(findedCat).not.toBeNull();
 
-        expect(response.body).not.toBeNull();
-        console.table(response.body);
-        console.table(findedCat);
-        expect(response.body).toMatchObject(findedCat);
+        expect(response.body).toMatchObject({
+          _id: catId.toString(),
+          name: cats[0].name,
+          birthDate: cats[0].birthDate.toISOString(),
+          litterStatus: cats[0].litterStatus,
+          owner: {
+            _id: userId,
+            login: expect.any(String) as string,
+          },
+        });
       });
     });
 
@@ -256,7 +297,7 @@ describe('CatController', () => {
 
       it('caches by url from DB', async () => {
         const cats = mockCatDTOList(1);
-        const catId = (await populateCatsDB(cats)).insertedIds[0];
+        const catId = (await populateCatsDB(cats, userId)).insertedIds[0];
 
         expect(countConsoleLogs('Take cache')).toBe(0);
         expect(countConsoleLogs('Put cache')).toBe(0);
@@ -264,7 +305,8 @@ describe('CatController', () => {
         await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
-          .send();
+          .send()
+          .expect(200);
 
         expect(countConsoleLogs('Take cache')).toBe(0);
         expect(countConsoleLogs('Put cache')).toBe(1);
@@ -272,7 +314,8 @@ describe('CatController', () => {
         await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
-          .send();
+          .send()
+          .expect(200);
 
         expect(countConsoleLogs('Take cache')).toBe(1);
         expect(countConsoleLogs('Put cache')).toBe(1);
@@ -280,7 +323,8 @@ describe('CatController', () => {
         await request(app.getHttpServer() as App)
           .get(`/animals/cats/${catId.toString()}`)
           .set('Authorization', `Bearer ${userToken}`)
-          .send();
+          .send()
+          .expect(200);
 
         expect(countConsoleLogs('Take cache')).toBe(2);
         expect(countConsoleLogs('Put cache')).toBe(1);
