@@ -42,6 +42,7 @@ describe('CatService', () => {
     where: jest.Mock;
     toJSON: jest.Mock;
     countDocuments: jest.Mock;
+    exists: jest.Mock;
     modelName: string;
   };
 
@@ -60,6 +61,7 @@ describe('CatService', () => {
     mockCatModel.countDocuments = jest.fn();
     mockCatModel.modelName = 'Cat';
     mockCatModel.toJSON = jest.fn();
+    mockCatModel.exists = jest.fn();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -140,40 +142,60 @@ describe('CatService', () => {
   });
 
   describe('findById', () => {
-    describe('existent id', () => {
+    describe('existent cat id', () => {
       it('must return cat with ID', async () => {
         const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a572a5';
         const cat: CatResponse & { login: string } = {
           ...mockCat({ _id: catId }),
           login: 'string',
         };
+
+        mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
 
         const mockQuery = createMockQueryBuilder();
         mockQuery.exec = jest.fn<Promise<any>, []>().mockResolvedValue(cat);
 
         mockCatModel.findById = jest.fn().mockReturnValue(mockQuery);
 
-        const result = await service.findById(catId);
+        const result = await service.findById(catId, userId);
 
         expect(mockCatModel.findById).toHaveBeenCalledWith(catId);
         expect(result).toEqual(cat);
       });
     });
 
-    describe('nonexistent id', () => {
+    describe('nonexistent cat id', () => {
       it('must throw AnimalException', async () => {
         const nonExistentId = '999999999999999999999999';
+        const userId = '694ac1f93b5320db21a572a5';
 
-        const mockQuery = createMockQueryBuilder();
-        mockQuery.exec = jest.fn<Promise<any>, []>().mockResolvedValue(null);
+        mockCatModel.exists = jest.fn().mockResolvedValue(null);
 
-        mockCatModel.findById = jest.fn().mockReturnValue(mockQuery);
-
-        await expect(service.findById(nonExistentId)).rejects.toThrow(
+        await expect(service.findById(nonExistentId, userId)).rejects.toThrow(
           AnimalException,
         );
 
-        expect(mockCatModel.findById).toHaveBeenCalledWith(nonExistentId);
+        expect(mockCatModel.findById).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('animal does not belong to user', () => {
+      it('must throw AnimalException', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a572a5';
+
+        mockCatModel.exists.mockResolvedValue(null);
+
+        await expect(service.findById(catId, userId)).rejects.toThrow(
+          AnimalException,
+        );
+        expect(mockCatModel.exists).toHaveBeenCalledWith({
+          _id: catId,
+          owner: expect.any(Object) as unknown as Types.ObjectId,
+        });
+
+        expect(mockCatModel.findById).not.toHaveBeenCalled();
       });
     });
   });
@@ -266,13 +288,7 @@ describe('CatService', () => {
 
         const updatedCat = mockCat(newData);
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 1 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue({ toJSON: () => updatedCat }),
@@ -301,20 +317,14 @@ describe('CatService', () => {
 
         const newData: Partial<CatResponse> = {};
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue(null);
 
         await expect(
           service.updateById(userId, nonExistentCatId, newData),
         ).rejects.toThrow(AnimalException);
 
         expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(0);
-        expect(mockCatModel.where).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -325,20 +335,14 @@ describe('CatService', () => {
 
         const newData: Partial<CatResponse> = {};
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue(null);
 
         await expect(
           service.updateById(nonExistentUserId, catId, newData),
         ).rejects.toThrow(AnimalException);
 
         expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(0);
-        expect(mockCatModel.where).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -348,13 +352,7 @@ describe('CatService', () => {
         const userId = '694ac1f93b5320db21a11111';
         const newData: Partial<CatResponse> = {};
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 1 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
 
         mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(null),
@@ -365,6 +363,30 @@ describe('CatService', () => {
         ).rejects.toThrow(AnimalException);
 
         expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('animal does not belong to user', () => {
+      it('must throw AnimalException', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a11111';
+
+        const newData: Partial<CatResponse> = {
+          name: 'Bart',
+          birthDate: new Date(),
+        };
+
+        mockCatModel.exists.mockResolvedValue(null);
+
+        await expect(
+          service.updateById(userId, catId, newData),
+        ).rejects.toThrow(AnimalException);
+        expect(mockCatModel.exists).toHaveBeenCalledWith({
+          _id: catId,
+          owner: expect.any(Object) as unknown as Types.ObjectId,
+        });
+
+        expect(mockCatModel.findByIdAndUpdate).not.toHaveBeenCalled();
       });
     });
   });
@@ -379,13 +401,7 @@ describe('CatService', () => {
 
         const expectedResponse = 'Selected item is deleted successfully!';
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 1 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
 
         mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(deletedCat),
@@ -393,7 +409,7 @@ describe('CatService', () => {
 
         const result = await service.delete(userId, catId);
 
-        expect(mockCatModel.where).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledWith(catId);
         expect(
@@ -409,19 +425,13 @@ describe('CatService', () => {
         const nonExistentCatId = '999999999999999999999999';
         const userId = '694ac1f93b5320db21a11111';
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue(null);
 
         await expect(service.delete(userId, nonExistentCatId)).rejects.toThrow(
           AnimalException,
         );
 
-        expect(mockCatModel.where).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(0);
       });
     });
@@ -431,19 +441,13 @@ describe('CatService', () => {
         const catId = '694ac1f93b5320db21a11111';
         const nonExistentUserId = '999999999999999999999999';
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 0 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue(null);
 
         await expect(service.delete(nonExistentUserId, catId)).rejects.toThrow(
           AnimalException,
         );
 
-        expect(mockCatModel.where).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(0);
       });
     });
@@ -453,13 +457,7 @@ describe('CatService', () => {
         const catId = '694ac1f93b5320db21a572a5';
         const userId = '694ac1f93b5320db21a11111';
 
-        mockCatModel.where = jest.fn().mockReturnValue({
-          equals: jest.fn().mockReturnValue({
-            where: jest.fn().mockReturnValue({
-              equals: jest.fn().mockResolvedValue({ length: 1 }),
-            }),
-          }),
-        });
+        mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
 
         mockCatModel.findByIdAndDelete = jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue(null),
@@ -470,6 +468,25 @@ describe('CatService', () => {
         );
 
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('animal does not belong to user', () => {
+      it('must throw AnimalException', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a11111';
+
+        mockCatModel.exists.mockResolvedValue(null);
+
+        await expect(service.delete(userId, catId)).rejects.toThrow(
+          AnimalException,
+        );
+        expect(mockCatModel.exists).toHaveBeenCalledWith({
+          _id: catId,
+          owner: expect.any(Object) as unknown as Types.ObjectId,
+        });
+
+        expect(mockCatModel.findByIdAndDelete).not.toHaveBeenCalled();
       });
     });
   });

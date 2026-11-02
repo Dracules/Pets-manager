@@ -78,8 +78,9 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   @UseInterceptors(AnimalCacheInterceptor)
   async getCatById(
     @Param('id', ParseObjectIdPipe) id: string,
+    @Req() request: RequestWithUser,
   ): Promise<CatResponse> {
-    return await super.getAnimalById(id);
+    return await super.getAnimalById(id, request.user.sub);
   }
 
   @Post('/')
@@ -89,7 +90,7 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.createAnimal(catDTO, response, request);
+    return await super.createAnimal(catDTO, request.user.sub, response);
   }
 
   @Put('/:id')
@@ -100,7 +101,13 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.updateAnimal(id, catDTO, response, request);
+    return await super.updateAnimal(
+      id,
+      request.user.sub,
+      catDTO,
+      response,
+      request.url,
+    );
   }
 
   @Delete('/:id')
@@ -110,6 +117,6 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.deleteAnimal(id, response, request);
+    return await super.deleteAnimal(id, request.user.sub, response);
   }
 }

@@ -56,7 +56,9 @@ export abstract class BaseAnimalService<
     };
   }
 
-  async findById(animalId: string): Promise<Response> {
+  async findById(animalId: string, userId: string): Promise<Response> {
+    if (!(await this.isExistedWithIdAndUser(animalId, userId)))
+      throw new AnimalException();
     const animal = await this.model
       .findById(animalId)
       .populate('owner', 'login')
@@ -135,11 +137,11 @@ export abstract class BaseAnimalService<
     animalId: string,
     userId: string,
   ): Promise<boolean> {
-    const animals = await this.model
-      .where('_id')
-      .equals(animalId)
-      .where('owner')
-      .equals(new Types.ObjectId(userId));
-    return !!animals.length;
+    const exists = await this.model.exists({
+      _id: animalId,
+      owner: new Types.ObjectId(userId),
+    });
+
+    return !!exists;
   }
 }

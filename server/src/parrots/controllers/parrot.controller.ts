@@ -81,8 +81,9 @@ export class ParrotController extends BaseAnimalController<
   @UseInterceptors(AnimalCacheInterceptor)
   async getParrotById(
     @Param('id', ParseObjectIdPipe) id: string,
+    @Req() request: RequestWithUser,
   ): Promise<ParrotResponse> {
-    return await super.getAnimalById(id);
+    return await super.getAnimalById(id, request.user.sub);
   }
 
   @Post('/')
@@ -92,7 +93,7 @@ export class ParrotController extends BaseAnimalController<
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.createAnimal(parrotDTO, response, request);
+    return await super.createAnimal(parrotDTO, request.user.sub, response);
   }
 
   @Put('/:id')
@@ -105,11 +106,24 @@ export class ParrotController extends BaseAnimalController<
   ): Promise<void> {
     if (parrotDTO.vocabulary && parrotDTO.vocabulary.length === 0) {
       parrotDTO.vocabulary = undefined;
-      return await super.updateAnimal(id, parrotDTO, response, request, {
-        $unset: { vocabulary: '' },
-      });
+      return await super.updateAnimal(
+        id,
+        request.user.sub,
+        parrotDTO,
+        response,
+        request.url,
+        {
+          $unset: { vocabulary: '' },
+        },
+      );
     }
-    return await super.updateAnimal(id, parrotDTO, response, request);
+    return await super.updateAnimal(
+      id,
+      request.user.sub,
+      parrotDTO,
+      response,
+      request.url,
+    );
   }
 
   @Delete('/:id')
@@ -119,6 +133,6 @@ export class ParrotController extends BaseAnimalController<
     @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.deleteAnimal(id, response, request);
+    return await super.deleteAnimal(id, request.user.sub, response);
   }
 }
