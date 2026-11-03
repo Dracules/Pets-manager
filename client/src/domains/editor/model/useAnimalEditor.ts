@@ -5,7 +5,7 @@ import type { Animal } from '../../animal/model/animal.interface';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 type UseAnimalEditorOptions<T> = {
   loadById: (id: string) => Promise<T>;
@@ -47,7 +47,8 @@ export default function useAnimalEditor<T extends Animal>({
         }
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          const serverMessage = err.response?.data?.message;
+          const axiosError = err as AxiosError<{ message: string }>;
+          const serverMessage = axiosError.response?.data?.message;
           setError(serverMessage || err.message);
         } else if (err instanceof Error) {
           setError(err.message);

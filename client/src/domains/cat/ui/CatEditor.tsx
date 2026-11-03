@@ -29,7 +29,7 @@ export default function CatEditor() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      navigate('/my/cats', { replace: true });
+      void navigate('/my/cats', { replace: true });
     }
   }, [error]);
 

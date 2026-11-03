@@ -33,7 +33,7 @@ export default function DogEditor() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      navigate('/my/dogs', { replace: true });
+      void navigate('/my/dogs', { replace: true });
     }
   }, [error]);
 

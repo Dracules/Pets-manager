@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { PaginationResult } from '../../../shared/model/interfaces/pagination.result';
 import { SortDirection } from '@tanstack/react-table';
 import { SortColumns } from '../../../shared/model/types/sort.columns';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 function useFetchData<T>(
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T>>,
@@ -28,7 +28,8 @@ function useFetchData<T>(
       setError('');
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        const serverMessage = err.response?.data?.message;
+        const axiosError = err as AxiosError<{ message: string }>;
+        const serverMessage = axiosError.response?.data?.message;
         setError(serverMessage || err.message);
       } else if (err instanceof Error) {
         setError(err.message);
