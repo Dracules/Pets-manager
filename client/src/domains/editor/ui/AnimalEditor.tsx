@@ -14,6 +14,7 @@ interface EditorProps<T extends Animal> {
   onSubmit: SubmitHandler<T>;
   fields: React.ReactNode;
   methods: UseFormReturn<T, any, T>;
+  isLoading: boolean;
 }
 
 const renderError = (message?: unknown) =>
@@ -25,6 +26,7 @@ export default function AnimalEditor<T extends Animal>({
   onSubmit,
   fields,
   methods,
+  isLoading,
 }: EditorProps<T>) {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -36,7 +38,10 @@ export default function AnimalEditor<T extends Animal>({
       <FormProvider {...methods}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <fieldset disabled={isSubmitting} className={styles.fieldset}>
+          <fieldset
+            disabled={isSubmitting || isLoading}
+            className={styles.fieldset}
+          >
             <div className={styles.field}>
               <label className={`${styles.label} ${styles.labelRequired}`}>
                 Name
@@ -93,7 +98,7 @@ export default function AnimalEditor<T extends Animal>({
                 type="button"
                 className={`${styles.button} ${styles.cancelButton}`}
                 onClick={() => void navigate(-1)}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoading}
               >
                 Cancel
               </button>

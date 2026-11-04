@@ -143,5 +143,4 @@
   background: rgba(248, 250, 252, 0.6);
   backdrop-filter: blur(2px);
   z-index: 10;
-  pointer-events: none;
 }

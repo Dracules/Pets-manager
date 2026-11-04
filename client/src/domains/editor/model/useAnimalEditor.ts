@@ -5,6 +5,7 @@ import type { Animal } from '../../animal/model/animal.interface';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import axios, { AxiosError } from 'axios';
 
 type UseAnimalEditorOptions<T> = {
   loadById: (id: string) => Promise<T>;
@@ -30,15 +31,31 @@ export default function useAnimalEditor<T extends Animal>({
   });
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(id ? true : false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!id) return;
 
     const loadAnimal = async () => {
       setIsLoading(true);
-      const item = await loadById(id);
-      if (item) {
-        methods.reset(item);
+      try {
+        const item = await loadById(id);
+        if (item) {
+          methods.reset(item);
+        } else {
+          setError('Animal not found');
+        }
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          const axiosError = err as AxiosError<{ message: string }>;
+          const serverMessage = axiosError.response?.data?.message;
+          setError(serverMessage || err.message);
+        } else if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Failed to load animal');
+        }
+      } finally {
         setIsLoading(false);
       }
     };
@@ -78,5 +95,5 @@ export default function useAnimalEditor<T extends Animal>({
     }
   };
 
-  return { methods, onSubmit, isLoading };
+  return { methods, onSubmit, isLoading, error };
 }
