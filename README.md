@@ -11,6 +11,7 @@ Single-page application for managing user data and their pets' data with a Node.
 - **Create & Edit** — Add new animals or update existing ones using corresponding forms
 - **Delete animals** — Remove animals from your collection with one click
 - **Pagination** — Navigate through large datasets with ease
+- **Sorting** — Sort by allowed columns with visual indicators
 - **Authentication** — Login and registration with JWT tokens
 - **Notifications** — Notifications for successful operations or validation errors
 
@@ -29,7 +30,7 @@ Single-page application for managing user data and their pets' data with a Node.
 - Request validation using class-validator
 - Custom error filters for error handling
 - Middleware for console-logging
-- Caching for specific endpoints
+- Caching simulation for specific endpoints
 - Unit and E2E tests for cat-related endpoints
 - Docker containerization
 - CI using GitHub Actions with tests and linter
@@ -110,6 +111,8 @@ Single-page application for managing user data and their pets' data with a Node.
 | **Editor**               |                                    |               |
 | /edit                    | Editor page (creation mode)        | Yes           |
 | /edit/:id                | Editor page (edit mode)            | Yes           |
+| **System**               |                                    |               |
+| \*                       | 404 Not Found page                 | No            |
 
 ## Screenshots
 
