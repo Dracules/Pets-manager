@@ -393,13 +393,11 @@ describe('CatService', () => {
 
   describe('delete', () => {
     describe('existent cat id and user id', () => {
-      it('must delete cat with ID and return hardcoded string', async () => {
+      it('must delete cat with ID and return void', async () => {
         const catId = '694ac1f93b5320db21a572a5';
         const userId = '694ac1f93b5320db21a11111';
 
         const deletedCat = mockCat({ _id: catId });
-
-        const expectedResponse = 'Selected item is deleted successfully!';
 
         mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
 
@@ -410,13 +408,13 @@ describe('CatService', () => {
         const result = await service.delete(userId, catId);
 
         expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.exists).toHaveBeenCalledWith({
+          _id: catId,
+          owner: expect.any(Object) as unknown as Types.ObjectId,
+        });
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledWith(catId);
-        expect(
-          (mockCatModel.findByIdAndDelete() as unknown as MockQueryBuilder)
-            .exec,
-        ).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(expectedResponse);
+        expect(result).toBeUndefined();
       });
     });
 

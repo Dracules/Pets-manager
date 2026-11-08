@@ -32,7 +32,7 @@ export default class AnimalsApi {
     this: void,
     id: string,
     type: AnimalType,
-  ): Promise<string> {
+  ): Promise<void> {
     switch (type) {
       case 'cat':
         return CatsApi.deleteCats(id);

@@ -41,7 +41,7 @@ export default class DogsApi {
     return apiClient.put(`/animals/dogs/${id}`, data);
   }
 
-  static async deleteDogs(this: void, id: string): Promise<string> {
-    return apiClient.delete(`/animals/dogs/${id}`);
+  static async deleteDogs(this: void, id: string): Promise<void> {
+    await apiClient.delete(`/animals/dogs/${id}`);
   }
 }

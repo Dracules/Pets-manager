@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Res,
   Param,
   UseFilters,
   UseInterceptors,
@@ -13,7 +12,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ParrotService } from '../services/parrot.service';
-import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
@@ -90,10 +88,9 @@ export class ParrotController extends BaseAnimalController<
   async createParrot(
     @Body()
     parrotDTO: ParrotDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.createAnimal(parrotDTO, request.user.sub, response);
+  ): Promise<ParrotResponse> {
+    return await super.createAnimal(parrotDTO, request.user.sub);
   }
 
   @Put('/:id')
@@ -101,27 +98,12 @@ export class ParrotController extends BaseAnimalController<
   async updateParrot(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() parrotDTO: UpdateParrotDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    if (parrotDTO.vocabulary && parrotDTO.vocabulary.length === 0) {
-      parrotDTO.vocabulary = undefined;
-      return await super.updateAnimal(
-        id,
-        request.user.sub,
-        parrotDTO,
-        response,
-        request.url,
-        {
-          $unset: { vocabulary: '' },
-        },
-      );
-    }
+  ): Promise<ParrotResponse> {
     return await super.updateAnimal(
       id,
       request.user.sub,
       parrotDTO,
-      response,
       request.url,
     );
   }
@@ -130,9 +112,8 @@ export class ParrotController extends BaseAnimalController<
   @UseFilters(AnimalExceptionFilter)
   async deleteParrot(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
   ): Promise<void> {
-    return await super.deleteAnimal(id, request.user.sub, response);
+    return await super.deleteAnimal(id, request.user.sub);
   }
 }

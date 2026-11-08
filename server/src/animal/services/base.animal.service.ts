@@ -124,11 +124,11 @@ export abstract class BaseAnimalService<
     throw new AnimalException();
   }
 
-  async delete(userId: string, animalId: string): Promise<string> {
+  async delete(userId: string, animalId: string): Promise<void> {
     if (await this.isExistedWithIdAndUser(animalId, userId)) {
       const deletedAnimal = await this.model.findByIdAndDelete(animalId).exec();
       if (!deletedAnimal) throw new AnimalException();
-      return 'Selected item is deleted successfully!';
+      return;
     }
     throw new AnimalException();
   }
