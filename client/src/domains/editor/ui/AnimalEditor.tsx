@@ -75,10 +75,7 @@ export default function AnimalEditor<T extends Animal>({
             <div className={styles.field}>
               <label className={styles.label}>Description</label>
               <textarea
-                {...methods.register('description' as Path<T>, {
-                  setValueAs: (value: string) =>
-                    value === '' ? undefined : value,
-                })}
+                {...methods.register('description' as Path<T>)}
                 placeholder="Enter description"
                 maxLength={1000}
                 rows={4}
