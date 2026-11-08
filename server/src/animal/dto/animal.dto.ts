@@ -5,7 +5,6 @@ import {
   IsDefined,
   MaxLength,
   IsOptional,
-  IsNotEmpty,
 } from 'class-validator';
 
 export class AnimalDTO {
@@ -15,12 +14,15 @@ export class AnimalDTO {
   @MaxLength(50)
   name: string;
 
-  @Transform(({ value }: { value: unknown }) =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @Transform(({ value }: { value: unknown }) => {
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      return trimmed === '' ? undefined : trimmed;
+    }
+    return value;
+  })
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(1000)
   description?: string;
 }

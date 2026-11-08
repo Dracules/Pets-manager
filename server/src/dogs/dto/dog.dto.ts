@@ -17,6 +17,12 @@ export class DogDTO extends AnimalDTO {
   @IsBirthDateRealistic(30)
   birthDate: Date;
 
+  @Transform(({ value }: { value: unknown }) => {
+    if (Array.isArray(value) && value.length === 0) {
+      return undefined;
+    }
+    return value;
+  })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
