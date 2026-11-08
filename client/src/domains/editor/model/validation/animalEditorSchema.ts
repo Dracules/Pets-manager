@@ -17,8 +17,8 @@ const animalEditorSchema = yup.object({
   description: yup
     .string()
     .trim()
-    .min(1, 'Please, enter a valid description')
-    .max(1000, 'Description is too long'),
+    .max(1000, 'Description is too long')
+    .optional(),
 });
 
 export default animalEditorSchema;
