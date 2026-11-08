@@ -119,7 +119,7 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
   async deleteDog(
     @Param('id', ParseObjectIdPipe) id: string,
     @Req() request: RequestWithUser,
-  ): Promise<string> {
+  ): Promise<void> {
     return await super.deleteAnimal(id, request.user.sub);
   }
 }

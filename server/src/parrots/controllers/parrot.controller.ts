@@ -127,7 +127,7 @@ export class ParrotController extends BaseAnimalController<
   async deleteParrot(
     @Param('id', ParseObjectIdPipe) id: string,
     @Req() request: RequestWithUser,
-  ): Promise<string> {
+  ): Promise<void> {
     return await super.deleteAnimal(id, request.user.sub);
   }
 }

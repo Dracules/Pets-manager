@@ -59,7 +59,7 @@ export abstract class BaseAnimalController<
     return animal;
   }
 
-  protected async deleteAnimal(id: string, userId: string): Promise<string> {
+  protected async deleteAnimal(id: string, userId: string): Promise<void> {
     await this.animalService.delete(userId, id);
   }
 }

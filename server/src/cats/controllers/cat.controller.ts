@@ -107,7 +107,7 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   async deleteCat(
     @Param('id', ParseObjectIdPipe) id: string,
     @Req() request: RequestWithUser,
-  ): Promise<string> {
+  ): Promise<void> {
     return await super.deleteAnimal(id, request.user.sub);
   }
 }
