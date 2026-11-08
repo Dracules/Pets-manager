@@ -19,7 +19,7 @@ const EMPTY_ARRAY: never[] = [];
 function BaseAnimalPage<T extends AnimalResponse>(
   AnimalTable: React.ComponentType<CommonBaseTableProps<T>>,
   fetchFn: (options: string, id?: string) => Promise<PaginationResult<T[]>>,
-  deleteFn?: (id: string, type: AnimalType) => Promise<string>,
+  deleteFn?: (id: string, type: AnimalType) => Promise<void>,
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlPage = parseInt(searchParams.get('page') || '1', 10);
@@ -118,9 +118,9 @@ function BaseAnimalPage<T extends AnimalResponse>(
       async function handleDelete(id: string, type: AnimalType) {
         const toastId = toast.loading('Deleting...');
         try {
-          const response = await deleteFn!(id, type);
+          await deleteFn!(id, type);
           setData((current) => current!.filter((animal) => animal._id !== id));
-          toast(response);
+          toast('Selected item is deleted successfully!');
         } catch {
           toast('Deletion failed!');
         } finally {
