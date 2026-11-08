@@ -106,11 +106,22 @@ export abstract class BaseAnimalService<
     userId: string,
     animalId: string,
     animalDTO: Partial<DTO>,
-    updateProps?: unknown,
   ): Promise<Response> {
     if (await this.isExistedWithIdAndUser(animalId, userId)) {
-      const updateObj = animalDTO as unknown as UpdateQuery<T>;
-      if (updateProps) Object.assign(updateObj, updateProps);
+      const updateObj = { ...animalDTO } as unknown as UpdateQuery<T>;
+
+      const fieldsToUnset: Record<string, 1> = {};
+
+      for (const [key, value] of Object.entries(updateObj)) {
+        if (value === undefined) {
+          fieldsToUnset[key] = 1;
+          delete updateObj[key];
+        }
+      }
+
+      if (Object.keys(fieldsToUnset).length > 0) {
+        updateObj.$unset = fieldsToUnset;
+      }
 
       const updatedAnimal = await this.model
         .findByIdAndUpdate(animalId, updateObj, {

@@ -47,14 +47,8 @@ export abstract class BaseAnimalController<
     userId: string,
     animalDTO: Partial<DTO>,
     url: string,
-    updateProps?: unknown,
   ): Promise<Resp> {
-    const animal = await this.animalService.updateById(
-      userId,
-      id,
-      animalDTO,
-      updateProps,
-    );
+    const animal = await this.animalService.updateById(userId, id, animalDTO);
     this.сacheService.saveToCache(url, animal);
     return animal;
   }
