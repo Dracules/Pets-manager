@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Res,
   Param,
   UseFilters,
   UseInterceptors,
@@ -13,7 +12,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ParrotService } from '../services/parrot.service';
-import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
@@ -102,18 +100,6 @@ export class ParrotController extends BaseAnimalController<
     @Body() parrotDTO: UpdateParrotDTO,
     @Req() request: RequestWithUser,
   ): Promise<ParrotResponse> {
-    if (parrotDTO.vocabulary && parrotDTO.vocabulary.length === 0) {
-      parrotDTO.vocabulary = undefined;
-      return await super.updateAnimal(
-        id,
-        request.user.sub,
-        parrotDTO,
-        request.url,
-        {
-          $unset: { vocabulary: '' },
-        },
-      );
-    }
     return await super.updateAnimal(
       id,
       request.user.sub,

@@ -42,6 +42,6 @@ export default class CatsApi {
   }
 
   static async deleteCats(this: void, id: string): Promise<void> {
-    apiClient.delete(`/animals/cats/${id}`);
+    await apiClient.delete(`/animals/cats/${id}`);
   }
 }

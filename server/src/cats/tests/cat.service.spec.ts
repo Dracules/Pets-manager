@@ -410,7 +410,7 @@ describe('CatService', () => {
         expect(mockCatModel.exists).toHaveBeenCalledTimes(1);
         expect(mockCatModel.exists).toHaveBeenCalledWith({
           _id: catId,
-          owner: expect.any(Object),
+          owner: expect.any(Object) as unknown as Types.ObjectId,
         });
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledTimes(1);
         expect(mockCatModel.findByIdAndDelete).toHaveBeenCalledWith(catId);

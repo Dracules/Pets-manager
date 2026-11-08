@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Res,
   Param,
   UseFilters,
   UseInterceptors,
@@ -13,7 +12,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { DogService } from '../services/dog.service';
-import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
@@ -99,18 +97,6 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
     @Body() dogDTO: UpdateDogDTO,
     @Req() request: RequestWithUser,
   ): Promise<DogResponse> {
-    if (dogDTO.trainedCommands && dogDTO.trainedCommands.length === 0) {
-      dogDTO.trainedCommands = undefined;
-      return await super.updateAnimal(
-        id,
-        request.user.sub,
-        dogDTO,
-        request.url,
-        {
-          $unset: { trainedCommands: '' },
-        },
-      );
-    }
     return await super.updateAnimal(id, request.user.sub, dogDTO, request.url);
   }
 

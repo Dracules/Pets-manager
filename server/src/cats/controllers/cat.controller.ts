@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Res,
   Param,
   UseFilters,
   UseInterceptors,
@@ -13,7 +12,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
-import { type Response } from 'express';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
 import { AnimalCacheInterceptor } from '../../animal/interceptors/animal.cache.interceptor';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
