@@ -87,10 +87,9 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
   async createDog(
     @Body()
     dogDTO: DogDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.createAnimal(dogDTO, request.user.sub, response);
+  ): Promise<DogResponse> {
+    return await super.createAnimal(dogDTO, request.user.sub);
   }
 
   @Put('/:id')
@@ -98,38 +97,29 @@ export class DogController extends BaseAnimalController<DogDTO, DogResponse> {
   async updateDog(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() dogDTO: UpdateDogDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
+  ): Promise<DogResponse> {
     if (dogDTO.trainedCommands && dogDTO.trainedCommands.length === 0) {
       dogDTO.trainedCommands = undefined;
       return await super.updateAnimal(
         id,
         request.user.sub,
         dogDTO,
-        response,
         request.url,
         {
           $unset: { trainedCommands: '' },
         },
       );
     }
-    return await super.updateAnimal(
-      id,
-      request.user.sub,
-      dogDTO,
-      response,
-      request.url,
-    );
+    return await super.updateAnimal(id, request.user.sub, dogDTO, request.url);
   }
 
   @Delete('/:id')
   @UseFilters(AnimalExceptionFilter)
   async deleteDog(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.deleteAnimal(id, request.user.sub, response);
+  ): Promise<string> {
+    return await super.deleteAnimal(id, request.user.sub);
   }
 }

@@ -38,23 +38,17 @@ export abstract class BaseAnimalController<
     return this.animalService.findById(id, userId);
   }
 
-  protected async createAnimal(
-    animalDTO: DTO,
-    userId: string,
-    response: Response,
-  ): Promise<void> {
-    const animal = await this.animalService.create(animalDTO, userId);
-    response.json(animal);
+  protected async createAnimal(animalDTO: DTO, userId: string): Promise<Resp> {
+    return await this.animalService.create(animalDTO, userId);
   }
 
   protected async updateAnimal(
     id: string,
     userId: string,
     animalDTO: Partial<DTO>,
-    response: Response,
     url: string,
     updateProps?: unknown,
-  ): Promise<void> {
+  ): Promise<Resp> {
     const animal = await this.animalService.updateById(
       userId,
       id,
@@ -62,15 +56,10 @@ export abstract class BaseAnimalController<
       updateProps,
     );
     this.сacheService.saveToCache(url, animal);
-    response.json(animal);
+    return animal;
   }
 
-  protected async deleteAnimal(
-    id: string,
-    userId: string,
-    response: Response,
-  ): Promise<void> {
-    const message = await this.animalService.delete(userId, id);
-    response.json(message);
+  protected async deleteAnimal(id: string, userId: string): Promise<string> {
+    await this.animalService.delete(userId, id);
   }
 }

@@ -87,10 +87,9 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   async createCat(
     @Body()
     catDTO: CatDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.createAnimal(catDTO, request.user.sub, response);
+  ): Promise<CatResponse> {
+    return await super.createAnimal(catDTO, request.user.sub);
   }
 
   @Put('/:id')
@@ -98,25 +97,17 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
   async updateCat(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() catDTO: UpdateCatDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.updateAnimal(
-      id,
-      request.user.sub,
-      catDTO,
-      response,
-      request.url,
-    );
+  ): Promise<CatResponse> {
+    return await super.updateAnimal(id, request.user.sub, catDTO, request.url);
   }
 
   @Delete('/:id')
   @UseFilters(AnimalExceptionFilter)
   async deleteCat(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.deleteAnimal(id, request.user.sub, response);
+  ): Promise<string> {
+    return await super.deleteAnimal(id, request.user.sub);
   }
 }

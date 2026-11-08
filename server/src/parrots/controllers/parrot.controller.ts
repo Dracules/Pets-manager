@@ -90,10 +90,9 @@ export class ParrotController extends BaseAnimalController<
   async createParrot(
     @Body()
     parrotDTO: ParrotDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.createAnimal(parrotDTO, request.user.sub, response);
+  ): Promise<ParrotResponse> {
+    return await super.createAnimal(parrotDTO, request.user.sub);
   }
 
   @Put('/:id')
@@ -101,16 +100,14 @@ export class ParrotController extends BaseAnimalController<
   async updateParrot(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() parrotDTO: UpdateParrotDTO,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
+  ): Promise<ParrotResponse> {
     if (parrotDTO.vocabulary && parrotDTO.vocabulary.length === 0) {
       parrotDTO.vocabulary = undefined;
       return await super.updateAnimal(
         id,
         request.user.sub,
         parrotDTO,
-        response,
         request.url,
         {
           $unset: { vocabulary: '' },
@@ -121,7 +118,6 @@ export class ParrotController extends BaseAnimalController<
       id,
       request.user.sub,
       parrotDTO,
-      response,
       request.url,
     );
   }
@@ -130,9 +126,8 @@ export class ParrotController extends BaseAnimalController<
   @UseFilters(AnimalExceptionFilter)
   async deleteParrot(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Res() response: Response,
     @Req() request: RequestWithUser,
-  ): Promise<void> {
-    return await super.deleteAnimal(id, request.user.sub, response);
+  ): Promise<string> {
+    return await super.deleteAnimal(id, request.user.sub);
   }
 }
