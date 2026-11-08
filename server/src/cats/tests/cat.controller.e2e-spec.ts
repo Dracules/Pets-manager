@@ -726,7 +726,7 @@ describe('CatController', () => {
 
       const findedCat = await findCatDB(new ObjectId(cat._id));
       expect(findedCat).toBeNull();
-      expect(response.body).toEqual('Selected item is deleted successfully!');
+      expect(response.body).toEqual({});
     });
   });
 });
