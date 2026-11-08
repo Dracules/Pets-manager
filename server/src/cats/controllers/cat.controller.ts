@@ -6,10 +6,10 @@ import {
   Param,
   UseFilters,
   UseInterceptors,
-  Put,
   Delete,
   Req,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { CatService } from '../services/cat.service';
 import { AnimalExceptionFilter } from '../../animal/exception_filters/animal.http.exception.filter';
@@ -90,7 +90,7 @@ export class CatController extends BaseAnimalController<CatDTO, CatResponse> {
     return await super.createAnimal(catDTO, request.user.sub);
   }
 
-  @Put('/:id')
+  @Patch('/:id')
   @UseFilters(AnimalExceptionFilter)
   async updateCat(
     @Param('id', ParseObjectIdPipe) id: string,

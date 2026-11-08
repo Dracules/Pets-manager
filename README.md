@@ -84,7 +84,7 @@ Single-page application for managing user data and their pets' data with a Node.
 | GET                      | /animals/{animal}/user     | List active user animals by type   | Yes               |
 | GET                      | /animals/{animal}/user/:id | List selected user animals by type | Yes               |
 | POST                     | /animals/{animal}          | Create animal                      | Yes               |
-| PUT                      | /animals/{animal}/:id      | Update animal                      | Yes               |
+| PATCH                    | /animals/{animal}/:id      | Update animal                      | Yes               |
 | DELETE                   | /animals/{animal}/:id      | Delete animal                      | Yes               |
 | **Authentication**       |                            |                                    |                   |
 | POST                     | /auth/login                | Login user                         | No                |

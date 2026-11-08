@@ -6,7 +6,7 @@ import {
   Param,
   UseFilters,
   UseInterceptors,
-  Put,
+  Patch,
   Delete,
   Req,
   Query,
@@ -93,7 +93,7 @@ export class ParrotController extends BaseAnimalController<
     return await super.createAnimal(parrotDTO, request.user.sub);
   }
 
-  @Put('/:id')
+  @Patch('/:id')
   @UseFilters(AnimalExceptionFilter)
   async updateParrot(
     @Param('id', ParseObjectIdPipe) id: string,

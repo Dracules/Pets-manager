@@ -38,7 +38,7 @@ export default class CatsApi {
     id: string,
     data: object,
   ): Promise<Cat> {
-    return apiClient.put(`/animals/cats/${id}`, data);
+    return apiClient.patch(`/animals/cats/${id}`, data);
   }
 
   static async deleteCats(this: void, id: string): Promise<void> {
