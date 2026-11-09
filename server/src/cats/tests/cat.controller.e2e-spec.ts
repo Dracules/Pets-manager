@@ -519,6 +519,32 @@ describe('CatController', () => {
         .expect(200);
     });
 
+    it('200 - valid CatDTO with empty optional fields', async () => {
+      const correctCatDTO: CatDTO = mockCatDTO({
+        description: 'Some description',
+      });
+
+      const createResponse = await request(app.getHttpServer() as App)
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(201);
+
+      const createdCat = createResponse.body as CatResponse;
+      expect(createdCat.description).toEqual('Some description');
+
+      const updateCatDTO: Partial<CatDTO> = { description: '' };
+
+      await request(app.getHttpServer() as App)
+        .patch(`/animals/cats/${createdCat._id}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(updateCatDTO)
+        .expect(200);
+
+      const findedCat = await findCatDB(new ObjectId(createdCat._id));
+      expect(findedCat.description).toBeUndefined();
+    });
+
     it('400 - invalid catDTO', async () => {
       const cats = mockCatDTOList(1);
       const catId = (await populateCatsDB(cats)).insertedIds[0];
