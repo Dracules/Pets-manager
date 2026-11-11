@@ -36,9 +36,9 @@ class ApiClient {
       });
   }
 
-  async put<T>(Url: string, data: object): Promise<T> {
+  async patch<T>(Url: string, data: object): Promise<T> {
     return api
-      .put<T>(Url, data)
+      .patch<T>(Url, data)
       .then((response) => response.data)
       .catch((error) => {
         console.log(error);

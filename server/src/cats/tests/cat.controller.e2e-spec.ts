@@ -472,7 +472,7 @@ describe('CatController', () => {
       const catId = '694ac1f93b5320db21a572a5';
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${catId}`)
+        .patch(`/animals/cats/${catId}`)
         .send(correctCatDTO)
         .expect(401);
     });
@@ -492,7 +492,7 @@ describe('CatController', () => {
       const updateCatDTO: Partial<CatDTO> = { name: newName };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${cat._id}`)
+        .patch(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(updateCatDTO)
         .expect(200);
@@ -513,10 +513,36 @@ describe('CatController', () => {
       const updateCatDTO: Partial<CatDTO> = { name: newName };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${cat._id}`)
+        .patch(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(updateCatDTO)
         .expect(200);
+    });
+
+    it('200 - valid CatDTO with empty optional fields', async () => {
+      const correctCatDTO: CatDTO = mockCatDTO({
+        description: 'Some description',
+      });
+
+      const createResponse = await request(app.getHttpServer() as App)
+        .post('/animals/cats/')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(correctCatDTO)
+        .expect(201);
+
+      const createdCat = createResponse.body as CatResponse;
+      expect(createdCat.description).toEqual('Some description');
+
+      const updateCatDTO: Partial<CatDTO> = { description: '' };
+
+      await request(app.getHttpServer() as App)
+        .patch(`/animals/cats/${createdCat._id}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(updateCatDTO)
+        .expect(200);
+
+      const findedCat = await findCatDB(new ObjectId(createdCat._id));
+      expect(findedCat.description).toBeUndefined();
     });
 
     it('400 - invalid catDTO', async () => {
@@ -529,7 +555,7 @@ describe('CatController', () => {
       });
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${catId.toString()}`)
+        .patch(`/animals/cats/${catId.toString()}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(catDTOWithIncorrectLitterStatus)
         .expect(400);
@@ -543,7 +569,7 @@ describe('CatController', () => {
       const correctCatDTO: Partial<CatDTO> = { name: 'newName' };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${invalidId}`)
+        .patch(`/animals/cats/${invalidId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
         .expect(400);
@@ -557,7 +583,7 @@ describe('CatController', () => {
       const correctCatDTO: Partial<CatDTO> = { name: 'newName' };
 
       const response = (await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${invalidId}`)
+        .patch(`/animals/cats/${invalidId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(correctCatDTO)
         .expect(404)) as { body: { message: string } };
@@ -579,7 +605,7 @@ describe('CatController', () => {
       const cat = createResponse.body as CatResponse;
 
       const response = (await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${cat._id}`)
+        .patch(`/animals/cats/${cat._id}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(correctCatDTO)
         .expect(404)) as { body: { message: string } };
@@ -604,7 +630,7 @@ describe('CatController', () => {
       const updateCatDTO: Partial<CatDTO> = { name: newName };
 
       await request(app.getHttpServer() as App)
-        .put(`/animals/cats/${createdCat._id}`)
+        .patch(`/animals/cats/${createdCat._id}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send(updateCatDTO)
         .expect(200);

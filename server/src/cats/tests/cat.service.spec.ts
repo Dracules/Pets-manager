@@ -297,15 +297,52 @@ describe('CatService', () => {
         const result = await service.updateById(userId, catId, newData);
 
         expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+
         expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledWith(
           catId,
-          newData,
+          expect.objectContaining({
+            name: 'Bart',
+            birthDate: newData.birthDate,
+          }),
           { new: true, runValidators: true },
         );
-        expect(
-          (mockCatModel.findByIdAndUpdate() as unknown as MockQueryBuilder)
-            .exec,
-        ).toHaveBeenCalledTimes(1);
+
+        expect(result).toEqual(updatedCat);
+      });
+    });
+
+    describe('updateById with undefined fields', () => {
+      it('must add $unset for undefined fields and remove them from update object', async () => {
+        const catId = '694ac1f93b5320db21a572a5';
+        const userId = '694ac1f93b5320db21a11111';
+
+        const newData: Partial<CatResponse> = {
+          name: 'Bart',
+          description: undefined,
+        };
+
+        const updatedCat = mockCat({ _id: catId, name: 'Bart' });
+
+        mockCatModel.exists = jest.fn().mockResolvedValue({ _id: catId });
+
+        mockCatModel.findByIdAndUpdate = jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue({ toJSON: () => updatedCat }),
+        });
+
+        const result = await service.updateById(userId, catId, newData);
+
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledTimes(1);
+        expect(mockCatModel.findByIdAndUpdate).toHaveBeenCalledWith(
+          catId,
+          {
+            name: 'Bart',
+            $unset: {
+              description: 1,
+            },
+          },
+          { new: true, runValidators: true },
+        );
+
         expect(result).toEqual(updatedCat);
       });
     });

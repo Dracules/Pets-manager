@@ -17,6 +17,12 @@ export class ParrotDTO extends AnimalDTO {
   @IsBirthDateRealistic(80)
   birthDate: Date;
 
+  @Transform(({ value }: { value: unknown }) => {
+    if (Array.isArray(value) && value.length === 0) {
+      return undefined;
+    }
+    return value;
+  })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
