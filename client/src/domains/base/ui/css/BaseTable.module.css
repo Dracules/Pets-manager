@@ -51,7 +51,6 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
-  box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -66,7 +65,6 @@
   vertical-align: middle;
   align-content: center;
   border: 1px solid var(--border-color);
-  box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
