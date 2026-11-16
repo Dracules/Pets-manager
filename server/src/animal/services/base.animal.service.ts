@@ -127,10 +127,11 @@ export abstract class BaseAnimalService<
       }
 
       const updatedAnimal = await this.model
-        .findByIdAndUpdate(animalId, updateObj, {
-          new: true,
-          runValidators: true,
-        })
+        .findOneAndUpdate(
+          { _id: animalId, owner: new Types.ObjectId(userId) },
+          updateObj,
+          { new: true, runValidators: true },
+        )
         .exec();
       if (!updatedAnimal) throw new AnimalException();
       return updatedAnimal.toJSON() as unknown as Response;
