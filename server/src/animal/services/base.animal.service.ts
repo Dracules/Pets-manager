@@ -141,7 +141,12 @@ export abstract class BaseAnimalService<
 
   async delete(userId: string, animalId: string): Promise<void> {
     if (await this.isExistedWithIdAndUser(animalId, userId)) {
-      const deletedAnimal = await this.model.findByIdAndDelete(animalId).exec();
+      const deletedAnimal = await this.model
+        .findOneAndDelete({
+          _id: animalId,
+          owner: new Types.ObjectId(userId),
+        })
+        .exec();
       if (!deletedAnimal) throw new AnimalException();
       return;
     }
