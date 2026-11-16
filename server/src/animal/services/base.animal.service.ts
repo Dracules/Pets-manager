@@ -60,7 +60,10 @@ export abstract class BaseAnimalService<
     if (!(await this.isExistedWithIdAndUser(animalId, userId)))
       throw new AnimalException();
     const animal = await this.model
-      .findById(animalId)
+      .findOne({
+        _id: animalId,
+        owner: new Types.ObjectId(userId),
+      })
       .populate('owner', 'login')
       .lean()
       .exec();
