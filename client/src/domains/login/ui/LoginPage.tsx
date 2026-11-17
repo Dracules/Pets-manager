@@ -22,8 +22,8 @@ export default function LoginPage() {
   });
 
   const location = useLocation();
-  const state = location.state as { isJwtExpired: boolean | undefined };
-  const isJwtExpired = state.isJwtExpired ?? false;
+  const state = location.state as { isJwtExpired: boolean | undefined } | null;
+  const isJwtExpired = state?.isJwtExpired ?? false;
 
   const [message, setMessage] = useState(() => {
     if (isJwtExpired)
