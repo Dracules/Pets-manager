@@ -17,7 +17,7 @@ const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
   login: (newToken: FullJwtToken) => {},
   updateToken: (newToken: FullJwtToken) => {},
-  logout: () => {},
+  logout: (isJwtExpired?: boolean) => {},
   getTokenStorage: () => {
     return {
       access_token: null,

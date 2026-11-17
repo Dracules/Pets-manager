@@ -9,13 +9,13 @@ const api = axios.create({ baseURL: '/' });
 interface AuthActions {
   getToken: () => AuthState;
   refreshToken: () => Promise<FullJwtToken>;
-  handleLogout: () => void;
+  handleLogout: (isJwtExpired?: boolean) => void;
   updateToken: (newToken: FullJwtToken) => void;
 }
 
 let authActions: AuthActions = {
   getToken: () => ({ access_token: null, refresh_token: null }),
-  handleLogout: () => {},
+  handleLogout: (isJwtExpired?: boolean) => {},
   updateToken: () => {},
   refreshToken: () => {
     return Promise.reject(new Error('Auth not initialized'));
@@ -86,11 +86,11 @@ api.interceptors.response.use(
       } catch (e) {
         processQueue(e);
         isRefreshing = false;
-        authActions.handleLogout();
+        authActions.handleLogout(true);
         return Promise.reject(e as Error);
       }
     } else if (error.response?.status === 401) {
-      authActions.handleLogout();
+      authActions.handleLogout(true);
     }
     return Promise.reject(error);
   },

@@ -99,7 +99,7 @@ function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                     <RxExit size={iconSize} />
                   </div>
                 }
-                onClick={logout}
+                onClick={() => logout()}
               >
                 Logout
               </MenuItem>
