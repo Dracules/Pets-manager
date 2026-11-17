@@ -16,14 +16,7 @@ import Auth from '../../../shared/api/authApi';
 const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
   login: (newToken: FullJwtToken) => {},
-  updateToken: (newToken: FullJwtToken) => {},
   logout: (isJwtExpired?: boolean) => {},
-  getTokenStorage: () => {
-    return {
-      access_token: null,
-      refresh_token: null,
-    } as AuthState;
-  },
 });
 
 function isTokenExpired(token: string | null): boolean {
@@ -120,10 +113,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
       token,
       login,
       logout,
-      updateToken,
-      getTokenStorage,
     }),
-    [token, login, logout, updateToken, getTokenStorage],
+    [token, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
