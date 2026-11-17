@@ -37,10 +37,22 @@ function isTokenExpired(token: string | null): boolean {
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [token, setToken] = useState<AuthState>(() => ({
-    access_token: localStorage.getItem('access_token'),
-    refresh_token: localStorage.getItem('refresh_token'),
-  }));
+  const [token, setToken] = useState<AuthState>(() => {
+    const access = localStorage.getItem('access_token');
+    const refresh = localStorage.getItem('refresh_token');
+
+    if (isTokenExpired(access)) {
+      if (!isTokenExpired(refresh)) {
+        localStorage.removeItem('access_token');
+        return { access_token: null, refresh_token: refresh };
+      }
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      return { access_token: null, refresh_token: null };
+    }
+
+    return { access_token: access, refresh_token: refresh };
+  });
   const navigate = useNavigate();
 
   const updateToken = useCallback((newToken: FullJwtToken) => {
