@@ -73,12 +73,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
     } as AuthState;
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback((isJwtExpired: boolean = false) => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setToken({ access_token: null, refresh_token: null });
 
-    void navigate('/login');
+    void navigate(
+      '/login',
+      isJwtExpired
+        ? {
+            state: { isJwtExpired: true },
+          }
+        : {},
+    );
   }, []);
 
   const refresh = useCallback(async () => {
