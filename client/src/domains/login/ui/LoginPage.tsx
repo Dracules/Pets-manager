@@ -10,6 +10,7 @@ import styles from './css/AuthPages.module.css';
 import FormField from './FormField';
 import AuthLayout from './AuthLayout';
 import SubmitButton from './SubmitButton';
+import { useLocation } from 'react-router';
 
 export default function LoginPage() {
   const methods = useForm<LoginFormInput>({
@@ -19,7 +20,16 @@ export default function LoginPage() {
       password: '',
     },
   });
-  const [message, setMessage] = useState({ text: '', error: false });
+  const location = useLocation();
+  const isJwtExpired = location.state?.isJwtExpired || false;
+  const [message, setMessage] = useState(() => {
+    if (isJwtExpired)
+      return {
+        text: 'Your session has expired. Please, log in again.',
+        error: true,
+      };
+    return { text: '', error: false };
+  });
   const { token, login } = useAuth();
 
   const {
