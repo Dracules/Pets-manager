@@ -57,10 +57,11 @@ export abstract class BaseAnimalService<
   }
 
   async findById(animalId: string, userId: string): Promise<Response> {
-    if (!(await this.isExistedWithIdAndUser(animalId, userId)))
-      throw new AnimalException();
     const animal = await this.model
-      .findById(animalId)
+      .findOne({
+        _id: animalId,
+        owner: new Types.ObjectId(userId),
+      })
       .populate('owner', 'login')
       .lean()
       .exec();
@@ -107,52 +108,39 @@ export abstract class BaseAnimalService<
     animalId: string,
     animalDTO: Partial<DTO>,
   ): Promise<Response> {
-    if (await this.isExistedWithIdAndUser(animalId, userId)) {
-      const updateObj = { ...animalDTO } as unknown as UpdateQuery<T>;
+    const updateObj = { ...animalDTO } as unknown as UpdateQuery<T>;
 
-      const fieldsToUnset: Record<string, 1> = {};
+    const fieldsToUnset: Record<string, 1> = {};
 
-      for (const [key, value] of Object.entries(updateObj)) {
-        if (value === undefined) {
-          fieldsToUnset[key] = 1;
-          delete updateObj[key];
-        }
+    for (const [key, value] of Object.entries(updateObj)) {
+      if (value === undefined) {
+        fieldsToUnset[key] = 1;
+        delete updateObj[key];
       }
-
-      if (Object.keys(fieldsToUnset).length > 0) {
-        updateObj.$unset = fieldsToUnset;
-      }
-
-      const updatedAnimal = await this.model
-        .findByIdAndUpdate(animalId, updateObj, {
-          new: true,
-          runValidators: true,
-        })
-        .exec();
-      if (!updatedAnimal) throw new AnimalException();
-      return updatedAnimal.toJSON() as unknown as Response;
     }
-    throw new AnimalException();
+
+    if (Object.keys(fieldsToUnset).length > 0) {
+      updateObj.$unset = fieldsToUnset;
+    }
+
+    const updatedAnimal = await this.model
+      .findOneAndUpdate(
+        { _id: animalId, owner: new Types.ObjectId(userId) },
+        updateObj,
+        { new: true, runValidators: true },
+      )
+      .exec();
+    if (!updatedAnimal) throw new AnimalException();
+    return updatedAnimal.toJSON() as unknown as Response;
   }
 
   async delete(userId: string, animalId: string): Promise<void> {
-    if (await this.isExistedWithIdAndUser(animalId, userId)) {
-      const deletedAnimal = await this.model.findByIdAndDelete(animalId).exec();
-      if (!deletedAnimal) throw new AnimalException();
-      return;
-    }
-    throw new AnimalException();
-  }
-
-  private async isExistedWithIdAndUser(
-    animalId: string,
-    userId: string,
-  ): Promise<boolean> {
-    const exists = await this.model.exists({
-      _id: animalId,
-      owner: new Types.ObjectId(userId),
-    });
-
-    return !!exists;
+    const deletedAnimal = await this.model
+      .findOneAndDelete({
+        _id: animalId,
+        owner: new Types.ObjectId(userId),
+      })
+      .exec();
+    if (!deletedAnimal) throw new AnimalException();
   }
 }
