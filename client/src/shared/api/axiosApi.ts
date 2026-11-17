@@ -15,7 +15,7 @@ interface AuthActions {
 
 let authActions: AuthActions = {
   getToken: () => ({ access_token: null, refresh_token: null }),
-  handleLogout: (isJwtExpired?: boolean) => {},
+  handleLogout: () => {},
   updateToken: () => {},
   refreshToken: () => {
     return Promise.reject(new Error('Auth not initialized'));
