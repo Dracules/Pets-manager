@@ -16,21 +16,36 @@ import Auth from '../../../shared/api/authApi';
 const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
   login: (newToken: FullJwtToken) => {},
-  updateToken: (newToken: FullJwtToken) => {},
-  logout: () => {},
-  getTokenStorage: () => {
-    return {
-      access_token: null,
-      refresh_token: null,
-    } as AuthState;
-  },
+  logout: (isJwtExpired?: boolean) => {},
 });
 
+function isTokenExpired(token: string | null): boolean {
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]!)) as { exp: number };
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [token, setToken] = useState<AuthState>(() => ({
-    access_token: localStorage.getItem('access_token'),
-    refresh_token: localStorage.getItem('refresh_token'),
-  }));
+  const [token, setToken] = useState<AuthState>(() => {
+    const access = localStorage.getItem('access_token');
+    const refresh = localStorage.getItem('refresh_token');
+
+    if (isTokenExpired(access)) {
+      if (!isTokenExpired(refresh)) {
+        localStorage.removeItem('access_token');
+        return { access_token: null, refresh_token: refresh };
+      }
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      return { access_token: null, refresh_token: null };
+    }
+
+    return { access_token: access, refresh_token: refresh };
+  });
   const navigate = useNavigate();
 
   const updateToken = useCallback((newToken: FullJwtToken) => {
@@ -51,12 +66,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
     } as AuthState;
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback((isJwtExpired: boolean = false) => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setToken({ access_token: null, refresh_token: null });
 
-    void navigate('/login');
+    void navigate(
+      '/login',
+      isJwtExpired
+        ? {
+            state: { isJwtExpired: true },
+          }
+        : {},
+    );
   }, []);
 
   const refresh = useCallback(async () => {
@@ -91,10 +113,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
       token,
       login,
       logout,
-      updateToken,
-      getTokenStorage,
     }),
-    [token, login, logout, updateToken, getTokenStorage],
+    [token, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
