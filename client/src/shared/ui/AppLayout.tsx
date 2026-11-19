@@ -1,9 +1,10 @@
-import { Outlet, useLocation, useParams } from 'react-router';
+import { matchPath, Outlet, useLocation, useParams } from 'react-router';
 import Header from './Header';
 import AppSidebar from './Sidebar';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { HeaderType } from '../model/types/header.type';
 import styles from './css/AppLayout.module.css';
+import { NO_HEADER_PATHS, ROUTES } from '../routes/constants/routes';
 
 export default function AppLayout() {
   const location = useLocation();
@@ -22,45 +23,43 @@ export default function AppLayout() {
   }
 
   const headerType: HeaderType = useMemo(() => {
-    if (noHeaderPaths.some((path) => pathname.startsWith(path))) return 'no';
-    if (pathname.startsWith('/owner')) return 'owner';
-    if (pathname.startsWith('/my')) return 'user';
+    if (NO_HEADER_PATHS.some((path) => matchPath(path, pathname))) return 'no';
+    if (matchPath(ROUTES.OWNER + '/*', pathname)) return 'owner';
+    if (matchPath(ROUTES.MY + '/*', pathname)) return 'user';
     return 'all';
   }, [pathname]);
 
   const pageTitle = useMemo(() => {
-    if (pathname.startsWith('/edit')) {
-      if (pathname === '/edit') return 'Create animal';
-      else return 'Update animal';
-    }
+    if (matchPath(ROUTES.EDIT, pathname)) return 'Create animal';
+    if (matchPath(ROUTES.EDIT_ID, pathname)) return 'Update animal';
 
-    if (headerType === 'owner') {
+    if (matchPath(ROUTES.OWNER + '/*', pathname)) {
       return ownerLogin
         ? `Animals of user '${ownerLogin}'`
         : `Animals of user with ID '${ownerId}'`;
     }
 
     switch (pathname) {
-      case '/':
+      case ROUTES.HOME:
         return 'Animals';
-      case '/dogs':
+      case ROUTES.DOGS:
         return 'Dogs';
-      case '/cats':
+      case ROUTES.CATS:
         return 'Cats';
-      case '/my/':
-        return 'My animals';
-      case '/my/cats':
-        return 'My cats';
-      case '/my/dogs':
-        return 'My dogs';
-      case '/parrots':
+      case ROUTES.PARROTS:
         return 'Parrots';
-      case '/my/parrots':
+      case ROUTES.MY:
+        return 'My animals';
+      case ROUTES.MY_CATS:
+        return 'My cats';
+      case ROUTES.MY_DOGS:
+        return 'My dogs';
+      case ROUTES.MY_PARROTS:
         return 'My parrots';
       default:
         return null;
     }
-  }, [pathname, headerType, ownerLogin, ownerId]);
+  }, [pathname, ownerLogin, ownerId]);
 
   const handleToggle = useCallback(() => {
     setCollapsed((prev) => !prev);
