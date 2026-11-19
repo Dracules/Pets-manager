@@ -13,6 +13,7 @@ import {
   isSortColumn,
   SortColumns,
 } from '../../../shared/model/types/sort.columns';
+import { ROUTES } from '../../../shared/routes/constants/routes';
 
 const EMPTY_ARRAY: never[] = [];
 
@@ -129,7 +130,8 @@ function BaseAnimalPage<T extends AnimalResponse>(
       }
 
       function handleEdit(id: string, type: AnimalType) {
-        void navigate(`/edit/${id}?type=${type}`);
+        const path = generatePath(ROUTES.EDIT_ID, { id });
+        void navigate(`${path}?type=${type}`);
       }
 
       return {
@@ -142,7 +144,8 @@ function BaseAnimalPage<T extends AnimalResponse>(
     }
 
     function handleOwnerClick(id: string, ownerLogin: string) {
-      void navigate(`/owner/${id}/`, { state: { ownerLogin } });
+      const path = generatePath(ROUTES.OWNER, { id });
+      void navigate(path, { state: { ownerLogin } });
     }
 
     return {
