@@ -10,6 +10,7 @@ import commonStyles from '../../../editor/ui/css/AnimalEditor.module.css';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import { ROUTES } from '../../../../shared/routes/constants/routes';
 
 export default function ParrotEditor() {
   const { methods, onSubmit, isLoading, error } = useAnimalEditor<Parrot>({
@@ -25,7 +26,7 @@ export default function ParrotEditor() {
     },
     updateItem: ParrotsApi.updateParrot,
     validationSchema: parrotEditorSchema,
-    afterSubmit: `/my/parrots`,
+    afterSubmit: ROUTES.MY_PARROTS,
   });
 
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function ParrotEditor() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      void navigate('/my/parrots', { replace: true });
+      void navigate(ROUTES.MY_PARROTS, { replace: true });
     }
   }, [error]);
 
