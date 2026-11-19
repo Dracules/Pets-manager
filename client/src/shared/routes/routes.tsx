@@ -24,30 +24,37 @@ import {
   UserParrotsPage,
 } from '../../domains/parrot/ui/ParrotPage';
 import { UnfoundedErrorComponent } from '../../domains/base/ui/ErrorComponent';
+import { ROUTES, SEGMENTS } from './constants/routes';
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route index element={<AnimalsPage />} />
-        <Route path="dogs" element={<DogsPage />} />
-        <Route path="cats" element={<CatsPage />} />
-        <Route path="parrots" element={<ParrotsPage />} />
-        <Route path="my/">
+        <Route path={ROUTES.DOGS} element={<DogsPage />} />
+        <Route path={ROUTES.CATS} element={<CatsPage />} />
+        <Route path={ROUTES.PARROTS} element={<ParrotsPage />} />
+        <Route path={ROUTES.MY}>
           <Route index element={<UserAnimalsPage />} />
-          <Route path="cats" element={<UserCatsPage />} />
-          <Route path="dogs" element={<UserDogsPage />} />
-          <Route path="parrots" element={<UserParrotsPage />} />
+          <Route path={SEGMENTS.CATS} element={<UserCatsPage />} />
+          <Route path={SEGMENTS.DOGS} element={<UserDogsPage />} />
+          <Route path={SEGMENTS.PARROTS} element={<UserParrotsPage />} />
         </Route>
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegistrationPage />} />
-        <Route path="edit" element={<AnimalEditorPage mode="create" />} />
-        <Route path="edit/:id" element={<AnimalEditorPage mode="edit" />} />
-        <Route path="owner/:id/">
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.REGISTER} element={<RegistrationPage />} />
+        <Route
+          path={ROUTES.EDIT}
+          element={<AnimalEditorPage mode="create" />}
+        />
+        <Route
+          path={ROUTES.EDIT_ID}
+          element={<AnimalEditorPage mode="edit" />}
+        />
+        <Route path={ROUTES.OWNER}>
           <Route index element={<AnimalsPageByOwner />} />
-          <Route path="cats" element={<CatsPageByOwner />} />
-          <Route path="dogs" element={<DogsPageByOwner />} />
-          <Route path="parrots" element={<ParrotsPageByOwner />} />
+          <Route path={SEGMENTS.CATS} element={<CatsPageByOwner />} />
+          <Route path={SEGMENTS.DOGS} element={<DogsPageByOwner />} />
+          <Route path={SEGMENTS.PARROTS} element={<ParrotsPageByOwner />} />
         </Route>
       </Route>
       <Route path="*" element={<UnfoundedErrorComponent />} />
