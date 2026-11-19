@@ -32,3 +32,9 @@ export const ROUTES = {
 } as const;
 
 
+export const NO_HEADER_PATHS = [
+  ROUTES.LOGIN,
+  ROUTES.REGISTER,
+  ROUTES.EDIT,
+  ROUTES.EDIT_ID,
+];

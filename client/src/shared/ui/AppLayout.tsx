@@ -21,8 +21,6 @@ export default function AppLayout() {
     prevOwnerIdRef.current = ownerId;
   }
 
-  const noHeaderPaths = ['/login', '/edit', '/register'];
-
   const headerType: HeaderType = useMemo(() => {
     if (noHeaderPaths.some((path) => pathname.startsWith(path))) return 'no';
     if (pathname.startsWith('/owner')) return 'owner';
