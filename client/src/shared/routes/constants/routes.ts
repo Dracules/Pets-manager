@@ -1,0 +1,40 @@
+export const SEGMENTS = {
+  MY: 'my',
+  EDIT: 'edit',
+  OWNER: 'owner',
+  DOGS: 'dogs',
+  CATS: 'cats',
+  PARROTS: 'parrots',
+  ID: ':id',
+} as const;
+
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+
+  DOGS: `/${SEGMENTS.DOGS}`,
+  CATS: `/${SEGMENTS.CATS}`,
+  PARROTS: `/${SEGMENTS.PARROTS}`,
+
+  MY: `/${SEGMENTS.MY}`,
+  MY_CATS: `/${SEGMENTS.MY}/${SEGMENTS.CATS}`,
+  MY_DOGS: `/${SEGMENTS.MY}/${SEGMENTS.DOGS}`,
+  MY_PARROTS: `/${SEGMENTS.MY}/${SEGMENTS.PARROTS}`,
+
+  EDIT: `/${SEGMENTS.EDIT}`,
+  EDIT_ID: `/${SEGMENTS.EDIT}/${SEGMENTS.ID}`,
+
+  OWNER: `/${SEGMENTS.OWNER}/${SEGMENTS.ID}`,
+  OWNER_CATS: `/${SEGMENTS.OWNER}/${SEGMENTS.ID}/${SEGMENTS.CATS}`,
+  OWNER_DOGS: `/${SEGMENTS.OWNER}/${SEGMENTS.ID}/${SEGMENTS.DOGS}`,
+  OWNER_PARROTS: `/${SEGMENTS.OWNER}/${SEGMENTS.ID}/${SEGMENTS.PARROTS}`,
+} as const;
+
+
+export const NO_HEADER_PATHS = [
+  ROUTES.LOGIN,
+  ROUTES.REGISTER,
+  ROUTES.EDIT,
+  ROUTES.EDIT_ID,
+];

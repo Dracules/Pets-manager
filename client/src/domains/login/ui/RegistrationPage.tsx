@@ -8,6 +8,7 @@ import styles from './css/AuthPages.module.css';
 import FormField from './FormField';
 import AuthLayout from './AuthLayout';
 import SubmitButton from './SubmitButton';
+import { ROUTES } from '../../../shared/routes/constants/routes';
 
 export default function RegistrationPage() {
   const methods = useForm<RegistrationFormInput>({
@@ -47,7 +48,10 @@ export default function RegistrationPage() {
       <AuthLayout
         title={'Create Account'}
         message={message}
-        footerLink={{ to: '/login', text: 'Already have an account? Sign in' }}
+        footerLink={{
+          to: ROUTES.LOGIN,
+          text: 'Already have an account? Sign in',
+        }}
       >
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -85,7 +89,7 @@ export default function RegistrationPage() {
     <AuthLayout
       title={'Registration Successful'}
       message={message}
-      footerLink={{ to: '/login', text: 'Go to login page' }}
+      footerLink={{ to: ROUTES.LOGIN, text: 'Go to login page' }}
     />
   );
 }

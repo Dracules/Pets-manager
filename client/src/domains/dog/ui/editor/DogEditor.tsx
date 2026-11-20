@@ -10,6 +10,7 @@ import commonStyles from '../../../editor/ui/css/AnimalEditor.module.css';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import { ROUTES } from '../../../../shared/routes/constants/routes';
 
 export default function DogEditor() {
   const { methods, onSubmit, isLoading, error } = useAnimalEditor<Dog>({
@@ -25,7 +26,7 @@ export default function DogEditor() {
     },
     updateItem: DogsApi.updateDog,
     validationSchema: dogEditorSchema,
-    afterSubmit: `/my/dogs`,
+    afterSubmit: ROUTES.MY_DOGS,
   });
 
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function DogEditor() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      void navigate('/my/dogs', { replace: true });
+      void navigate(ROUTES.MY_DOGS, { replace: true });
     }
   }, [error]);
 

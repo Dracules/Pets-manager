@@ -11,6 +11,7 @@ import FormField from './FormField';
 import AuthLayout from './AuthLayout';
 import SubmitButton from './SubmitButton';
 import { useLocation } from 'react-router';
+import { ROUTES } from '../../../shared/routes/constants/routes';
 
 export default function LoginPage() {
   const methods = useForm<LoginFormInput>({
@@ -68,7 +69,10 @@ export default function LoginPage() {
     <AuthLayout
       title={'Login'}
       message={message}
-      footerLink={{ to: '/register', text: "Don't have an account? Sign up" }}
+      footerLink={{
+        to: ROUTES.REGISTER,
+        text: "Don't have an account? Sign up",
+      }}
     >
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit(onSubmit)}>

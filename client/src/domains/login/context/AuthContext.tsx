@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import type { AuthState, FullJwtToken } from '../model/jwtToken.interface';
 import { setApiAuth } from '../../../shared/api/axiosApi';
 import Auth from '../../../shared/api/authApi';
+import { ROUTES } from '../../../shared/routes/constants/routes';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const AuthContext = createContext({
@@ -56,7 +57,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const login = useCallback((newToken: FullJwtToken) => {
     updateToken(newToken);
-    void navigate('/my/');
+    void navigate(ROUTES.MY);
   }, []);
 
   const getTokenStorage = useCallback(() => {
@@ -72,7 +73,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setToken({ access_token: null, refresh_token: null });
 
     void navigate(
-      '/login',
+      ROUTES.LOGIN,
       isJwtExpired
         ? {
             state: { isJwtExpired: true },

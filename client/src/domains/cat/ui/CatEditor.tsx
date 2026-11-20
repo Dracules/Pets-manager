@@ -11,6 +11,7 @@ import { FiChevronDown } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import { ROUTES } from '../../../shared/routes/constants/routes';
 
 export default function CatEditor() {
   const { methods, onSubmit, isLoading, error } = useAnimalEditor<Cat>({
@@ -20,7 +21,7 @@ export default function CatEditor() {
       await CatsApi.createCat({ name, birthDate, litterStatus, description });
     },
     updateItem: CatsApi.updateCat,
-    afterSubmit: `/my/cats`,
+    afterSubmit: ROUTES.MY_CATS,
     validationSchema: catEditorSchema,
     defaultValues: { litterStatus: 'unknown' },
   });
@@ -29,7 +30,7 @@ export default function CatEditor() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      void navigate('/my/cats', { replace: true });
+      void navigate(ROUTES.MY_CATS, { replace: true });
     }
   }, [error]);
 

@@ -11,6 +11,7 @@ import { RxExit } from 'react-icons/rx';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import styles from './css/AppSidebar.module.css';
 import { memo } from 'react';
+import { ROUTES } from '../routes/constants/routes';
 
 interface AppSidebarProps {
   collapsed: boolean;
@@ -55,7 +56,7 @@ function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                   <TbCircleLetterA size={iconSize} />
                 </div>
               }
-              component={<Link to="/" className={styles.navLink} />}
+              component={<Link to={ROUTES.HOME} className={styles.navLink} />}
             >
               All animals
             </MenuItem>
@@ -69,7 +70,7 @@ function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                       <TbCircleLetterM size={iconSize} />
                     </div>
                   }
-                  component={<Link to="/my/" className={styles.navLink} />}
+                  component={<Link to={ROUTES.MY} className={styles.navLink} />}
                 >
                   My animals
                 </MenuItem>
@@ -80,7 +81,9 @@ function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                       <IoMdAddCircleOutline size={iconSize} />
                     </div>
                   }
-                  component={<Link to="/edit" className={styles.navLink} />}
+                  component={
+                    <Link to={ROUTES.EDIT} className={styles.navLink} />
+                  }
                 >
                   Add animal
                 </MenuItem>
@@ -111,7 +114,9 @@ function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                     <TbCircleLetterL size={iconSize} />
                   </div>
                 }
-                component={<Link to="/login" className={styles.navLink} />}
+                component={
+                  <Link to={ROUTES.LOGIN} className={styles.navLink} />
+                }
               >
                 Login
               </MenuItem>
