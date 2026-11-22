@@ -87,14 +87,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if (!tokens.refresh_token) {
       throw new Error('Error: No refresh token');
     }
-    return await Auth.refresh(tokens.refresh_token);
+    const newTokens = await Auth.refresh(tokens.refresh_token!);
+    updateToken(newTokens);
+    return newTokens;
   }, []);
 
   useEffect(() => {
     setApiAuth({
       getToken: getTokenStorage,
       handleLogout: logout,
-      updateToken: updateToken,
       refreshToken: refresh,
     });
   }, [getTokenStorage, logout, updateToken, refresh]);

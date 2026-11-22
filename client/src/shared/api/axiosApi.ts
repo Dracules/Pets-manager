@@ -10,13 +10,11 @@ interface AuthActions {
   getToken: () => AuthState;
   refreshToken: () => Promise<FullJwtToken>;
   handleLogout: (isJwtExpired?: boolean) => void;
-  updateToken: (newToken: FullJwtToken) => void;
 }
 
 let authActions: AuthActions = {
   getToken: () => ({ access_token: null, refresh_token: null }),
   handleLogout: () => {},
-  updateToken: () => {},
   refreshToken: () => {
     return Promise.reject(new Error('Auth not initialized'));
   },
@@ -77,7 +75,6 @@ api.interceptors.response.use(
 
       try {
         const newToken = await authActions.refreshToken();
-        authActions.updateToken(newToken);
 
         processQueue(null, newToken);
         isRefreshing = false;
