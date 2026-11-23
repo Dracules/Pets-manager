@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import { useNavigate } from 'react-router';
 import type { AuthState, FullJwtToken } from '../model/jwtToken.interface';
@@ -18,6 +19,8 @@ const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
   login: (newToken: FullJwtToken) => {},
   logout: (isJwtExpired?: boolean) => {},
+  refresh: () =>
+    Promise.resolve({ access_token: '', refresh_token: '' } as FullJwtToken),
 });
 
 function isTokenExpired(token: string | null): boolean {
@@ -47,6 +50,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     return { access_token: access, refresh_token: refresh };
   });
+
+  const refreshPromiseRef = useRef<Promise<FullJwtToken> | null>(null);
   const navigate = useNavigate();
 
   const updateToken = useCallback((newToken: FullJwtToken) => {
@@ -71,7 +76,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setToken({ access_token: null, refresh_token: null });
-
+    refreshPromiseRef.current = null;
     void navigate(
       ROUTES.LOGIN,
       isJwtExpired
@@ -83,13 +88,27 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const refresh = useCallback(async () => {
+    if (refreshPromiseRef.current) {
+      return refreshPromiseRef.current;
+    }
+
     const tokens = getTokenStorage();
     if (!tokens.refresh_token) {
       throw new Error('Error: No refresh token');
     }
-    const newTokens = await Auth.refresh(tokens.refresh_token!);
-    updateToken(newTokens);
-    return newTokens;
+    refreshPromiseRef.current = (async () => {
+      try {
+        const newTokens = await Auth.refresh(tokens.refresh_token!);
+        updateToken(newTokens);
+        return newTokens;
+      } catch (error) {
+        throw error;
+      } finally {
+        refreshPromiseRef.current = null;
+      }
+    })();
+
+    return refreshPromiseRef.current;
   }, []);
 
   useEffect(() => {
@@ -115,8 +134,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
       token,
       login,
       logout,
+      refresh,
     }),
-    [token, login, logout],
+    [token, login, logout, refresh],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
