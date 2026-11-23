@@ -104,8 +104,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         const newTokens = await Auth.refresh(tokens.refresh_token!);
         updateToken(newTokens);
         return newTokens;
-      } catch (error) {
-        throw error;
       } finally {
         refreshPromiseRef.current = null;
         setIsRefreshing(false);
