@@ -1,0 +1,19 @@
+.overlayWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+}
+
+.screenLoaderOverlay {
+  position: absolute;
+  top: 46px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 0 0 12px 12px;
+  pointer-events: none;
+}

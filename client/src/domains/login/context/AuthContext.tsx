@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import { useNavigate } from 'react-router';
 import type { AuthState, FullJwtToken } from '../model/jwtToken.interface';
@@ -18,9 +19,12 @@ const AuthContext = createContext({
   token: { access_token: null, refresh_token: null } as AuthState,
   login: (newToken: FullJwtToken) => {},
   logout: (isJwtExpired?: boolean) => {},
+  refresh: () =>
+    Promise.resolve({ access_token: '', refresh_token: '' } as FullJwtToken),
+  isRefreshing: false,
 });
 
-function isTokenExpired(token: string | null): boolean {
+export function isTokenExpired(token: string | null): boolean {
   if (!token) return true;
   try {
     const payload = JSON.parse(atob(token.split('.')[1]!)) as { exp: number };
@@ -47,6 +51,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     return { access_token: access, refresh_token: refresh };
   });
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const refreshPromiseRef = useRef<Promise<FullJwtToken> | null>(null);
   const navigate = useNavigate();
 
   const updateToken = useCallback((newToken: FullJwtToken) => {
@@ -71,7 +78,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setToken({ access_token: null, refresh_token: null });
-
+    refreshPromiseRef.current = null;
     void navigate(
       ROUTES.LOGIN,
       isJwtExpired
@@ -83,18 +90,33 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const refresh = useCallback(async () => {
+    if (refreshPromiseRef.current) {
+      return refreshPromiseRef.current;
+    }
+
     const tokens = getTokenStorage();
     if (!tokens.refresh_token) {
       throw new Error('Error: No refresh token');
     }
-    return await Auth.refresh(tokens.refresh_token);
+    refreshPromiseRef.current = (async () => {
+      setIsRefreshing(true);
+      try {
+        const newTokens = await Auth.refresh(tokens.refresh_token!);
+        updateToken(newTokens);
+        return newTokens;
+      } finally {
+        refreshPromiseRef.current = null;
+        setIsRefreshing(false);
+      }
+    })();
+
+    return refreshPromiseRef.current;
   }, []);
 
   useEffect(() => {
     setApiAuth({
       getToken: getTokenStorage,
       handleLogout: logout,
-      updateToken: updateToken,
       refreshToken: refresh,
     });
   }, [getTokenStorage, logout, updateToken, refresh]);
@@ -114,8 +136,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
       token,
       login,
       logout,
+      refresh,
+      isRefreshing,
     }),
-    [token, login, logout],
+    [token, login, logout, refresh, isRefreshing],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -25,6 +25,7 @@ import {
 } from '../../domains/parrot/ui/ParrotPage';
 import { UnfoundedErrorComponent } from '../../domains/base/ui/ErrorComponent';
 import { ROUTES, SEGMENTS } from './constants/routes';
+import { ProtectedRoute } from './ProtectedRoute';
 
 export function AppRoutes() {
   return (
@@ -35,26 +36,90 @@ export function AppRoutes() {
         <Route path={ROUTES.CATS} element={<CatsPage />} />
         <Route path={ROUTES.PARROTS} element={<ParrotsPage />} />
         <Route path={ROUTES.MY}>
-          <Route index element={<UserAnimalsPage />} />
-          <Route path={SEGMENTS.CATS} element={<UserCatsPage />} />
-          <Route path={SEGMENTS.DOGS} element={<UserDogsPage />} />
-          <Route path={SEGMENTS.PARROTS} element={<UserParrotsPage />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <UserAnimalsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SEGMENTS.CATS}
+            element={
+              <ProtectedRoute>
+                <UserCatsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SEGMENTS.DOGS}
+            element={
+              <ProtectedRoute>
+                <UserDogsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SEGMENTS.PARROTS}
+            element={
+              <ProtectedRoute>
+                <UserParrotsPage />
+              </ProtectedRoute>
+            }
+          />
         </Route>
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.REGISTER} element={<RegistrationPage />} />
         <Route
           path={ROUTES.EDIT}
-          element={<AnimalEditorPage mode="create" />}
+          element={
+            <ProtectedRoute>
+              <AnimalEditorPage mode="create" />
+            </ProtectedRoute>
+          }
         />
         <Route
           path={ROUTES.EDIT_ID}
-          element={<AnimalEditorPage mode="edit" />}
+          element={
+            <ProtectedRoute>
+              <AnimalEditorPage mode="edit" />
+            </ProtectedRoute>
+          }
         />
         <Route path={ROUTES.OWNER}>
-          <Route index element={<AnimalsPageByOwner />} />
-          <Route path={SEGMENTS.CATS} element={<CatsPageByOwner />} />
-          <Route path={SEGMENTS.DOGS} element={<DogsPageByOwner />} />
-          <Route path={SEGMENTS.PARROTS} element={<ParrotsPageByOwner />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <AnimalsPageByOwner />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SEGMENTS.CATS}
+            element={
+              <ProtectedRoute>
+                <CatsPageByOwner />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SEGMENTS.DOGS}
+            element={
+              <ProtectedRoute>
+                <DogsPageByOwner />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={SEGMENTS.PARROTS}
+            element={
+              <ProtectedRoute>
+                <ParrotsPageByOwner />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Route>
       <Route path="*" element={<UnfoundedErrorComponent />} />
