@@ -21,6 +21,7 @@ const AuthContext = createContext({
   logout: (isJwtExpired?: boolean) => {},
   refresh: () =>
     Promise.resolve({ access_token: '', refresh_token: '' } as FullJwtToken),
+  isRefreshing: false,
 });
 
 function isTokenExpired(token: string | null): boolean {
@@ -50,6 +51,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     return { access_token: access, refresh_token: refresh };
   });
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refreshPromiseRef = useRef<Promise<FullJwtToken> | null>(null);
   const navigate = useNavigate();
@@ -97,6 +99,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       throw new Error('Error: No refresh token');
     }
     refreshPromiseRef.current = (async () => {
+      setIsRefreshing(true);
       try {
         const newTokens = await Auth.refresh(tokens.refresh_token!);
         updateToken(newTokens);
@@ -105,6 +108,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         throw error;
       } finally {
         refreshPromiseRef.current = null;
+        setIsRefreshing(false);
       }
     })();
 
@@ -135,8 +139,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
       login,
       logout,
       refresh,
+      isRefreshing,
     }),
-    [token, login, logout, refresh],
+    [token, login, logout, refresh, isRefreshing],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
