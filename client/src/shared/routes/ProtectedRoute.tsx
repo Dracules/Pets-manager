@@ -30,7 +30,13 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (isExpired || isRefreshing) {
-    return <LoadingComponent />;
+    return (
+      <div className={styles.overlayWrapper}>
+        <div className={styles.screenLoaderOverlay}>
+          <LoadingComponent />
+        </div>
+      </div>
+    );
   }
 
   return <>{children}</>;
