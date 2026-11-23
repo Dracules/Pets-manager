@@ -47,11 +47,16 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
+      originalRequest.url?.includes('/auth/refresh')
+    ) {
+      return Promise.reject(error);
+    }
+
+    if (
+      error.response?.status === 401 &&
       authActions.getToken().refresh_token
     ) {
       if (isRefreshing) {
-        if (originalRequest.url?.includes('/auth/refresh'))
-          return Promise.reject(error);
         return new Promise(function (resolve, reject) {
           failedQueue.push((err: Error, newToken) => {
             if (err) {
